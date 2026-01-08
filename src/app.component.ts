@@ -867,7 +867,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     return 0; 
   }
 
-  private getMaxIndex(type: string): number {
+  public getMaxIndex(type: string): number {
     if (type === 'experience') return this.experiences.length - 1;
     if (type === 'class') return this.oneDayClasses.length - 1;
     return this.reviews.length - 1;
