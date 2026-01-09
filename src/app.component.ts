@@ -42,7 +42,9 @@ interface SliderDragState {
     :host {
       display: block;
       height: 100vh;
+      height: 100dvh;
       width: 100%;
+      overflow: hidden;
     }
     .font-cursive {
       font-family: 'Dancing Script', cursive;

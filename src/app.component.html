@@ -1,6 +1,6 @@
 
 <!-- Desktop Background / Wrapper -->
-<div class="relative w-full h-full bg-[#e8e4dc] flex flex-col lg:flex-row items-center lg:items-stretch justify-center px-0 lg:pt-12 gap-8 lg:gap-16">
+<div class="relative w-full h-full bg-[#e8e4dc] flex flex-col lg:flex-row items-center lg:items-stretch justify-center px-0 lg:pt-12 gap-8 lg:gap-8 xl:gap-16 overflow-hidden overscroll-none touch-none">
   
   <!-- Decorative Background Elements (Desktop only) -->
   <div class="absolute inset-0 z-0 hidden lg:block opacity-30 pointer-events-none">
@@ -93,7 +93,7 @@
   </aside>
 
   <!-- Right Side: Tablet/Device Frame -->
-  <div class="relative z-10 w-full h-full lg:w-[500px] 2xl:w-[820px] lg:h-full bg-white lg:rounded-t-[2.5rem] lg:shadow-2xl flex flex-col lg:border-[8px] lg:border-b-0 lg:border-gray-900 box-border shrink-0 ring-1 ring-white/20 lg:overflow-hidden">
+  <div class="touch-pan-y relative z-10 w-full h-full lg:w-[500px] 2xl:w-[820px] lg:h-full bg-white lg:rounded-t-[2.5rem] lg:shadow-2xl flex flex-col lg:border-[8px] lg:border-b-0 lg:border-gray-900 box-border shrink-0 ring-1 ring-white/20 lg:overflow-hidden">
     
     <!-- Original SPA View -->
     <header class="absolute top-0 left-0 right-0 z-50 h-16 flex items-center px-4 lg:px-6 pointer-events-none">
@@ -198,7 +198,7 @@
     }
 
     <!-- Scrollable Content Area -->
-    <main #scrollContainer class="scroll-container relative w-full h-full overflow-y-auto overflow-x-hidden md:pt-0 bg-white lg:rounded-t-[calc(2.5rem-8px)]">
+    <main #scrollContainer class="touch-pan-y scroll-container relative w-full h-full overflow-y-auto overflow-x-hidden md:pt-0 bg-white lg:rounded-t-[calc(2.5rem-8px)]">
       
       <!-- 1. Main Banner -->
       <section id="home" class="relative z-10 w-full h-screen flex items-center justify-center overflow-hidden bg-black lg:rounded-t-[calc(2.5rem-8px)]">
