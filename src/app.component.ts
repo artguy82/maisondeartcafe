@@ -169,6 +169,15 @@ interface SliderDragState {
     .popup-open { animation: popup-fade-in 0.3s ease-out forwards; }
     .popup-panel-open { animation: popup-scale-in 0.3s ease-out forwards; }
     .text-shadow-custom { text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6); }
+
+    /* Utility to hide scrollbar */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+    }
   `]
 })
 export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
