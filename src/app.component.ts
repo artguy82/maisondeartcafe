@@ -159,10 +159,19 @@ interface SliderDragState {
       aside .text-7xl { font-size: 3.75rem; line-height: 1; }
       aside .text-lg { font-size: 1rem; line-height: 1.5rem; }
       aside.space-y-6 > :not([hidden]) ~ :not([hidden]) { margin-top: 1rem; }
+      aside .py-4 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
       aside .py-3 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
       aside .px-6 { padding-left: 1.25rem; padding-right: 1.25rem; }
     }
     
+    /* Hide separator and description on very short screens */
+    @media (max-height: 720px) and (min-width: 1024px) {
+      aside > .aside-anim-item.aside-delay-2,
+      aside > .aside-anim-item.aside-delay-3 {
+        display: none;
+      }
+    }
+
     .slider-container { cursor: grab; user-select: none; touch-action: pan-y; }
     .slider-container.dragging { cursor: grabbing; }
     .slider-transition { transition: transform 500ms cubic-bezier(0.23, 1, 0.32, 1); }
