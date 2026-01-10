@@ -20,6 +20,11 @@ interface ReviewItem {
   program?: string;
 }
 
+interface FaqItem {
+  question: string;
+  answer: string;
+}
+
 interface SliderDragState {
   isDragging: boolean;
   startX: number;
@@ -193,6 +198,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   isProgramPopupOpen = signal(false);
   selectedProgram = signal<ProgramItem | null>(null);
   programImageIndex = signal(0);
+  
+  openFaqIndex = signal<number | null>(null);
 
   private platformId = inject(PLATFORM_ID);
   
@@ -475,6 +482,37 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     { name: '엄*준 님', date: '3달 전', content: '부산 여행 마지막 코스로 들렀는데, 여행의 피로가 싹 풀리는 느낌이었어요. 부산에서의 특별한 추억을 작품으로 남길 수 있어서 더 의미있었습니다.', rating: 5, avatar: 'https://picsum.photos/seed/reviewT/40/40' }
   ];
 
+  faqs: FaqItem[] = [
+    {
+      question: '그림을 전혀 못 그리는데, 저도 참여할 수 있을까요?',
+      answer: `그럼요! 메종디아트의 모든 프로그램은 그림 실력과 관계없이 누구나 즐길 수 있도록 만들어졌습니다.\n전문 강사님이 기본 코칭과 마무리를 친절하게 도와드리며, 미리 준비된 도안을 선택하는 체험도 있어 부담 없이 멋진 작품을 완성하실 수 있습니다.`
+    },
+    {
+      question: '체험 시간은 얼마나 걸리나요?',
+      answer: `대부분의 체험은 약 2시간 정도 소요됩니다.\n개개인의 작업 속도에 맞춰 여유롭게 그림을 완성하실 수 있도록 도와드립니다. 시간에 쫓기지 않고 편안하게 즐겨주세요.`
+    },
+    {
+      question: '아이와 함께 가고 싶은데, 아이가 참여할 수 있는 프로그램이 있나요?',
+      answer: `네, 아이들이 특히 좋아하는 '아트토이 베어브릭' 이나 '대형 도안 채색' 프로그램은 온 가족이 함께 즐기기 좋습니다.\n아이들의 눈높이에 맞춰 진행되며, 창의력과 집중력을 키우는 데 도움이 되는 특별한 경험이 될 것입니다.`
+    },
+    {
+      question: '보호자 입장권은 꼭 구매 해야 되나요?',
+      answer: `메종디아트의 기본 원칙은 '1인 1체험'입니다. 다만, 미취학 아동과 같이 보호자의 관리가 필요한 경우 '보호자 입장권'을 구매하시면 함께 입장하여 아이의 체험을 도와주실 수 있습니다.\n아이가 혼자 체험에 참여할 수 있다면 보호자 동반 없이 아이만 입실해도 괜찮습니다.\n(보호자 입장권에는 시그니처 메뉴를 제외한 음료 1잔이 포함되어 있습니다.)`
+    },
+    {
+      question: '준비물이 필요한가요?',
+      answer: `아니요, 전혀 없습니다. 캔버스, 물감, 붓, 앞치마 등 그림에 필요한 모든 재료는 메종디아트에 완벽하게 준비되어 있습니다.\n가벼운 마음으로 오셔서 즐기기만 하시면 됩니다.`
+    },
+    {
+      question: '예약은 필수인가요? 당일 방문도 가능한가요?',
+      answer: `원활한 체험을 위해 네이버 예약을 통한 사전 예약을 권장해 드립니다.\n당일 예약의 경우, 희망하시는 체험 시간 최소 1시간 전까지 예약이 가능합니다. 잔여석이 있을 경우 현장 접수도 가능하지만, 주말이나 공휴일에는 예약이 조기 마감될 수 있습니다.`
+    },
+    {
+      question: '예약 방법이 낯설어서 매장에서 설명 듣고 결제 해도 될까요?',
+      answer: `네, 물론 가능합니다. 다만, 다른 예약 고객님과의 혼선을 방지하고 원활한 상담을 위해 '네이버 방문 예약'을 통해 시간 약속을 먼저 잡아주시길 부탁드립니다.\n예약 메뉴에서 '방문 예약'을 선택하시면 간단히 예약하실 수 있습니다.`
+    }
+  ];
+
   private readonly resizeListener = () => {
     this.updateSliderPosition('experience', false);
     this.updateSliderPosition('class', false);
@@ -558,7 +596,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         if (entry.isIntersecting) {
           const id = entry.target.id;
           // Sections that have a LIGHT background (so we need DARK text)
-          const lightSections = ['intro', 'programs', 'reviews', 'group'];
+          const lightSections = ['intro', 'programs', 'reviews', 'group', 'faq'];
           // 'home', 'healing-art', 'quote-divider', 'contact' are DARK background (need WHITE text)
           
           this.isMenuTextDark.set(lightSections.includes(id));
@@ -566,7 +604,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       });
     }, options);
 
-    const sections = ['home', 'intro', 'healing-art', 'programs', 'reviews', 'group', 'quote-divider', 'contact'];
+    const sections = ['home', 'intro', 'healing-art', 'programs', 'reviews', 'group', 'faq', 'quote-divider', 'contact'];
     sections.forEach(id => {
       const el = document.getElementById(id);
       if (el) this.scrollSpyObserver?.observe(el);
@@ -854,6 +892,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   nextClass() { this.setIndex('class', this.classIndex() + 1); }
   prevClass() { this.setIndex('class', this.classIndex() - 1); }
   
+  toggleFaq(index: number) {
+    this.openFaqIndex.update(currentIndex => (currentIndex === index ? null : index));
+  }
+
   private getSliderElement(type: string): HTMLElement | undefined {
     if (type === 'experience') return this.experienceSlider()?.nativeElement;
     if (type === 'class') return this.classSlider()?.nativeElement;

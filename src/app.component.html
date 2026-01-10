@@ -131,6 +131,7 @@
             <button (click)="scrollToSection('intro')" class="text-xl font-bold text-gray-800 py-1">힐링아트</button>
             <button (click)="scrollToSection('programs')" class="text-xl font-bold text-gray-800 py-1">프로그램</button>
             <button (click)="scrollToSection('group')" class="text-xl font-bold text-gray-800 py-1">단체/출강/행사</button>
+            <button (click)="scrollToSection('faq')" class="text-xl font-bold text-gray-800 py-1">자주 묻는 질문</button>
             <button (click)="scrollToSection('contact')" class="text-xl font-bold text-gray-800 py-1">이용안내</button>
           </div>
     
@@ -330,6 +331,7 @@
         <button (click)="scrollToSection('intro')" class="text-sm font-semibold text-gray-700 hover:text-orange-500 transition-colors">힐링아트</button>
         <button (click)="scrollToSection('programs')" class="text-sm font-semibold text-gray-700 hover:text-orange-500 transition-colors">프로그램</button>
         <button (click)="scrollToSection('group')" class="text-sm font-semibold text-gray-700 hover:text-orange-500 transition-colors">단체/출강/행사</button>
+        <button (click)="scrollToSection('faq')" class="text-sm font-semibold text-gray-700 hover:text-orange-500 transition-colors">자주 묻는 질문</button>
         <button (click)="scrollToSection('contact')" class="text-sm font-semibold text-gray-700 hover:text-orange-500 transition-colors">이용안내</button>
       </nav>
 
@@ -349,10 +351,10 @@
             <div class="flex gap-4 items-start bg-gray-50 border border-gray-200 rounded-2xl p-6 md:p-8 text-left">
                 <!-- Icon -->
                 <div class="flex-shrink-0 text-orange-500 mt-0.5">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10"></circle>
-                        <line x1="12" y1="16" x2="12" y2="12"></line>
-                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
                     </svg>
                 </div>
                 <!-- Content -->
@@ -630,6 +632,42 @@
         </div>
       </section>
 
+      <!-- FAQ Section -->
+      <section id="faq" class="relative z-10 py-16 px-6 bg-orange-50">
+        <div class="max-w-3xl mx-auto">
+          <div class="text-center mb-12">
+            <h2 class="text-orange-500 text-sm font-bold tracking-widest mb-2">Q & A</h2>
+            <h3 class="text-3xl md:text-4xl font-extrabold text-gray-800">자주 묻는 질문</h3>
+            <p class="mt-4 text-gray-600 text-sm max-w-2xl mx-auto leading-relaxed">
+              메종디아트에 대해 궁금한 점들을 모아 답변해 드립니다.
+            </p>
+          </div>
+          <div class="space-y-4">
+            @for (faq of faqs; track $index; let i = $index) {
+              <div class="border border-gray-200 rounded-lg bg-white overflow-hidden transition-all duration-300" [class.shadow-lg]="openFaqIndex() === i">
+                <button (click)="toggleFaq(i)" class="w-full flex justify-between items-center text-left p-5 font-bold text-gray-800 hover:bg-gray-50/50 focus:outline-none transition-colors">
+                  <span class="flex items-center gap-x-4">
+                      <span class="text-orange-500 font-bold">Q.</span>
+                      <span>{{ faq.question }}</span>
+                  </span>
+                  <svg class="w-5 h-5 text-gray-500 transform transition-transform duration-300 shrink-0" [class.rotate-180]="openFaqIndex() === i" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                @if (openFaqIndex() === i) {
+                  <div class="p-5 pt-0 animate-fade-in">
+                      <div class="flex items-start gap-x-4 text-gray-600 text-sm font-normal leading-relaxed whitespace-pre-line">
+                          <span class="text-gray-400 font-bold mt-0.5">A.</span>
+                          <p class="flex-1">{{ faq.answer }}</p>
+                      </div>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      </section>
+
       <!-- New Parallax Divider Section -->
       <section id="quote-divider" class="relative z-10 h-64 md:h-80 bg-gray-800 overflow-hidden">
         <!-- Parallax Background Container -->
@@ -656,7 +694,7 @@
         <div class="max-w-5xl mx-auto">
           
           <!-- Top Section: Info & Partnership -->
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 2xl:grid-cols-2 gap-12 xl:gap-16 mb-16">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-12 xl:gap-16 mb-16">
             
             <!-- Info Area -->
             <div class="flex flex-col">
