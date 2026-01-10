@@ -198,6 +198,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   
   bannerImages: string[] = [
     'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/main.jpg',
+    'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/main2.jpg',
     'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/main3.jpg',
     'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/main4.jpg',
     'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/main5.jpg'
