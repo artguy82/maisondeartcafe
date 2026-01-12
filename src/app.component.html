@@ -1,12 +1,6 @@
 <!-- Desktop Background / Wrapper -->
-<div class="relative w-full h-full bg-[#e8e4dc] flex flex-col lg:flex-row items-center lg:items-stretch justify-center px-0 lg:px-12 lg:pt-12 gap-8 lg:gap-8 xl:gap-16 overflow-hidden overscroll-none touch-none">
+<div class="relative w-full h-full wave-bg flex flex-col lg:flex-row items-center lg:items-stretch justify-center px-0 lg:px-12 lg:pt-12 gap-8 lg:gap-8 xl:gap-16 overflow-hidden overscroll-none touch-none">
   
-  <!-- Decorative Background Elements (Desktop only) -->
-  <div class="absolute inset-0 z-0 hidden lg:block opacity-30 pointer-events-none">
-    <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-orange-200 rounded-full blur-[100px]"></div>
-    <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-blue-200 rounded-full blur-[100px]"></div>
-  </div>
-
   <!-- Left Side: Brand Info (Desktop Only) -->
   <aside class="hidden lg:flex flex-col items-start justify-center max-w-md z-20 space-y-6 xl:space-y-8 shrink-0">
     
@@ -198,7 +192,7 @@
     }
 
     <!-- Scrollable Content Area -->
-    <main #scrollContainer class="touch-pan-y scroll-container relative w-full h-full overflow-y-auto overflow-x-hidden md:pt-0 bg-white lg:rounded-t-[calc(2.5rem-8px)]">
+    <main #scrollContainer class="touch-pan-y scroll-container relative w-full h-full overflow-y-auto overflow-x-hidden pt-0 bg-white lg:rounded-t-[calc(2.5rem-8px)]">
       
       <!-- 1. Main Banner -->
       <section id="home" class="relative z-10 w-full h-screen flex items-center justify-center overflow-hidden bg-black lg:rounded-t-[calc(2.5rem-8px)]">
@@ -216,7 +210,7 @@
         <div class="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-black/50 to-transparent z-10"></div>
         
         <!-- Text content -->
-        <div class="relative z-10 text-center text-white px-4 pt-10 md:pt-0">
+        <div class="relative z-10 text-center text-white px-4">
           
           <!-- 3. Subtitle (Visually first, animates third) -->
           <div class="banner-anim-item anim-delay-3 relative inline-block my-5 lg:my-8">
@@ -410,7 +404,7 @@
           <div class="px-4 md:px-8 h-5"></div>
         </div>
 
-        <div id="class-section">
+        <div id="class-section" class="mb-12">
            <div class="flex items-center justify-between mb-6 px-4 md:px-8">
             <h4 class="text-xl font-bold text-gray-800">원데이 클래스</h4>
             <div class="flex items-center gap-2">
@@ -452,6 +446,99 @@
           </div>
            <div class="px-4 md:px-8 h-5"></div>
         </div>
+
+        <!-- Special Programs Section (NEW) -->
+        <div id="special-section">
+          <div class="flex items-center justify-between mb-6 px-4 md:px-8">
+            <h4 class="text-xl font-bold text-gray-800">스페셜 프로그램</h4>
+            <div class="flex items-center gap-2">
+              <button (click)="prevSpecial()" [disabled]="specialIndex() === 0" class="bg-white hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed rounded-full p-2 shadow-sm transition-colors border border-gray-200">
+                <svg class="w-4 h-4 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+              </button>
+              <button (click)="nextSpecial()" [disabled]="specialIndex() >= getMaxIndex('special')" class="bg-white hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed rounded-full p-2 shadow-sm transition-colors border border-gray-200">
+                 <svg class="w-4 h-4 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+              </button>
+            </div>
+          </div>
+          <div class="overflow-hidden slider-container"
+            (mousedown)="dragStart($event, 'special')" (touchstart)="dragStart($event, 'special')"
+            (mousemove)="dragging($event, 'special')" (touchmove)="dragging($event, 'special')">
+            <div #specialSlider class="flex gap-4 px-4 md:px-8">
+              @for (item of specialPrograms; track item.title) {
+                <div class="w-[90vw] md:w-[480px] flex-shrink-0">
+                  <div class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-gray-100 h-full flex flex-col">
+                    <div class="relative h-60 overflow-hidden">
+                      <img [ngSrc]="item.image" [alt]="item.title" fill class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" draggable="false" priority>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                      <div class="flex flex-wrap gap-2 mb-3">
+                        @for (tag of item.tags; track tag) {
+                          <span class="text-[10px] bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-medium">#{{tag}}</span>
+                        }
+                      </div>
+                      <h5 class="text-xl font-bold text-gray-800 mb-1">{{item.title}}</h5>
+                      <p class="text-sm font-bold text-orange-600 mb-3">{{item.desc}}</p>
+                      
+                      <div class="flex-grow">
+                        <!-- Sub Description List -->
+                        @if (item.subDescription) {
+                          <ul class="space-y-1.5 mb-4">
+                            @for(desc of item.subDescription; track desc) {
+                              <li class="text-sm text-gray-600 font-normal flex items-start gap-2">
+                                <span class="text-purple-400 mt-0.5 flex-shrink-0">✔</span>
+                                <span class="leading-relaxed">{{desc}}</span>
+                              </li>
+                            }
+                          </ul>
+                        } @else if (item.detailedDesc) {
+                           <div class="text-sm text-gray-600 font-normal leading-relaxed whitespace-pre-line">
+                            {{item.detailedDesc}}
+                          </div>
+                        }
+
+                        <!-- Pricing Box (Art Ticon) -->
+                        @if (item.pricing) {
+                          <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4 border border-purple-100 mt-4 shadow-sm">
+                             @if(item.pricingTitle) {
+                               <h6 class="font-bold text-gray-800 flex items-center gap-2 mb-2 text-sm">
+                                 <span class="text-base">🎁</span> {{item.pricingTitle}}
+                               </h6>
+                             }
+                             @for(p of item.pricing; track p.price) {
+                               <div class="flex justify-between items-center py-1.5 border-b border-purple-100/50 last:border-0" [class.bg-white]="p.highlight" [class.rounded-lg]="p.highlight" [class.px-2]="p.highlight" [class.-mx-2]="p.highlight" [class.shadow-sm]="p.highlight">
+                                 <span class="font-bold text-gray-700 text-sm" [class.text-purple-900]="p.highlight">{{p.price}}</span>
+                                 <span class="font-extrabold text-sm" [class.text-pink-600]="p.highlight" [class.text-pink-500]="!p.highlight">{{p.bonus}}</span>
+                               </div>
+                             }
+                          </div>
+                        }
+
+                        <!-- Recommendations Box -->
+                        @if (item.recommendations) {
+                          <div class="bg-gray-50 rounded-xl p-4 mt-4 border border-gray-100">
+                             <h6 class="font-bold text-gray-800 flex items-center gap-2 mb-2 text-sm">
+                               <span class="text-base">👍</span> {{item.recommendations.title}}
+                             </h6>
+                             <ul class="space-y-1">
+                               @for(rec of item.recommendations.items; track rec) {
+                                 <li class="text-xs text-gray-600 flex items-start gap-2 leading-relaxed">
+                                   <span class="text-gray-400 mt-0.5">•</span> {{rec}}
+                                 </li>
+                               }
+                             </ul>
+                          </div>
+                        }
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+           <div class="px-4 md:px-8 h-5"></div>
+        </div>
+
       </section>
 
       <!-- 5. User Reviews (Revamped) -->
@@ -747,7 +834,7 @@
                <div class="hidden md:block lg:hidden mt-8 w-full">
                 <div class="space-y-3">
                     <!-- Primary CTA -->
-                    <a href="https://pcmap.place.naver.com/restaurant/1276609996/booking?entry=pll&fromNxList=true&fromPanelNum=2&locale=ko&searchText=%EB%A9%94%EC%A2%85%EB%94%94%EC%95%84%ED%8A%B8&svcName=map_pcv5&timestamp=202601041429" target="_blank" class="w-full flex items-center justify-center px-6 py-3 text-white rounded-full animated-gradient-bg">
+                    <a href="https://pcmap.place.naver.com/restaurant/1276609996/booking?entry=pll&fromNxList=true&fromPanelNum=2&locale=ko&searchText=%EB%A9%94%EC%A2%85%EB%94%94%EC%95%8A%ED%8A%B8&svcName=map_pcv5&timestamp=202601041429" target="_blank" class="w-full flex items-center justify-center px-6 py-3 text-white rounded-full animated-gradient-bg">
                         <span class="relative z-10 flex items-center justify-center gap-3">
                             <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/booking.png" alt="Booking Icon" width="18" height="18">
                             <span class="font-bold text-base whitespace-nowrap">예약 바로 가기</span>
@@ -916,6 +1003,10 @@
                   <img [ngSrc]="image" [alt]="program.title + ' image ' + (i + 1)" fill class="object-cover pointer-events-none" priority>
                 </div>
               }
+            } @else {
+               <div class="w-full h-full flex-shrink-0 relative select-none">
+                  <img [ngSrc]="program.image" [alt]="program.title" fill class="object-cover pointer-events-none" priority>
+                </div>
             }
           </div>
 
@@ -944,7 +1035,7 @@
               <span class="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full font-semibold">#{{tag}}</span>
             }
           </div>
-          <p class="text-sm text-gray-600 leading-relaxed whitespace-pre-line">{{ program.detailedDesc }}</p>
+          <p class="text-sm text-gray-600 leading-relaxed whitespace-pre-line">{{ program.detailedDesc || program.desc }}</p>
         </div>
 
         <!-- Footer Actions -->

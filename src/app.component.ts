@@ -2,6 +2,17 @@
 import { Component, signal, OnInit, OnDestroy, inject, PLATFORM_ID, ElementRef, Renderer2, AfterViewInit, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule, NgOptimizedImage, isPlatformBrowser } from '@angular/common';
 
+interface PricingTier {
+  price: string;
+  bonus: string;
+  highlight?: boolean;
+}
+
+interface Recommendation {
+  title: string;
+  items: string[];
+}
+
 interface ProgramItem {
   title: string;
   desc: string;
@@ -9,6 +20,11 @@ interface ProgramItem {
   tags: string[];
   images?: string[];
   detailedDesc?: string;
+  // New structured fields for clearer UI
+  subDescription?: string[];
+  pricing?: PricingTier[];
+  pricingTitle?: string; // Added field for pricing section title
+  recommendations?: Recommendation;
 }
 
 interface ReviewItem {
@@ -43,6 +59,13 @@ interface SliderDragState {
   imports: [CommonModule, NgOptimizedImage],
   templateUrl: './app.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '(window:resize)': 'onResize()',
+    '(document:mouseup)': 'onGlobalEnd($event)',
+    '(document:touchend)': 'onGlobalEnd($event)',
+    '(document:mousemove)': 'onGlobalMove($event)',
+    '(document:touchmove)': 'onGlobalMove($event)'
+  },
   styles: [`
     :host {
       display: block;
@@ -157,6 +180,14 @@ interface SliderDragState {
       margin-bottom: 0; vertical-align: text-bottom;
     }
 
+    /* Background Style - Custom Image */
+    .wave-bg {
+      background-image: url('https://raw.githubusercontent.com/artguy82/maisondeart/main/web/image2.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
     /* Responsive Adjustments */
     @media (max-height: 850px) and (min-width: 1024px) {
       aside .text-5xl { font-size: 2.25rem; }
@@ -229,6 +260,14 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   reviewIndex = signal(0);
   experienceIndex = signal(0);
   classIndex = signal(0);
+  specialIndex = signal(0);
+
+  // Dynamic Max Indices for Sliders
+  maxIndices = signal<{ experience: number, class: number, special: number }>({
+    experience: 0,
+    class: 0,
+    special: 0
+  });
 
   private readonly CLONE_COUNT = 5;
   displayReviews = signal<ReviewItem[]>([]);
@@ -250,6 +289,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   groupFooterParallaxBg = viewChild<ElementRef<HTMLElement>>('groupFooterParallaxBg');
   experienceSlider = viewChild<ElementRef<HTMLElement>>('experienceSlider');
   classSlider = viewChild<ElementRef<HTMLElement>>('classSlider');
+  specialSlider = viewChild<ElementRef<HTMLElement>>('specialSlider');
   reviewSlider = viewChild<ElementRef<HTMLElement>>('reviewSlider');
   reviewSliderLayer2 = viewChild<ElementRef<HTMLElement>>('reviewSliderLayer2');
   reviewsSection = viewChild<ElementRef<HTMLElement>>('reviewsSection');
@@ -263,12 +303,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   private sliderDragState: { [key: string]: SliderDragState } = {
     experience: { isDragging: false, startX: 0, startY: 0, startTranslate: 0, currentTranslate: 0, lastX: 0, lastTimestamp: 0, velocityX: 0, isScrolling: undefined },
     class: { isDragging: false, startX: 0, startY: 0, startTranslate: 0, currentTranslate: 0, lastX: 0, lastTimestamp: 0, velocityX: 0, isScrolling: undefined },
+    special: { isDragging: false, startX: 0, startY: 0, startTranslate: 0, currentTranslate: 0, lastX: 0, lastTimestamp: 0, velocityX: 0, isScrolling: undefined },
     review: { isDragging: false, startX: 0, startY: 0, startTranslate: 0, currentTranslate: 0, lastX: 0, lastTimestamp: 0, velocityX: 0, isScrolling: undefined },
-    reviewLayer2: { isDragging: false, startX: 0, startY: 0, startTranslate: 0, currentTranslate: 0, lastX: 0, lastTimestamp: 0, velocityX: 0, isScrolling: undefined }
+    reviewLayer2: { isDragging: false, startX: 0, startY: 0, startTranslate: 0, currentTranslate: 0, lastX: 0, lastTimestamp: 0, velocityX: 0, isScrolling: undefined },
   };
   
   private sliderTransitionTimers: { [key: string]: any } = {
-    experience: null, class: null, review: null, reviewLayer2: null
+    experience: null, class: null, special: null, review: null, reviewLayer2: null
   };
   
   private unlistenMouseUp!: () => void;
@@ -422,7 +463,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       title: '테라리움 힐링 아트', 
       desc: '작은 유리병 속에 나만의 정원을 꾸미는 시간', 
       image: 'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/pro4.jpg', 
-      tags: ['식물', '반려식물'], 
+      tags: ['식물', '반려이끼'], 
       images: [
         'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/terrarium/1.jpg',
         'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/terrarium/2.jpg',
@@ -433,6 +474,70 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       detailedDesc: `유리병 속 작은 세상에 나만의 이야기를 담아보세요.
 이끼와 작은 식물, 돌멩이를 조화롭게 배치하며 나만의 작은 정원을 가꾸는 과정은 마음을 차분하게 하고 자연과의 교감을 느끼게 합니다.
 관리가 쉬워 식물을 처음 키워보는 분들에게도 좋으며, 책상 위 작은 반려 식물로 일상에 생기와 활력을 더해줄 것입니다.` 
+    }
+  ];
+
+  specialPrograms: ProgramItem[] = [
+    {
+      title: '아트티콘(기프티콘)',
+      desc: '더 많이, 더 알뜰하게 즐기는 메종디아트 아트 패스',
+      image: 'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/artticon.jpg',
+      tags: ['모바일충전형', '추가포인트'],
+      subDescription: [
+        "구입 당일 바로 사용 가능",
+        "모바일로 충전되 간편하게 사용",
+        "충전포인트 모두 누구나 이용 가능",
+        "금액대별 추가 포인트 적립",
+        "방과후 창작 놀이터, 체험 프로그램 모두 사용 가능"
+      ],
+      pricingTitle: '힐링아트 기프티콘 3종!',
+      pricing: [
+        { price: '10만원권 구입시', bonus: '+5,000 P 추가 적립' },
+        { price: '20만원권 구입시', bonus: '+15,000 P 추가 적립' },
+        { price: '30만원권 구입시', bonus: '+25,000 P 추가 적립', highlight: true }
+      ]
+    },
+    {
+      title: '초등 방과후 창작 놀이터',
+      desc: '초등학생 만을 위한 방과후 창작 아트 공간',
+      image: 'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/after.jpg',
+      tags: ['집중력', '창의력'],
+      subDescription: [
+        "초등생 전용 1시간 체험권",
+        "아트티콘(선불권) 구매 후 사용 가능",
+        "기존 체험 대비 30% 할인",
+        "방과후 시간 언제든 이용 가능",
+        "시간연장시 50% 추가 할인 적용"
+      ],
+      recommendations: {
+        title: "이런 아이에게 추천해요!",
+        items: [
+          "미술을 좋아하지만 학원식 수업은 부담스러운 아이",
+          "자유롭게 그리고 만들며 놀고 싶은 아이",
+          "방과후 창의력을 키우고 싶은 아이"
+        ]
+      }
+    },
+    {
+      title: '취미 드로잉 프로젝트',
+      desc: '완성까지 회차 제한 없이 여유롭게 이어가는 장기 프로젝트',
+      image: 'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/hobby.jpg',
+      tags: ['특대형', '성인취미'],
+      subDescription: [
+        "30호 특대형 캔버스 아크릴 드로잉",
+        "대형 프린트로 스케치 쉽게 가능",
+        "회차 제한 없이 작품이 완성될 때까지 자유롭게 이용",
+        "(옵션)티칭 & 터칭 : 맞춤 이론 및 보정 지도",
+        "(옵션)대리 작품 제작 (기간 협의) : 별도 상담"
+      ],
+      recommendations: {
+        title: "이런 분께 추천해요!",
+        items: [
+          "진짜 “작품” 하나를 집에 걸고 싶은 분",
+          "취미로 시작했지만, 제대로 된 결과물을 만들고 싶은 분",
+          "완성 보다는 그 과정에 심취하며 힐링 하고 싶은 분"
+        ]
+      }
     }
   ];
 
@@ -483,39 +588,18 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   ];
 
   faqs: FaqItem[] = [
-    {
-      question: '그림을 전혀 못 그리는데, 저도 참여할 수 있을까요?',
-      answer: `그럼요! 메종디아트의 모든 프로그램은 그림 실력과 관계없이 누구나 즐길 수 있도록 만들어졌습니다.\n전문 강사님이 기본 코칭과 마무리를 친절하게 도와드리며, 미리 준비된 도안을 선택하는 체험도 있어 부담 없이 멋진 작품을 완성하실 수 있습니다.`
-    },
-    {
-      question: '체험 시간은 얼마나 걸리나요?',
-      answer: `대부분의 체험은 약 2시간 정도 소요됩니다.\n개개인의 작업 속도에 맞춰 여유롭게 그림을 완성하실 수 있도록 도와드립니다. 시간에 쫓기지 않고 편안하게 즐겨주세요.`
-    },
-    {
-      question: '아이와 함께 가고 싶은데, 아이가 참여할 수 있는 프로그램이 있나요?',
-      answer: `네, 아이들이 특히 좋아하는 '아트토이 베어브릭' 이나 '대형 도안 채색' 프로그램은 온 가족이 함께 즐기기 좋습니다.\n아이들의 눈높이에 맞춰 진행되며, 창의력과 집중력을 키우는 데 도움이 되는 특별한 경험이 될 것입니다.`
-    },
-    {
-      question: '보호자 입장권은 꼭 구매 해야 되나요?',
-      answer: `메종디아트의 기본 원칙은 '1인 1체험'입니다. 다만, 미취학 아동과 같이 보호자의 관리가 필요한 경우 '보호자 입장권'을 구매하시면 함께 입장하여 아이의 체험을 도와주실 수 있습니다.\n아이가 혼자 체험에 참여할 수 있다면 보호자 동반 없이 아이만 입실해도 괜찮습니다.\n(보호자 입장권에는 시그니처 메뉴를 제외한 음료 1잔이 포함되어 있습니다.)`
-    },
-    {
-      question: '준비물이 필요한가요?',
-      answer: `아니요, 전혀 없습니다. 캔버스, 물감, 붓, 앞치마 등 그림에 필요한 모든 재료는 메종디아트에 완벽하게 준비되어 있습니다.\n가벼운 마음으로 오셔서 즐기기만 하시면 됩니다.`
-    },
-    {
-      question: '예약은 필수인가요? 당일 방문도 가능한가요?',
-      answer: `원활한 체험을 위해 네이버 예약을 통한 사전 예약을 권장해 드립니다.\n당일 예약의 경우, 희망하시는 체험 시간 최소 1시간 전까지 예약이 가능합니다. 잔여석이 있을 경우 현장 접수도 가능하지만, 주말이나 공휴일에는 예약이 조기 마감될 수 있습니다.`
-    },
-    {
-      question: '예약 방법이 낯설어서 매장에서 설명 듣고 결제 해도 될까요?',
-      answer: `네, 물론 가능합니다. 다만, 다른 예약 고객님과의 혼선을 방지하고 원활한 상담을 위해 '네이버 방문 예약'을 통해 시간 약속을 먼저 잡아주시길 부탁드립니다.\n예약 메뉴에서 '방문 예약'을 선택하시면 간단히 예약하실 수 있습니다.`
-    }
+    { question: '예약은 꼭 해야 하나요?', answer: '네, 원활한 체험 진행을 위해 네이버 예약제를 운영하고 있습니다. 당일 예약은 체험 1시간 전까지 가능합니다.' },
+    { question: '그림을 못 그려도 괜찮나요?', answer: '물론입니다! 메종디아트의 도안과 가이드가 있어 초보자도 멋진 작품을 완성할 수 있습니다. 전문가의 코칭도 도와드립니다.' },
+    { question: '소요 시간은 얼마나 걸리나요?', answer: '프로그램마다 다르지만 보통 1시간 30분에서 2시간 정도 소요됩니다. 개인차에 따라 조금씩 달라질 수 있습니다.' },
+    { question: '주차는 가능한가요?', answer: '네, 건물 내 주차타워를 무료로 이용하실 수 있습니다. 대형 SUV 차량의 경우 별도 문의 부탁드립니다.' },
+    { question: '단체 예약도 가능한가요?', answer: '네, 기업 워크샵, 동호회 등 단체 체험 및 대관이 가능합니다. 전화로 문의 주시면 자세한 상담 도와드리겠습니다.' }
   ];
 
   private readonly resizeListener = () => {
+    this.calculateMaxIndices();
     this.updateSliderPosition('experience', false);
     this.updateSliderPosition('class', false);
+    this.updateSliderPosition('special', false);
     this.updateSliderPosition('review', false);
     this.updateSliderPosition('reviewLayer2', false);
   };
@@ -560,8 +644,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
       // Initial layout setup
       setTimeout(() => {
+        this.calculateMaxIndices();
         this.updateSliderPosition('experience');
         this.updateSliderPosition('class');
+        this.updateSliderPosition('special');
         this.updateSliderPosition('review', false);
         this.updateSliderPosition('reviewLayer2', false);
         this.resumeReviewAutoScroll(2000);
@@ -574,6 +660,38 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       }, 100);
     }
+  }
+
+  onGlobalMove(event: MouseEvent | TouchEvent) {
+    if (this.sliderDragState.experience.isDragging) this.dragging(event, 'experience');
+    else if (this.sliderDragState.class.isDragging) this.dragging(event, 'class');
+    else if (this.sliderDragState.special.isDragging) this.dragging(event, 'special');
+    else if (this.sliderDragState.review.isDragging) this.dragging(event, 'review');
+    else if (this.sliderDragState.reviewLayer2.isDragging) this.dragging(event, 'reviewLayer2');
+    
+    if (this.popupImageDragState.isDragging) this.popupImageDragging(event);
+  }
+
+  onGlobalEnd(event: MouseEvent | TouchEvent) {
+    this.handleDragEnd();
+  }
+
+  onResize() {
+    this.calculateMaxIndices();
+    this.updateSliderPosition('experience', false);
+    this.updateSliderPosition('class', false);
+    this.updateSliderPosition('special', false);
+    this.updateSliderPosition('review', false);
+    this.updateSliderPosition('reviewLayer2', false);
+  }
+
+  private handleDragEnd(): void {
+    if (this.sliderDragState.experience.isDragging) this.dragEnd('experience');
+    if (this.sliderDragState.class.isDragging) this.dragEnd('class');
+    if (this.sliderDragState.special.isDragging) this.dragEnd('special');
+    if (this.sliderDragState.review.isDragging) this.dragEnd('review');
+    if (this.sliderDragState.reviewLayer2.isDragging) this.dragEnd('reviewLayer2');
+    if (this.popupImageDragState.isDragging) this.popupImageDragEnd();
   }
 
   // --- Scroll Spy for Menu Color ---
@@ -891,14 +1009,17 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   prevExperience() { this.setIndex('experience', this.experienceIndex() - 1); }
   nextClass() { this.setIndex('class', this.classIndex() + 1); }
   prevClass() { this.setIndex('class', this.classIndex() - 1); }
+  nextSpecial() { this.setIndex('special', this.specialIndex() + 1); }
+  prevSpecial() { this.setIndex('special', this.specialIndex() - 1); }
   
   toggleFaq(index: number) {
     this.openFaqIndex.update(currentIndex => (currentIndex === index ? null : index));
   }
-
+  
   private getSliderElement(type: string): HTMLElement | undefined {
     if (type === 'experience') return this.experienceSlider()?.nativeElement;
     if (type === 'class') return this.classSlider()?.nativeElement;
+    if (type === 'special') return this.specialSlider()?.nativeElement;
     if (type === 'review') return this.reviewSlider()?.nativeElement;
     if (type === 'reviewLayer2') return this.reviewSliderLayer2()?.nativeElement;
     return undefined;
@@ -919,13 +1040,57 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   private getIndex(type: string): number {
     if (type === 'experience') return this.experienceIndex();
     if (type === 'class') return this.classIndex();
+    if (type === 'special') return this.specialIndex();
     return 0; 
   }
 
   public getMaxIndex(type: string): number {
-    if (type === 'experience') return this.experiences.length - 1;
-    if (type === 'class') return this.oneDayClasses.length - 1;
+    if (type === 'experience') return this.maxIndices().experience;
+    if (type === 'class') return this.maxIndices().class;
+    if (type === 'special') return this.maxIndices().special;
     return this.reviews.length - 1;
+  }
+
+  private calculateMaxIndices() {
+    if (!isPlatformBrowser(this.platformId)) return;
+    
+    const newIndices = { ...this.maxIndices() };
+    let changed = false;
+
+    ['experience', 'class', 'special'].forEach(type => {
+        const sliderEl = this.getSliderElement(type);
+        const containerEl = sliderEl?.parentElement;
+        if (!sliderEl || !containerEl) return;
+
+        const containerWidth = containerEl.clientWidth;
+        // Last element
+        const lastCard = sliderEl.children[sliderEl.children.length - 1] as HTMLElement;
+        if(!lastCard) return;
+
+        const sliderStyle = window.getComputedStyle(sliderEl);
+        const paddingRight = parseFloat(sliderStyle.paddingRight) || 0;
+        const scrollableWidth = lastCard.offsetLeft + lastCard.offsetWidth + paddingRight;
+
+        const slideWidth = this.getSlideWidth(type);
+        if (slideWidth <= 0) return;
+
+        let maxIndex = 0;
+        if (scrollableWidth > containerWidth) {
+            const maxScroll = scrollableWidth - containerWidth;
+            maxIndex = Math.ceil(maxScroll / slideWidth);
+        } else {
+            maxIndex = 0;
+        }
+        
+        if (newIndices[type as keyof typeof newIndices] !== maxIndex) {
+            newIndices[type as keyof typeof newIndices] = maxIndex;
+            changed = true;
+        }
+    });
+
+    if (changed) {
+        this.maxIndices.set(newIndices);
+    }
   }
   
   private setIndex(type: string, index: number): void {
@@ -947,10 +1112,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     const newIndex = Math.max(0, Math.min(index, maxIndex));
     if (type === 'experience') this.experienceIndex.set(newIndex);
     else if (type === 'class') this.classIndex.set(newIndex);
+    else if (type === 'special') this.specialIndex.set(newIndex);
     this.updateSliderPosition(type, true);
   }
 
-  private getSliderBoundaries(type: 'experience' | 'class'): { min: number, max: number } {
+  private getSliderBoundaries(type: 'experience' | 'class' | 'special'): { min: number, max: number } {
     const sliderEl = this.getSliderElement(type);
     const containerEl = sliderEl?.parentElement;
     if (!isPlatformBrowser(this.platformId) || !sliderEl || !containerEl || sliderEl.children.length === 0 || !containerEl.clientWidth) {
@@ -976,14 +1142,15 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     let index = 0;
     if (type === 'experience') index = this.experienceIndex();
     else if (type === 'class') index = this.classIndex();
+    else if (type === 'special') index = this.specialIndex();
     else if (type === 'review') index = this.reviewIndex();
     else if (type === 'reviewLayer2') index = this.CLONE_COUNT; // Start at real items to allow reverse scrolling
 
     const slideWidth = this.getSlideWidth(type);
     let finalTranslate = -index * slideWidth;
 
-    if (type === 'experience' || type === 'class') {
-        const boundaries = this.getSliderBoundaries(type as 'experience' | 'class');
+    if (type === 'experience' || type === 'class' || type === 'special') {
+        const boundaries = this.getSliderBoundaries(type as 'experience' | 'class' | 'special');
         finalTranslate = Math.max(boundaries.min, Math.min(finalTranslate, boundaries.max));
     }
 
@@ -1030,7 +1197,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     return event.type.includes('mouse') ? (event as MouseEvent).pageY : (event as TouchEvent).touches[0].clientY;
   }
 
-  dragStart(event: MouseEvent | TouchEvent, type: 'experience' | 'class' | 'review' | 'reviewLayer2') {
+  dragStart(event: MouseEvent | TouchEvent, type: 'experience' | 'class' | 'special' | 'review' | 'reviewLayer2') {
     const sliderEl = this.getSliderElement(type);
     if (!sliderEl?.parentElement) return;
 
@@ -1057,7 +1224,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.renderer.addClass(sliderEl.parentElement, 'dragging');
   }
 
-  dragging(event: MouseEvent | TouchEvent, type: 'experience' | 'class' | 'review' | 'reviewLayer2') {
+  dragging(event: MouseEvent | TouchEvent, type: 'experience' | 'class' | 'special' | 'review' | 'reviewLayer2') {
     const state = this.sliderDragState[type];
     if (!state.isDragging) return;
     if (state.isScrolling) return;
@@ -1090,7 +1257,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     const diff = currentX - state.startX;
     const newTranslate = state.startTranslate + diff;
 
-    if (type === 'experience' || type === 'class') {
+    if (type === 'experience' || type === 'class' || type === 'special') {
         const boundaries = this.getSliderBoundaries(type);
         state.currentTranslate = Math.max(boundaries.min, Math.min(newTranslate, boundaries.max));
     } else {
@@ -1110,14 +1277,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.renderer.setStyle(sliderEl, 'transform', `translateX(${state.currentTranslate}px)`);
   }
   
-  private handleDragEnd(): void {
-    if (this.sliderDragState.experience.isDragging) this.dragEnd('experience');
-    if (this.sliderDragState.class.isDragging) this.dragEnd('class');
-    if (this.sliderDragState.review.isDragging) this.dragEnd('review');
-    if (this.sliderDragState.reviewLayer2.isDragging) this.dragEnd('reviewLayer2');
-  }
-
-  dragEnd(type: 'experience' | 'class' | 'review' | 'reviewLayer2') {
+  dragEnd(type: 'experience' | 'class' | 'special' | 'review' | 'reviewLayer2') {
     const state = this.sliderDragState[type];
     if (!state.isDragging) return;
     state.isDragging = false;
@@ -1126,7 +1286,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.renderer.removeClass(sliderEl.parentElement, 'dragging');
 
-    if (type === 'experience' || type === 'class') {
+    if (type === 'experience' || type === 'class' || type === 'special') {
         this.startInertiaAnimation(type);
     } else {
       const movedBy = state.currentTranslate - state.startTranslate;
@@ -1144,7 +1304,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     if (type === 'reviewLayer2') this.resumeReviewAutoScrollLayer2(5000);
   }
 
-  private startInertiaAnimation(type: 'experience' | 'class') {
+  private startInertiaAnimation(type: 'experience' | 'class' | 'special') {
     const state = this.sliderDragState[type];
     const sliderEl = this.getSliderElement(type);
     if (!sliderEl) return;
@@ -1181,7 +1341,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     state.animationFrameId = requestAnimationFrame(animate);
   }
 
-  private updateIndexFromPosition(type: 'experience' | 'class') {
+  private updateIndexFromPosition(type: 'experience' | 'class' | 'special') {
     const state = this.sliderDragState[type];
     const slideWidth = this.getSlideWidth(type);
     if (slideWidth > 0) {
@@ -1190,6 +1350,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         const clampedIndex = Math.max(0, Math.min(finalIndex, maxItems));
         if (type === 'experience') this.experienceIndex.set(clampedIndex);
         else if (type === 'class') this.classIndex.set(clampedIndex);
+        else if (type === 'special') this.specialIndex.set(clampedIndex);
     }
   }
 
@@ -1281,7 +1442,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       this.renderer.setStyle(sliderEl, 'transform', `translateX(${currentTranslateX}px)`);
       this.reviewLayer2AnimationId = requestAnimationFrame(() => this.animateReviewsLayer2());
   }
-
+  
   ngOnDestroy() {
       if (this.bannerInterval) clearInterval(this.bannerInterval);
       clearTimeout(this.animationTimeoutId);
@@ -1291,7 +1452,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         if(this.sliderTransitionTimers[key]) clearTimeout(this.sliderTransitionTimers[key]);
       });
       if (isPlatformBrowser(this.platformId)) {
-        window.removeEventListener('resize', this.resizeListener);
+        window.removeEventListener('resize', this.resizeListener); // Remove this as well
         const scrollEl = this.scrollContainer();
         if (scrollEl) scrollEl.nativeElement.removeEventListener('scroll', this.parallaxListener);
         if (this.unlistenMouseUp) this.unlistenMouseUp();
