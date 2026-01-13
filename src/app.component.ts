@@ -1,4 +1,5 @@
 
+
 import { Component, signal, OnInit, OnDestroy, inject, PLATFORM_ID, ElementRef, Renderer2, AfterViewInit, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule, NgOptimizedImage, isPlatformBrowser } from '@angular/common';
 
@@ -288,6 +289,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   parallaxBg = viewChild<ElementRef<HTMLElement>>('parallaxBg');
   reviewParallaxBg = viewChild<ElementRef<HTMLElement>>('reviewParallaxBg');
   groupFooterParallaxBg = viewChild<ElementRef<HTMLElement>>('groupFooterParallaxBg');
+  floatingImage1 = viewChild<ElementRef<HTMLElement>>('floatingImage1');
+  floatingImage2 = viewChild<ElementRef<HTMLElement>>('floatingImage2');
   experienceSlider = viewChild<ElementRef<HTMLElement>>('experienceSlider');
   classSlider = viewChild<ElementRef<HTMLElement>>('classSlider');
   specialSlider = viewChild<ElementRef<HTMLElement>>('specialSlider');
@@ -593,12 +596,15 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   ];
 
   faqs: FaqItem[] = [
-    { question: '예약은 꼭 해야 하나요?', answer: '네, 원활한 체험 진행을 위해 네이버 예약제를 운영하고 있습니다. 당일 예약은 체험 1시간 전까지 가능합니다.' },
-    { question: '보호자 입장권은 필수 인가요?', answer: '메종디아트는 1인 1체험을 원칙으로 합니다. 미취학 아동의 경우 체험시 동반 입장하여 함께 체험 하실 수 있도록 만든 티켓 입니다. 보호자 입장권에는 시그니쳐 메뉴를 제외한 음료가 포함 되어 있습니다.' },
+    { question: '예약은 꼭 해야 하나요?', answer: '네, 다른 이용자들과의 혼선을 막고 원활한 체험 진행을 위해 네이버 예약제를 운영하고 있습니다. 당일 예약은 체험 1시간 전까지 가능합니다.' },
+    { question: '보호자 입장권은 필수 인가요?', answer: '메종디아트 입실시 1인 1체험으로 운영 되고 있습니다. 예외적으로 미취학 아동 체험시 부모 동반 입장하여 함께 체험 할 수 있도록 운영 되고 있으며 이때, 보호자 입장권을 구매 하시면 됩니다. (보호자 입장권에는 시그니쳐 메뉴를 제외한 음료가 포함 되어 있습니다.)' },
     { question: '그림을 못 그려도 괜찮나요?', answer: '물론입니다! 메종디아트의 도안과 가이드가 있어 초보자도 멋진 작품을 완성할 수 있습니다. 전문가의 코칭도 도와드립니다.' },
     { question: '소요 시간은 얼마나 걸리나요?', answer: '프로그램마다 다르지만 보통 1시간 30분에서 2시간 정도 소요됩니다. 개인차에 따라 조금씩 달라질 수 있습니다.' },
-    { question: '주차는 가능한가요?', answer: '네, 건물 내 주차타워를 무료로 이용하실 수 있습니다. 대형 SUV 차량의 경우 별도 문의 부탁드립니다.' },
-    { question: '단체 예약도 가능한가요?', answer: '네, 기업 워크샵, 동호회 등 단체 체험 및 대관이 가능합니다. 전화로 문의 주시면 자세한 상담 도와드리겠습니다.' }
+    { question: '주차는 가능한가요?', answer: '네, 건물 내 주차타워를 무료로 이용하실 수 있습니다. 대형 & SUV 차량의 경우 별도 문의 부탁드립니다.' },
+    { question: '단체 예약도 가능한가요?', answer: '네, 기업 워크샵, 동호회 등 단체 체험 및 대관이 가능합니다. 전화로 문의 주시면 자세한 상담 도와드리겠습니다.' },
+    { question: '재방문 50% 할인은 어떻게 해야 하나요?', answer: '재방문 50% 할인과 같은 예약 메뉴가 없는 서비스 일 경우 네이버예약의 \'방문예약\' 메뉴로 간략한 메모와 함께 예약 하고 오시면 할인/상담 도와 드립니다.' },
+    { question: '네이버 예약이 낯설어서 그냥 방문 하면 안되나요?', answer: '매장에 오셔서 체험 진행도 가능은 하지만 이용자님들과 혼선이 있거나 체험 공간이 없어 체험진행이 어려울 수 있습니다. 프로그램 선택이 어려우시면 \'방문예약\'을 하시고 오셔서 상담 하셔도 됩니다.' },
+    { question: '몇 세 부터 체험 가능 한가요?', answer: '아트를 즐기는 나이는 따로 없답니다. 붓을 들수 있는 나이면 누구나 체험 가능 하며 4세도 엄마와 함께 체험 가능 합니다. 커플, 회사원, 주부, 부모님 모두 즐겁게 체험 가능 합니다.' }
   ];
 
   private readonly resizeListener = () => {
@@ -672,6 +678,33 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  ngOnDestroy() {
+    if (isPlatformBrowser(this.platformId)) {
+      window.removeEventListener('resize', this.resizeListener);
+      const scrollEl = this.scrollContainer();
+      if (scrollEl) {
+        scrollEl.nativeElement.removeEventListener('scroll', this.parallaxListener);
+        scrollEl.nativeElement.removeEventListener('scroll', this.updateActiveNavOnScrollHandler);
+      }
+      
+      this.unlistenMouseUp?.();
+      this.unlistenTouchEnd?.();
+      this.scrollSpyObserver?.disconnect();
+      this.reviewCountObserver?.disconnect();
+    }
+    
+    clearInterval(this.bannerInterval);
+    clearTimeout(this.animationTimeoutId);
+    
+    if (this.reviewAnimationId) cancelAnimationFrame(this.reviewAnimationId);
+    if (this.reviewLayer2AnimationId) cancelAnimationFrame(this.reviewLayer2AnimationId);
+    if (this.countUpAnimationId) cancelAnimationFrame(this.countUpAnimationId);
+    clearTimeout(this.countUpRestartTimeoutId);
+    clearTimeout(this.reviewAutoScrollTimeout);
+    clearTimeout(this.reviewAutoScrollTimeoutLayer2);
+    Object.values(this.sliderTransitionTimers).forEach(timer => clearTimeout(timer));
+  }
+
   onGlobalMove(event: MouseEvent | TouchEvent) {
     if (this.sliderDragState.experience.isDragging) this.dragging(event, 'experience');
     else if (this.sliderDragState.class.isDragging) this.dragging(event, 'class');
@@ -709,13 +742,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   private setupScrollSpy() {
     if (!isPlatformBrowser(this.platformId)) return;
     
-    // We observe the main sections. When one enters the "top area", we check its background brightness.
     const scrollContainerEl = this.scrollContainer()?.nativeElement;
     if (!scrollContainerEl) return;
 
     const options = {
       root: scrollContainerEl,
-      // '0px 0px -90% 0px' means: Check intersection with the top 10% of the viewport.
       rootMargin: '0px 0px -90% 0px', 
       threshold: 0
     };
@@ -724,10 +755,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           const id = entry.target.id;
-          // Sections that have a LIGHT background (so we need DARK text)
           const lightSections = ['intro', 'programs', 'reviews', 'group', 'faq'];
-          // 'home', 'healing-art', 'quote-divider', 'contact' are DARK background (need WHITE text)
-          
           this.isMenuTextDark.set(lightSections.includes(id));
         }
       });
@@ -771,29 +799,17 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.activeDesktopNav.set(currentSection);
   };
 
-  // Helper to replace DOMMatrix for safer translateX extraction
   private getTranslateX(element: HTMLElement): number {
     if (!isPlatformBrowser(this.platformId)) return 0;
     const style = window.getComputedStyle(element);
     const transform = style.transform;
     if (transform === 'none' || !transform) return 0;
-
-    // matrix(a, b, c, d, tx, ty)
     const mat = transform.match(/^matrix\((.+)\)$/);
-    if (mat) {
-        const parts = mat[1].split(',').map(parseFloat);
-        return parts[4] || 0; 
-    }
-    // matrix3d support if needed, though usually 2d for simple slides
+    if (mat) return parseFloat(mat[1].split(', ')[4]);
     const mat3d = transform.match(/^matrix3d\((.+)\)$/);
-    if (mat3d) {
-        const parts = mat3d[1].split(',').map(parseFloat);
-        return parts[12] || 0;
-    }
+    if (mat3d) return parseFloat(mat3d[1].split(', ')[12]);
     return 0;
   }
-
-  // ... (Other standard methods remain similar but using getTranslateX)
 
   private setupInfiniteReviewSlider(): void {
     if (!isPlatformBrowser(this.platformId) || this.reviews.length === 0) {
@@ -855,9 +871,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private updateParallax() {
-    const applyEffect = (el: HTMLElement | undefined, speed: number) => {
+    const applyEffect = (elRef: ElementRef<HTMLElement> | undefined, speed: number) => {
         const scrollEl = this.scrollContainer();
-        if (!el || !scrollEl) return;
+        if (!elRef || !scrollEl) return;
+        const el = elRef.nativeElement;
         const container = scrollEl.nativeElement;
         const section = el.closest('section') as HTMLElement;
         if (!section) return;
@@ -874,9 +891,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     };
 
     if (isPlatformBrowser(this.platformId)) {
-        applyEffect(this.parallaxBg()?.nativeElement, -0.2);
-        applyEffect(this.reviewParallaxBg()?.nativeElement, -0.1);
-        applyEffect(this.groupFooterParallaxBg()?.nativeElement, -0.05);
+        applyEffect(this.parallaxBg(), -0.2);
+        applyEffect(this.reviewParallaxBg(), -0.1);
+        applyEffect(this.groupFooterParallaxBg(), -0.05);
+        applyEffect(this.floatingImage1(), 0.1);
+        applyEffect(this.floatingImage2(), -0.1);
     }
   }
 
@@ -932,580 +951,465 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     const scrollContainerEl = this.scrollContainer()?.nativeElement;
     if (element && scrollContainerEl) {
       const isDesktop = window.innerWidth >= 768;
+      
       let offset = 0;
-      
-      // 모바일 헤더 높이 60px (64px에서 복구) -> 0px로 수정
-      if (!isDesktop && sectionId !== 'home') {
-        offset = 0;
+      if (isDesktop) {
+          // Sections located after the sticky nav need offset to not be obscured
+          const sectionsAfterNav = ['programs', 'group', 'faq', 'contact'];
+          if (sectionsAfterNav.includes(sectionId)) {
+            offset = 70; // Adjusted for sticky nav height (~55px) + breathing room
+          }
       }
       
-      // 데스크탑 네비게이션 높이: 48px -> 46px로 수정
-      if (isDesktop && !['home', 'intro', 'healing-art', 'quote-divider'].includes(sectionId)) {
-          offset = 46; 
-      }
-      
-      const rect = element.getBoundingClientRect();
-      const scrollContainerRect = scrollContainerEl.getBoundingClientRect();
-      const topPosition = rect.top - scrollContainerRect.top + scrollContainerEl.scrollTop - offset;
-      scrollContainerEl.scrollTo({ top: topPosition, behavior: 'smooth' });
+      const elementPosition = element.offsetTop;
+      const offsetPosition = elementPosition - offset;
+      scrollContainerEl.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+    }
+  }
+  
+  private getSliderElement(sliderName: string): HTMLElement | undefined {
+    switch (sliderName) {
+      case 'experience': return this.experienceSlider()?.nativeElement;
+      case 'class': return this.classSlider()?.nativeElement;
+      case 'special': return this.specialSlider()?.nativeElement;
+      case 'review': return this.reviewSlider()?.nativeElement;
+      case 'reviewLayer2': return this.reviewSliderLayer2()?.nativeElement;
+      default: return undefined;
+    }
+  }
+  
+  private calculateMaxIndices() {
+    if (!isPlatformBrowser(this.platformId)) return;
+    const getVisibleCount = (sliderEl: HTMLElement | undefined): number => {
+        if (!sliderEl) return 1;
+        const firstChild = sliderEl.firstElementChild as HTMLElement;
+        if (!firstChild) return 1;
+        const childWidth = firstChild.offsetWidth;
+        const containerWidth = sliderEl.parentElement?.offsetWidth || 0;
+        return Math.max(1, Math.floor(containerWidth / childWidth));
+    };
+    this.maxIndices.update(current => ({
+        ...current,
+        experience: Math.max(0, this.experiences.length - getVisibleCount(this.experienceSlider()?.nativeElement)),
+        class: Math.max(0, this.oneDayClasses.length - getVisibleCount(this.classSlider()?.nativeElement)),
+        special: Math.max(0, this.specialPrograms.length - getVisibleCount(this.specialSlider()?.nativeElement)),
+    }));
+  }
+
+  private updateSliderPosition(sliderName: 'experience' | 'class' | 'special' | 'review' | 'reviewLayer2', transition: boolean = true) {
+    const sliderEl = this.getSliderElement(sliderName);
+    if (!sliderEl) return;
+    
+    const firstChild = sliderEl.firstElementChild as HTMLElement;
+    if (!firstChild) return;
+    
+    const childWidth = firstChild.offsetWidth;
+    const gap = parseInt(window.getComputedStyle(sliderEl).gap || '0', 10);
+
+    let targetTranslateX: number;
+
+    if (sliderName === 'review') {
+        targetTranslateX = -this.reviewIndex() * (childWidth + gap);
+    } else if (sliderName === 'reviewLayer2') {
+        targetTranslateX = this.getTranslateX(sliderEl);
+    } else {
+        const indexSignal = this[`${sliderName}Index` as keyof this] as any;
+        const index = indexSignal();
+        targetTranslateX = -index * (childWidth + gap);
+    }
+    this.sliderDragState[sliderName].currentTranslate = targetTranslateX;
+    if (transition) this.renderer.addClass(sliderEl, 'slider-transition');
+    else this.renderer.removeClass(sliderEl, 'slider-transition');
+    this.renderer.setStyle(sliderEl, 'transform', `translateX(${targetTranslateX}px)`);
+    if (transition) {
+        if (this.sliderTransitionTimers[sliderName]) clearTimeout(this.sliderTransitionTimers[sliderName]);
+        this.sliderTransitionTimers[sliderName] = setTimeout(() => {
+            this.renderer.removeClass(sliderEl, 'slider-transition');
+        }, 500);
     }
   }
 
-  callShop() { window.location.href = 'tel:0507-1381-5672'; }
+  public dragging(event: MouseEvent | TouchEvent, sliderName: string) {
+    const state = this.sliderDragState[sliderName];
+    if (!state || !state.isDragging) return;
+    
+    const clientX = event.type.startsWith('touch') ? (event as TouchEvent).touches[0].clientX : (event as MouseEvent).clientX;
+    const clientY = event.type.startsWith('touch') ? (event as TouchEvent).touches[0].clientY : (event as MouseEvent).clientY;
+    
+    if (state.isScrolling === undefined) {
+      const deltaX = Math.abs(clientX - state.startX);
+      const deltaY = Math.abs(clientY - state.startY);
+      state.isScrolling = deltaY > deltaX;
+    }
 
-  openPopup(type: 'terms' | 'privacy') { this.popupContent.set(type); this.isPopupOpen.set(true); }
-  closePopup() { this.isPopupOpen.set(false); }
+    if (state.isScrolling) {
+      this.dragEnd(sliderName);
+      return;
+    }
+    event.preventDefault();
+
+    const currentX = clientX;
+    const diff = currentX - state.startX;
+    state.currentTranslate = state.startTranslate + diff;
+
+    const sliderEl = this.getSliderElement(sliderName);
+    if (sliderEl) {
+      this.renderer.setStyle(sliderEl, 'transform', `translateX(${state.currentTranslate}px)`);
+    }
+
+    const now = performance.now();
+    const timeDelta = now - state.lastTimestamp;
+    const posDelta = currentX - state.lastX;
+    state.velocityX = (posDelta / timeDelta) * (1000 / 60);
+    state.lastX = currentX;
+    state.lastTimestamp = now;
+  }
+
+  private dragEnd(sliderName: string) {
+    const state = this.sliderDragState[sliderName];
+    if (!state || !state.isDragging) return;
+    state.isDragging = false;
+    
+    const sliderEl = this.getSliderElement(sliderName);
+    const sliderContainer = sliderEl?.parentElement;
+    if (sliderContainer) this.renderer.removeClass(sliderContainer, 'dragging');
+
+    if (sliderName.startsWith('review')) {
+        this.handleReviewDragEnd(sliderName as 'review' | 'reviewLayer2');
+        return;
+    }
+    
+    const firstChild = sliderEl?.firstElementChild as HTMLElement;
+    if (!firstChild) return;
+
+    const childWidth = firstChild.offsetWidth;
+    const gap = parseInt(window.getComputedStyle(sliderEl).gap || '0', 10);
+    const itemWidth = childWidth + gap;
+
+    let projectedTranslate = state.currentTranslate + state.velocityX * 10;
+    
+    const indexSignal = (this as any)[`${sliderName}Index`];
+    const maxIndex = (this.maxIndices() as any)[sliderName];
+
+    let newIndex = Math.round(-projectedTranslate / itemWidth);
+    newIndex = Math.max(0, Math.min(newIndex, maxIndex));
+
+    indexSignal.set(newIndex);
+    this.updateSliderPosition(sliderName as any, true);
+  }
+
+  private handleReviewDragEnd(sliderName: 'review' | 'reviewLayer2') {
+    if (sliderName === 'review') this.resumeReviewAutoScroll(1000);
+    if (sliderName === 'reviewLayer2') this.resumeReviewAutoScrollLayer2(1000);
+
+    const state = this.sliderDragState[sliderName];
+    const sliderEl = this.getSliderElement(sliderName);
+    if (!sliderEl) return;
+
+    const firstChild = sliderEl.firstElementChild as HTMLElement;
+    if (!firstChild) return;
+
+    const itemWidth = firstChild.offsetWidth;
+    const gap = parseInt(window.getComputedStyle(sliderEl).gap || '0', 10);
+    const itemWidthWithGap = itemWidth + gap;
+    const originalItems = sliderName === 'review' ? this.reviews : this.reviewsLayer2;
+    const totalContentWidth = originalItems.length * itemWidthWithGap;
+    let currentTranslate = state.currentTranslate;
+
+    if (sliderName === 'review') {
+        const wrapPoint = -(totalContentWidth + (this.CLONE_COUNT * itemWidthWithGap));
+        if (currentTranslate <= wrapPoint) {
+            currentTranslate += totalContentWidth;
+            this.renderer.setStyle(sliderEl, 'transform', `translateX(${currentTranslate}px)`);
+            this.reviewIndex.update(i => i - originalItems.length);
+        }
+        const startPoint = -(this.CLONE_COUNT * itemWidthWithGap);
+        if(currentTranslate > startPoint) {
+            currentTranslate -= totalContentWidth;
+            this.renderer.setStyle(sliderEl, 'transform', `translateX(${currentTranslate}px)`);
+            this.reviewIndex.update(i => i + originalItems.length);
+        }
+    } else { 
+        const wrapPoint = 0;
+        if (currentTranslate > wrapPoint) {
+            currentTranslate -= totalContentWidth;
+            this.renderer.setStyle(sliderEl, 'transform', `translateX(${currentTranslate}px)`);
+        }
+        const startPoint = -(totalContentWidth);
+        if (currentTranslate < startPoint) {
+            currentTranslate += totalContentWidth;
+            this.renderer.setStyle(sliderEl, 'transform', `translateX(${currentTranslate}px)`);
+        }
+    }
+    state.currentTranslate = currentTranslate;
+  }
+
+  private popupImageDragging(event: MouseEvent | TouchEvent) {
+    if (!this.popupImageDragState.isDragging) return;
+
+    const clientX = event.type.startsWith('touch') ? (event as TouchEvent).touches[0].clientX : (event as MouseEvent).clientX;
+    const clientY = event.type.startsWith('touch') ? (event as TouchEvent).touches[0].clientY : (event as MouseEvent).clientY;
+    
+    if (this.popupImageDragState.isScrolling === undefined) {
+      const deltaX = Math.abs(clientX - this.popupImageDragState.startX);
+      const deltaY = Math.abs(clientY - this.popupImageDragState.startY);
+      this.popupImageDragState.isScrolling = deltaY > deltaX;
+    }
+
+    if (this.popupImageDragState.isScrolling) return;
+    event.preventDefault();
+    const diff = clientX - this.popupImageDragState.startX;
+    const newTranslate = this.popupImageDragState.startTranslate + diff;
+    this.popupImageTranslateX.set(newTranslate);
+  }
+
+  private popupImageDragEnd() {
+    if (!this.popupImageDragState.isDragging) return;
+
+    this.popupImageDragState.isDragging = false;
+    this.popupImageSliderTransition.set(true);
+
+    const sliderEl = this.popupImageSliderContainer()?.nativeElement;
+    if (!sliderEl) return;
+
+    const itemWidth = sliderEl.offsetWidth;
+    const dragDistance = this.popupImageTranslateX() - this.popupImageDragState.startTranslate;
+    let newIndex = this.programImageIndex();
+    if (Math.abs(dragDistance) > itemWidth * 0.3) {
+        newIndex += dragDistance < 0 ? 1 : -1;
+    }
+    const maxIndex = (this.selectedProgram()?.images?.length || 1) - 1;
+    newIndex = Math.max(0, Math.min(newIndex, maxIndex));
+    this.programImageIndex.set(newIndex);
+    this.popupImageTranslateX.set(-newIndex * itemWidth);
+  }
+
+  private pauseReviewAutoScroll() {
+    this.isReviewSliderPaused.set(true);
+    if (this.reviewAutoScrollTimeout) clearTimeout(this.reviewAutoScrollTimeout);
+  }
+
+  private resumeReviewAutoScroll(delay: number = 0) {
+    if (this.reviewAutoScrollTimeout) clearTimeout(this.reviewAutoScrollTimeout);
+    this.reviewAutoScrollTimeout = setTimeout(() => {
+      this.isReviewSliderPaused.set(false);
+      this.lastFrameTime = performance.now();
+      if (!this.reviewAnimationId) {
+        this.reviewAnimationId = requestAnimationFrame((t) => this.animateReviewScroll(t));
+      }
+    }, delay);
+  }
+
+  private animateReviewScroll(timestamp: number) {
+    if (this.isReviewSliderPaused()) {
+        this.reviewAnimationId = null;
+        return;
+    }
+    const deltaTime = (timestamp - this.lastFrameTime) / 1000;
+    this.lastFrameTime = timestamp;
+
+    const sliderEl = this.reviewSlider()?.nativeElement;
+    if (!sliderEl) return;
+
+    let currentTranslate = this.getTranslateX(sliderEl);
+    currentTranslate -= this.SCROLL_SPEED * deltaTime;
+    
+    const firstChild = sliderEl.firstElementChild as HTMLElement;
+    if (firstChild) {
+      const itemWidth = firstChild.offsetWidth;
+      const gap = parseInt(window.getComputedStyle(sliderEl).gap || '0', 10);
+      const itemWidthWithGap = itemWidth + gap;
+      const totalContentWidth = this.reviews.length * itemWidthWithGap;
+      const wrapPoint = -(totalContentWidth + (this.CLONE_COUNT * itemWidthWithGap));
+      if (currentTranslate <= wrapPoint) {
+        currentTranslate += totalContentWidth;
+        this.reviewIndex.update(i => i - this.reviews.length);
+      }
+    }
+    this.renderer.setStyle(sliderEl, 'transform', `translateX(${currentTranslate}px)`);
+    this.reviewAnimationId = requestAnimationFrame((t) => this.animateReviewScroll(t));
+  }
+
+  private pauseReviewAutoScrollLayer2() {
+    this.isReviewSliderLayer2Paused.set(true);
+    if (this.reviewAutoScrollTimeoutLayer2) clearTimeout(this.reviewAutoScrollTimeoutLayer2);
+  }
+
+  private resumeReviewAutoScrollLayer2(delay: number = 0) {
+    if (this.reviewAutoScrollTimeoutLayer2) clearTimeout(this.reviewAutoScrollTimeoutLayer2);
+    this.reviewAutoScrollTimeoutLayer2 = setTimeout(() => {
+      this.isReviewSliderLayer2Paused.set(false);
+      this.lastFrameTimeLayer2 = performance.now();
+      if (!this.reviewLayer2AnimationId) {
+        this.reviewLayer2AnimationId = requestAnimationFrame((t) => this.animateReviewScrollLayer2(t));
+      }
+    }, delay);
+  }
+  
+  private animateReviewScrollLayer2(timestamp: number) {
+    if (this.isReviewSliderLayer2Paused()) {
+        this.reviewLayer2AnimationId = null;
+        return;
+    }
+    const deltaTime = (timestamp - this.lastFrameTimeLayer2) / 1000;
+    this.lastFrameTimeLayer2 = timestamp;
+
+    const sliderEl = this.reviewSliderLayer2()?.nativeElement;
+    if (!sliderEl) return;
+    let currentTranslate = this.getTranslateX(sliderEl);
+    currentTranslate += this.SCROLL_SPEED * deltaTime;
+    
+    const firstChild = sliderEl.firstElementChild as HTMLElement;
+    if (firstChild) {
+      const itemWidth = firstChild.offsetWidth;
+      const totalContentWidth = this.reviewsLayer2.length * itemWidth;
+      const wrapPoint = 0;
+      if (currentTranslate >= wrapPoint) {
+        currentTranslate -= totalContentWidth;
+      }
+    }
+    this.renderer.setStyle(sliderEl, 'transform', `translateX(${currentTranslate}px)`);
+    this.reviewLayer2AnimationId = requestAnimationFrame((t) => this.animateReviewScrollLayer2(t));
+  }
 
   openProgramPopup(program: ProgramItem) {
     this.selectedProgram.set(program);
     this.programImageIndex.set(0);
-    this.isProgramPopupOpen.set(true);
     this.popupImageTranslateX.set(0);
-    this.popupImageSliderTransition.set(true);
+    this.isProgramPopupOpen.set(true);
+    this.renderer.addClass(document.body, 'overflow-hidden');
   }
 
   closeProgramPopup() {
     this.isProgramPopupOpen.set(false);
-    setTimeout(() => { this.selectedProgram.set(null); }, 300);
+    this.renderer.removeClass(document.body, 'overflow-hidden');
+    setTimeout(() => this.selectedProgram.set(null), 300);
   }
 
-  nextProgramImage() {
-    const images = this.selectedProgram()?.images;
-    if (images && images.length > 1) {
-      const newIndex = this.programImageIndex() + 1;
-      if (newIndex < images.length) this.programImageIndex.set(newIndex);
-    }
-    this.updatePopupSliderPosition();
+  openPopup(contentType: 'terms' | 'privacy') {
+    this.popupContent.set(contentType);
+    this.isPopupOpen.set(true);
+    this.renderer.addClass(document.body, 'overflow-hidden');
   }
 
-  prevProgramImage() {
-    if (this.programImageIndex() > 0) this.programImageIndex.update(i => i - 1);
-    this.updatePopupSliderPosition();
-  }
-  
-  setProgramImage(index: number) {
-    this.programImageIndex.set(index);
-    this.updatePopupSliderPosition();
+  closePopup() {
+    this.isPopupOpen.set(false);
+    this.renderer.removeClass(document.body, 'overflow-hidden');
+    setTimeout(() => this.popupContent.set(null), 300);
   }
 
-  updatePopupSliderPosition() {
-    const sliderEl = this.popupImageSliderContainer();
-    if (sliderEl) {
-        const containerWidth = sliderEl.nativeElement.offsetWidth;
-        const newTranslate = -this.programImageIndex() * containerWidth;
-        this.popupImageSliderTransition.set(true);
-        this.popupImageTranslateX.set(newTranslate);
-    }
-  }
-
-  popupImageDragStart(event: MouseEvent | TouchEvent) {
-    const sliderEl = this.popupImageSliderContainer()?.nativeElement;
-    if (!sliderEl) return;
-    this.popupImageDragState.isDragging = true;
-    this.popupImageDragState.startX = this.getPositionX(event);
-    this.popupImageDragState.startY = this.getPositionY(event);
-    this.popupImageDragState.startTranslate = this.popupImageTranslateX();
-    this.popupImageDragState.isScrolling = undefined;
-    this.popupImageSliderTransition.set(false);
-  }
-
-  popupImageDragging(event: MouseEvent | TouchEvent) {
-    if (!this.popupImageDragState.isDragging) return;
-    const currentX = this.getPositionX(event);
-    const currentY = this.getPositionY(event);
-    if (this.popupImageDragState.isScrolling === undefined) {
-        const dx = Math.abs(currentX - this.popupImageDragState.startX);
-        const dy = Math.abs(currentY - this.popupImageDragState.startY);
-        if (dx > 5 || dy > 5) {
-            if (dy > dx) {
-                this.popupImageDragState.isScrolling = true;
-                this.popupImageDragState.isDragging = false;
-                return;
-            } else {
-                this.popupImageDragState.isScrolling = false;
-            }
-        }
-    }
-    if (this.popupImageDragState.isScrolling) return;
-    if (event.cancelable) event.preventDefault();
-    const diff = currentX - this.popupImageDragState.startX;
-    this.popupImageTranslateX.set(this.popupImageDragState.startTranslate + diff);
-  }
-
-  popupImageDragEnd() {
-    if (!this.popupImageDragState.isDragging) return;
-    this.popupImageDragState.isDragging = false;
-    const sliderEl = this.popupImageSliderContainer()?.nativeElement;
-    if (!sliderEl) return;
-    const containerWidth = sliderEl.offsetWidth;
-    const images = this.selectedProgram()?.images;
-    if (!images || images.length === 0) return;
-    const currentTranslate = this.popupImageTranslateX();
-    let newIndex = Math.round(-currentTranslate / containerWidth);
-    newIndex = Math.max(0, Math.min(newIndex, images.length - 1));
-    this.programImageIndex.set(newIndex);
-    this.updatePopupSliderPosition();
-  }
-
-  nextExperience() { this.setIndex('experience', this.experienceIndex() + 1); }
-  prevExperience() { this.setIndex('experience', this.experienceIndex() - 1); }
-  nextClass() { this.setIndex('class', this.classIndex() + 1); }
-  prevClass() { this.setIndex('class', this.classIndex() - 1); }
-  nextSpecial() { this.setIndex('special', this.specialIndex() + 1); }
-  prevSpecial() { this.setIndex('special', this.specialIndex() - 1); }
-  
   toggleFaq(index: number) {
-    this.openFaqIndex.update(currentIndex => (currentIndex === index ? null : index));
+    this.openFaqIndex.update(current => current === index ? null : index);
+  }
+
+  public getMaxIndex(sliderName: 'experience' | 'class' | 'special'): number {
+    return this.maxIndices()[sliderName];
   }
   
-  private getSliderElement(type: string): HTMLElement | undefined {
-    if (type === 'experience') return this.experienceSlider()?.nativeElement;
-    if (type === 'class') return this.classSlider()?.nativeElement;
-    if (type === 'special') return this.specialSlider()?.nativeElement;
-    if (type === 'review') return this.reviewSlider()?.nativeElement;
-    if (type === 'reviewLayer2') return this.reviewSliderLayer2()?.nativeElement;
-    return undefined;
+  public prevExperience() {
+    this.experienceIndex.update(i => Math.max(0, i - 1));
+    this.updateSliderPosition('experience');
   }
   
-  private getSlideWidth(type: string): number {
-    if (!isPlatformBrowser(this.platformId)) return 500;
-    const sliderEl = this.getSliderElement(type);
-    if (!sliderEl?.firstElementChild) return 0;
-    const firstRect = sliderEl.firstElementChild.getBoundingClientRect();
-    if (sliderEl.children.length > 1) {
-        const secondRect = sliderEl.children[1].getBoundingClientRect();
-        return Math.abs(secondRect.left - firstRect.left);
-    }
-    return firstRect.width;
+  public nextExperience() {
+    this.experienceIndex.update(i => Math.min(this.getMaxIndex('experience'), i + 1));
+    this.updateSliderPosition('experience');
   }
   
-  private getIndex(type: string): number {
-    if (type === 'experience') return this.experienceIndex();
-    if (type === 'class') return this.classIndex();
-    if (type === 'special') return this.specialIndex();
-    return 0; 
-  }
-
-  public getMaxIndex(type: string): number {
-    if (type === 'experience') return this.maxIndices().experience;
-    if (type === 'class') return this.maxIndices().class;
-    if (type === 'special') return this.maxIndices().special;
-    return this.reviews.length - 1;
-  }
-
-  private calculateMaxIndices() {
-    if (!isPlatformBrowser(this.platformId)) return;
-    
-    const newIndices = { ...this.maxIndices() };
-    let changed = false;
-
-    ['experience', 'class', 'special'].forEach(type => {
-        const sliderEl = this.getSliderElement(type);
-        const containerEl = sliderEl?.parentElement;
-        if (!sliderEl || !containerEl) return;
-
-        const containerWidth = containerEl.clientWidth;
-        // Last element
-        const lastCard = sliderEl.children[sliderEl.children.length - 1] as HTMLElement;
-        if(!lastCard) return;
-
-        const sliderStyle = window.getComputedStyle(sliderEl);
-        const paddingRight = parseFloat(sliderStyle.paddingRight) || 0;
-        const scrollableWidth = lastCard.offsetLeft + lastCard.offsetWidth + paddingRight;
-
-        const slideWidth = this.getSlideWidth(type);
-        if (slideWidth <= 0) return;
-
-        let maxIndex = 0;
-        if (scrollableWidth > containerWidth) {
-            const maxScroll = scrollableWidth - containerWidth;
-            maxIndex = Math.ceil(maxScroll / slideWidth);
-        } else {
-            maxIndex = 0;
-        }
-        
-        if (newIndices[type as keyof typeof newIndices] !== maxIndex) {
-            newIndices[type as keyof typeof newIndices] = maxIndex;
-            changed = true;
-        }
-    });
-
-    if (changed) {
-        this.maxIndices.set(newIndices);
-    }
+  public prevClass() {
+    this.classIndex.update(i => Math.max(0, i - 1));
+    this.updateSliderPosition('class');
   }
   
-  private setIndex(type: string, index: number): void {
-    if (type === 'review' || type === 'reviewLayer2') {
-        const sliderEl = this.getSliderElement(type);
-        if (!sliderEl) return;
-        const slideWidth = this.getSlideWidth(type);
-        const finalTranslate = -index * slideWidth;
-        this.renderer.addClass(sliderEl, 'slider-transition');
-        this.renderer.setStyle(sliderEl, 'transform', `translateX(${finalTranslate}px)`);
-        if (this.sliderTransitionTimers[type]) clearTimeout(this.sliderTransitionTimers[type]);
-        this.sliderTransitionTimers[type] = setTimeout(() => {
-            if (type === 'review') this.checkReviewLoop();
-            if(sliderEl) this.renderer.removeClass(sliderEl, 'slider-transition');
-        }, 500);
-        return;
-    }
-    const maxIndex = this.getMaxIndex(type);
-    const newIndex = Math.max(0, Math.min(index, maxIndex));
-    if (type === 'experience') this.experienceIndex.set(newIndex);
-    else if (type === 'class') this.classIndex.set(newIndex);
-    else if (type === 'special') this.specialIndex.set(newIndex);
-    this.updateSliderPosition(type, true);
-  }
-
-  private getSliderBoundaries(type: 'experience' | 'class' | 'special'): { min: number, max: number } {
-    const sliderEl = this.getSliderElement(type);
-    const containerEl = sliderEl?.parentElement;
-    if (!isPlatformBrowser(this.platformId) || !sliderEl || !containerEl || sliderEl.children.length === 0 || !containerEl.clientWidth) {
-        return { min: 0, max: 0 };
-    }
-    const containerWidth = containerEl.clientWidth;
-    const lastCard = sliderEl.children[sliderEl.children.length - 1] as HTMLElement;
-    const sliderStyle = window.getComputedStyle(sliderEl);
-    const paddingRight = parseFloat(sliderStyle.paddingRight) || 0;
-    const scrollableWidth = lastCard.offsetLeft + lastCard.offsetWidth + paddingRight;
-
-    if (scrollableWidth <= containerWidth) return { min: 0, max: 0 };
-    return { min: containerWidth - scrollableWidth, max: 0 };
-  }
-
-  private updateSliderPosition(type: string, animated = false) {
-    const sliderEl = this.getSliderElement(type);
-    if (!sliderEl) return;
-
-    if (animated) this.renderer.addClass(sliderEl, 'slider-transition');
-    else this.renderer.removeClass(sliderEl, 'slider-transition');
-
-    let index = 0;
-    if (type === 'experience') index = this.experienceIndex();
-    else if (type === 'class') index = this.classIndex();
-    else if (type === 'special') index = this.specialIndex();
-    else if (type === 'review') index = this.reviewIndex();
-    else if (type === 'reviewLayer2') index = this.CLONE_COUNT; // Start at real items to allow reverse scrolling
-
-    const slideWidth = this.getSlideWidth(type);
-    let finalTranslate = -index * slideWidth;
-
-    if (type === 'experience' || type === 'class' || type === 'special') {
-        const boundaries = this.getSliderBoundaries(type as 'experience' | 'class' | 'special');
-        finalTranslate = Math.max(boundaries.min, Math.min(finalTranslate, boundaries.max));
-    }
-
-    this.renderer.setStyle(sliderEl, 'transform', `translateX(${finalTranslate}px)`);
-
-    if (animated && type !== 'review' && type !== 'reviewLayer2') {
-      if (this.sliderTransitionTimers[type]) clearTimeout(this.sliderTransitionTimers[type]);
-      this.sliderTransitionTimers[type] = setTimeout(() => {
-          if(sliderEl) this.renderer.removeClass(sliderEl, 'slider-transition');
-          this.sliderTransitionTimers[type] = null;
-      }, 500);
-    }
-  }
-
-  private checkReviewLoop(): void {
-      const sliderEl = this.getSliderElement('review');
-      if (!sliderEl) return;
-      const slideWidth = this.getSlideWidth('review');
-      if (slideWidth === 0) return;
-      
-      const currentTranslateX = this.getTranslateX(sliderEl); // Safely get translate
-      const currentIndex = Math.abs(Math.round(currentTranslateX / slideWidth));
-
-      const cloneCount = Math.min(this.reviews.length, this.CLONE_COUNT);
-      const totalOriginals = this.reviews.length;
-
-      if (currentIndex >= totalOriginals + cloneCount) {
-          const newTranslate = currentTranslateX + (totalOriginals * slideWidth);
-          this.renderer.removeClass(sliderEl, 'slider-transition');
-          this.renderer.setStyle(sliderEl, 'transform', `translateX(${newTranslate}px)`);
-      } 
-      else if (currentIndex < cloneCount) {
-          const newTranslate = currentTranslateX - (totalOriginals * slideWidth);
-          this.renderer.removeClass(sliderEl, 'slider-transition');
-          this.renderer.setStyle(sliderEl, 'transform', `translateX(${newTranslate}px)`);
-      }
-  }
-
-  private getPositionX(event: MouseEvent | TouchEvent): number {
-    return event.type.includes('mouse') ? (event as MouseEvent).pageX : (event as TouchEvent).touches[0].clientX;
+  public nextClass() {
+    this.classIndex.update(i => Math.min(this.getMaxIndex('class'), i + 1));
+    this.updateSliderPosition('class');
   }
   
-  private getPositionY(event: MouseEvent | TouchEvent): number {
-    return event.type.includes('mouse') ? (event as MouseEvent).pageY : (event as TouchEvent).touches[0].clientY;
+  public prevSpecial() {
+    this.specialIndex.update(i => Math.max(0, i - 1));
+    this.updateSliderPosition('special');
   }
-
-  dragStart(event: MouseEvent | TouchEvent, type: 'experience' | 'class' | 'special' | 'review' | 'reviewLayer2') {
-    const sliderEl = this.getSliderElement(type);
-    if (!sliderEl?.parentElement) return;
-
-    if (type === 'review') this.pauseReviewAutoScroll();
-    if (type === 'reviewLayer2') this.pauseReviewAutoScrollLayer2();
-
-    const state = this.sliderDragState[type];
-    if (state.animationFrameId) {
-        cancelAnimationFrame(state.animationFrameId);
-        state.animationFrameId = undefined;
+  
+  public nextSpecial() {
+    this.specialIndex.update(i => Math.min(this.getMaxIndex('special'), i + 1));
+    this.updateSliderPosition('special');
+  }
+  
+  public dragStart(event: MouseEvent | TouchEvent, sliderName: string) {
+    const state = this.sliderDragState[sliderName];
+    if (!state) return;
+  
+    if (sliderName.startsWith('review')) {
+      if (sliderName === 'review') this.pauseReviewAutoScroll();
+      else this.pauseReviewAutoScrollLayer2();
     }
-
-    state.startTranslate = this.getTranslateX(sliderEl); // Use safe helper
-    state.currentTranslate = state.startTranslate;
+  
     state.isDragging = true;
     state.isScrolling = undefined;
-    state.startX = this.getPositionX(event);
-    state.startY = this.getPositionY(event);
+    state.startX = event.type.startsWith('touch') ? (event as TouchEvent).touches[0].clientX : (event as MouseEvent).clientX;
+    state.startY = event.type.startsWith('touch') ? (event as TouchEvent).touches[0].clientY : (event as MouseEvent).clientY;
+    
+    const sliderEl = this.getSliderElement(sliderName);
+    if (sliderEl) {
+      state.startTranslate = this.getTranslateX(sliderEl);
+      this.renderer.removeClass(sliderEl, 'slider-transition');
+    }
+    
+    state.currentTranslate = state.startTranslate;
+    state.velocityX = 0;
     state.lastX = state.startX;
     state.lastTimestamp = performance.now();
-    state.velocityX = 0;
     
-    this.renderer.removeClass(sliderEl, 'slider-transition');
-    this.renderer.addClass(sliderEl.parentElement, 'dragging');
-  }
-
-  dragging(event: MouseEvent | TouchEvent, type: 'experience' | 'class' | 'special' | 'review' | 'reviewLayer2') {
-    const state = this.sliderDragState[type];
-    if (!state.isDragging) return;
-    if (state.isScrolling) return;
-
-    const currentX = this.getPositionX(event);
-    const currentY = this.getPositionY(event);
-
-    if (state.isScrolling === undefined) {
-        const dx = Math.abs(currentX - state.startX);
-        const dy = Math.abs(currentY - state.startY);
-        if (dx > 5 || dy > 5) {
-            if (dy > dx) {
-                state.isScrolling = true;
-                state.isDragging = false;
-                const sliderEl = this.getSliderElement(type);
-                if (sliderEl?.parentElement) this.renderer.removeClass(sliderEl.parentElement, 'dragging');
-                return;
-            } else {
-                state.isScrolling = false;
-            }
-        }
-    }
-
-    if (state.isScrolling === false && event.cancelable) event.preventDefault();
-    if (state.isScrolling === undefined) return;
-
-    const sliderEl = this.getSliderElement(type);
-    if (!sliderEl) return;
-
-    const diff = currentX - state.startX;
-    const newTranslate = state.startTranslate + diff;
-
-    if (type === 'experience' || type === 'class' || type === 'special') {
-        const boundaries = this.getSliderBoundaries(type);
-        state.currentTranslate = Math.max(boundaries.min, Math.min(newTranslate, boundaries.max));
-    } else {
-        state.currentTranslate = newTranslate;
-    }
-
-    const now = performance.now();
-    const deltaTime = now - state.lastTimestamp;
-    if (deltaTime > 16) {
-        const deltaX = currentX - state.lastX;
-        const newVelocity = (deltaX / deltaTime) * 1000;
-        state.velocityX = 0.6 * newVelocity + 0.4 * state.velocityX;
-        state.lastX = currentX;
-        state.lastTimestamp = now;
-    }
+    const sliderContainer = sliderEl?.parentElement;
+    if (sliderContainer) this.renderer.addClass(sliderContainer, 'dragging');
     
-    this.renderer.setStyle(sliderEl, 'transform', `translateX(${state.currentTranslate}px)`);
+    if (!event.type.startsWith('touch')) {
+      event.preventDefault();
+    }
   }
   
-  dragEnd(type: 'experience' | 'class' | 'special' | 'review' | 'reviewLayer2') {
-    const state = this.sliderDragState[type];
-    if (!state.isDragging) return;
-    state.isDragging = false;
-    const sliderEl = this.getSliderElement(type);
-    if (!sliderEl?.parentElement) return;
-
-    this.renderer.removeClass(sliderEl.parentElement, 'dragging');
-
-    if (type === 'experience' || type === 'class' || type === 'special') {
-        this.startInertiaAnimation(type);
-    } else {
-      const movedBy = state.currentTranslate - state.startTranslate;
-      const slideWidth = this.getSlideWidth(type);
-      if (slideWidth > 0) {
-        const dragThreshold = slideWidth / 4;
-        let currentLogicalIndex = Math.round(Math.abs(state.startTranslate / slideWidth));
-        let newIndex = currentLogicalIndex;
-        if (movedBy < -dragThreshold) newIndex++;
-        else if (movedBy > dragThreshold) newIndex--;
-        this.setIndex(type, newIndex);
-      }
+  public callShop() {
+    if (isPlatformBrowser(this.platformId)) {
+      window.location.href = 'tel:0507-1381-5672';
     }
-    if (type === 'review') this.resumeReviewAutoScroll(5000);
-    if (type === 'reviewLayer2') this.resumeReviewAutoScrollLayer2(5000);
-  }
-
-  private startInertiaAnimation(type: 'experience' | 'class' | 'special') {
-    const state = this.sliderDragState[type];
-    const sliderEl = this.getSliderElement(type);
-    if (!sliderEl) return;
-
-    const friction = 0.94;
-    const stopThreshold = 1;
-    const boundaries = this.getSliderBoundaries(type);
-    let lastFrameTime = performance.now();
-
-    const animate = () => {
-        const now = performance.now();
-        const deltaTime = (now - lastFrameTime) / 1000;
-        lastFrameTime = now;
-        state.currentTranslate += state.velocityX * deltaTime;
-        state.velocityX *= friction;
-
-        if (state.currentTranslate > boundaries.max) {
-            state.currentTranslate = boundaries.max;
-            state.velocityX = 0;
-        } else if (state.currentTranslate < boundaries.min) {
-            state.currentTranslate = boundaries.min;
-            state.velocityX = 0;
-        }
-
-        this.renderer.setStyle(sliderEl, 'transform', `translateX(${state.currentTranslate}px)`);
-
-        if (Math.abs(state.velocityX) > stopThreshold) {
-            state.animationFrameId = requestAnimationFrame(animate);
-        } else {
-            state.animationFrameId = undefined;
-            this.updateIndexFromPosition(type);
-        }
-    };
-    state.animationFrameId = requestAnimationFrame(animate);
-  }
-
-  private updateIndexFromPosition(type: 'experience' | 'class' | 'special') {
-    const state = this.sliderDragState[type];
-    const slideWidth = this.getSlideWidth(type);
-    if (slideWidth > 0) {
-        const finalIndex = Math.round(Math.abs(state.currentTranslate) / slideWidth);
-        const maxItems = this.getMaxIndex(type);
-        const clampedIndex = Math.max(0, Math.min(finalIndex, maxItems));
-        if (type === 'experience') this.experienceIndex.set(clampedIndex);
-        else if (type === 'class') this.classIndex.set(clampedIndex);
-        else if (type === 'special') this.specialIndex.set(clampedIndex);
-    }
-  }
-
-  pauseReviewAutoScroll() {
-      this.isReviewSliderPaused.set(true);
-      if (this.reviewAutoScrollTimeout) clearTimeout(this.reviewAutoScrollTimeout);
-      if (this.reviewAnimationId) cancelAnimationFrame(this.reviewAnimationId);
-      this.reviewAutoScrollTimeout = null;
-      this.reviewAnimationId = null;
-  }
-
-  resumeReviewAutoScroll(delay: number = 0) {
-      this.pauseReviewAutoScroll(); 
-      this.reviewAutoScrollTimeout = setTimeout(() => {
-          if (!this.sliderDragState['review'].isDragging) {
-              this.isReviewSliderPaused.set(false);
-              this.lastFrameTime = performance.now();
-              this.animateReviews();
-          }
-      }, delay);
-  }
-
-  private animateReviews() {
-      if (this.isReviewSliderPaused() || !isPlatformBrowser(this.platformId)) return;
-      const sliderEl = this.getSliderElement('review');
-      if (!sliderEl) return;
-      const now = performance.now();
-      const deltaTime = (now - this.lastFrameTime) / 1000;
-      this.lastFrameTime = now;
-      const slideWidth = this.getSlideWidth('review');
-      if (slideWidth === 0) {
-          this.reviewAnimationId = requestAnimationFrame(() => this.animateReviews());
-          return;
-      }
-      let currentTranslateX = this.getTranslateX(sliderEl);
-      currentTranslateX -= this.SCROLL_SPEED * deltaTime;
-      const cloneCount = Math.min(this.reviews.length, this.CLONE_COUNT);
-      const totalOriginals = this.reviews.length;
-      const loopBoundary = -((totalOriginals + cloneCount) * slideWidth);
-      if (currentTranslateX <= loopBoundary) currentTranslateX += totalOriginals * slideWidth;
-      this.renderer.setStyle(sliderEl, 'transform', `translateX(${currentTranslateX}px)`);
-      this.reviewAnimationId = requestAnimationFrame(() => this.animateReviews());
-  }
-
-  pauseReviewAutoScrollLayer2() {
-      this.isReviewSliderLayer2Paused.set(true);
-      if (this.reviewAutoScrollTimeoutLayer2) clearTimeout(this.reviewAutoScrollTimeoutLayer2);
-      if (this.reviewLayer2AnimationId) cancelAnimationFrame(this.reviewLayer2AnimationId);
-      this.reviewAutoScrollTimeoutLayer2 = null;
-      this.reviewLayer2AnimationId = null;
-  }
-
-  resumeReviewAutoScrollLayer2(delay: number = 0) {
-      this.pauseReviewAutoScrollLayer2(); 
-      this.reviewAutoScrollTimeoutLayer2 = setTimeout(() => {
-          if (!this.sliderDragState['reviewLayer2'].isDragging) {
-              this.isReviewSliderLayer2Paused.set(false);
-              this.lastFrameTimeLayer2 = performance.now();
-              this.animateReviewsLayer2();
-          }
-      }, delay);
-  }
-
-  private animateReviewsLayer2() {
-      if (this.isReviewSliderLayer2Paused() || !isPlatformBrowser(this.platformId)) return;
-      const sliderEl = this.getSliderElement('reviewLayer2');
-      if (!sliderEl) return;
-      const now = performance.now();
-      const deltaTime = (now - this.lastFrameTimeLayer2) / 1000;
-      this.lastFrameTimeLayer2 = now;
-      const slideWidth = this.getSlideWidth('reviewLayer2');
-      if (slideWidth === 0) {
-          this.reviewLayer2AnimationId = requestAnimationFrame(() => this.animateReviewsLayer2());
-          return;
-      }
-      let currentTranslateX = this.getTranslateX(sliderEl);
-      
-      // Move RIGHT (Reverse)
-      currentTranslateX += this.SCROLL_SPEED * deltaTime;
-
-      const cloneCount = Math.min(this.reviewsLayer2.length, this.CLONE_COUNT);
-      const totalOriginals = this.reviewsLayer2.length;
-      
-      // Loop logic for moving RIGHT
-      if (currentTranslateX >= 0) {
-          currentTranslateX -= totalOriginals * slideWidth;
-      }
-
-      this.renderer.setStyle(sliderEl, 'transform', `translateX(${currentTranslateX}px)`);
-      this.reviewLayer2AnimationId = requestAnimationFrame(() => this.animateReviewsLayer2());
   }
   
-  ngOnDestroy() {
-      if (this.bannerInterval) clearInterval(this.bannerInterval);
-      clearTimeout(this.animationTimeoutId);
-      this.pauseReviewAutoScroll();
-      this.pauseReviewAutoScrollLayer2();
-      Object.keys(this.sliderTransitionTimers).forEach(key => {
-        if(this.sliderTransitionTimers[key]) clearTimeout(this.sliderTransitionTimers[key]);
-      });
-      if (isPlatformBrowser(this.platformId)) {
-        window.removeEventListener('resize', this.resizeListener); // Remove this as well
-        const scrollEl = this.scrollContainer();
-        if (scrollEl) {
-          scrollEl.nativeElement.removeEventListener('scroll', this.parallaxListener);
-          scrollEl.nativeElement.removeEventListener('scroll', this.updateActiveNavOnScrollHandler);
-        }
-        if (this.unlistenMouseUp) this.unlistenMouseUp();
-        if (this.unlistenTouchEnd) this.unlistenTouchEnd();
-      }
-      if (this.reviewCountObserver) this.reviewCountObserver.disconnect();
-      if (this.scrollSpyObserver) this.scrollSpyObserver.disconnect();
-      if (this.countUpAnimationId) cancelAnimationFrame(this.countUpAnimationId);
-      clearTimeout(this.countUpRestartTimeoutId);
+  public prevProgramImage() {
+    const maxIndex = (this.selectedProgram()?.images?.length || 1) - 1;
+    this.programImageIndex.update(i => (i > 0 ? i - 1 : maxIndex));
+    this.updatePopupImageSliderPosition();
+  }
+  
+  public nextProgramImage() {
+    const maxIndex = (this.selectedProgram()?.images?.length || 1) - 1;
+    this.programImageIndex.update(i => (i < maxIndex ? i + 1 : 0));
+    this.updatePopupImageSliderPosition();
+  }
+  
+  public setProgramImage(index: number) {
+    this.programImageIndex.set(index);
+    this.updatePopupImageSliderPosition();
+  }
+  
+  private updatePopupImageSliderPosition() {
+      const sliderEl = this.popupImageSliderContainer()?.nativeElement;
+      if (!sliderEl) return;
+      const itemWidth = sliderEl.offsetWidth;
+      this.popupImageTranslateX.set(-this.programImageIndex() * itemWidth);
+      this.popupImageSliderTransition.set(true);
+  }
+  
+  public popupImageDragStart(event: MouseEvent | TouchEvent) {
+    if (!event.type.startsWith('touch')) {
+      event.preventDefault();
+    }
+    this.popupImageDragState.isDragging = true;
+    this.popupImageDragState.isScrolling = undefined;
+    this.popupImageSliderTransition.set(false);
+    
+    this.popupImageDragState.startX = event.type.startsWith('touch') ? (event as TouchEvent).touches[0].clientX : (event as MouseEvent).clientX;
+    this.popupImageDragState.startY = event.type.startsWith('touch') ? (event as TouchEvent).touches[0].clientY : (event as MouseEvent).clientY;
+    this.popupImageDragState.startTranslate = this.popupImageTranslateX();
   }
 }
