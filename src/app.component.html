@@ -322,11 +322,11 @@
 
       <!-- New Sticky Desktop Navigation -->
       <nav class="hidden md:flex sticky top-0 z-[100] justify-center items-center gap-x-8 lg:gap-x-12 py-4 bg-white/90 backdrop-blur-sm border-b border-gray-100 shadow-sm w-full lg:rounded-t-[calc(2.5rem-8px)]">
-        <button (click)="scrollToSection('intro')" class="text-sm font-semibold text-gray-700 hover:text-orange-500 transition-colors">힐링아트</button>
-        <button (click)="scrollToSection('programs')" class="text-sm font-semibold text-gray-700 hover:text-orange-500 transition-colors">프로그램</button>
-        <button (click)="scrollToSection('group')" class="text-sm font-semibold text-gray-700 hover:text-orange-500 transition-colors">단체/출강/행사</button>
-        <button (click)="scrollToSection('faq')" class="text-sm font-semibold text-gray-700 hover:text-orange-500 transition-colors">자주 묻는 질문</button>
-        <button (click)="scrollToSection('contact')" class="text-sm font-semibold text-gray-700 hover:text-orange-500 transition-colors">이용안내</button>
+        <button (click)="scrollToSection('intro')" class="text-sm font-semibold text-gray-700 hover:text-orange-500 transition-colors" [class.text-orange-500]="activeDesktopNav() === 'intro'">힐링아트</button>
+        <button (click)="scrollToSection('programs')" class="text-sm font-semibold text-gray-700 hover:text-orange-500 transition-colors" [class.text-orange-500]="activeDesktopNav() === 'programs'">프로그램</button>
+        <button (click)="scrollToSection('group')" class="text-sm font-semibold text-gray-700 hover:text-orange-500 transition-colors" [class.text-orange-500]="activeDesktopNav() === 'group'">단체/출강/행사</button>
+        <button (click)="scrollToSection('faq')" class="text-sm font-semibold text-gray-700 hover:text-orange-500 transition-colors" [class.text-orange-500]="activeDesktopNav() === 'faq'">자주 묻는 질문</button>
+        <button (click)="scrollToSection('contact')" class="text-sm font-semibold text-gray-700 hover:text-orange-500 transition-colors" [class.text-orange-500]="activeDesktopNav() === 'contact'">이용안내</button>
       </nav>
 
       <!-- 4. Programs -->

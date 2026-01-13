@@ -222,6 +222,7 @@ interface SliderDragState {
 export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   isMenuOpen = signal(false);
   isMenuTextDark = signal(false);
+  activeDesktopNav = signal<string | null>(null);
 
   isPopupOpen = signal(false);
   popupContent = signal<'terms' | 'privacy' | null>(null);
@@ -297,6 +298,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   
   private renderer = inject(Renderer2);
   private readonly parallaxListener = () => this.updateParallax();
+  private readonly updateActiveNavOnScrollHandler = () => this.updateActiveNavOnScroll();
   
   private scrollSpyObserver?: IntersectionObserver;
 
@@ -326,6 +328,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   };
   popupImageTranslateX = signal(0);
   popupImageSliderTransition = signal(true);
+
+  private readonly navSections = ['intro', 'programs', 'group', 'faq', 'contact'];
+  private sectionOffsets = new Map<string, number>();
 
   experiences: ProgramItem[] = [
     { 
@@ -598,6 +603,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private readonly resizeListener = () => {
     this.calculateMaxIndices();
+    this.calculateSectionOffsets();
     this.updateSliderPosition('experience', false);
     this.updateSliderPosition('class', false);
     this.updateSliderPosition('special', false);
@@ -635,6 +641,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       const scrollEl = this.scrollContainer();
       if (scrollEl) {
         scrollEl.nativeElement.addEventListener('scroll', this.parallaxListener, { passive: true });
+        scrollEl.nativeElement.addEventListener('scroll', this.updateActiveNavOnScrollHandler, { passive: true });
         
         // Initialize ScrollSpy
         this.setupScrollSpy();
@@ -646,6 +653,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       // Initial layout setup
       setTimeout(() => {
         this.calculateMaxIndices();
+        this.calculateSectionOffsets();
+        this.updateActiveNavOnScroll();
         this.updateSliderPosition('experience');
         this.updateSliderPosition('class');
         this.updateSliderPosition('special');
@@ -679,6 +688,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onResize() {
     this.calculateMaxIndices();
+    this.calculateSectionOffsets();
     this.updateSliderPosition('experience', false);
     this.updateSliderPosition('class', false);
     this.updateSliderPosition('special', false);
@@ -729,6 +739,37 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       if (el) this.scrollSpyObserver?.observe(el);
     });
   }
+
+  private calculateSectionOffsets() {
+    if (!isPlatformBrowser(this.platformId)) return;
+    this.sectionOffsets.clear();
+    const scrollEl = this.scrollContainer()?.nativeElement;
+    if (!scrollEl) return;
+
+    this.navSections.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            this.sectionOffsets.set(id, el.offsetTop);
+        }
+    });
+  }
+
+  private updateActiveNavOnScroll() {
+    const scrollEl = this.scrollContainer()?.nativeElement;
+    if (!scrollEl) return;
+    
+    const triggerOffset = scrollEl.scrollTop + 46 + 100;
+
+    let currentSection: string | null = null;
+    for (const [id, offsetTop] of this.sectionOffsets.entries()) {
+        if (offsetTop <= triggerOffset) {
+            currentSection = id;
+        } else {
+            break;
+        }
+    }
+    this.activeDesktopNav.set(currentSection);
+  };
 
   // Helper to replace DOMMatrix for safer translateX extraction
   private getTranslateX(element: HTMLElement): number {
@@ -1455,7 +1496,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       if (isPlatformBrowser(this.platformId)) {
         window.removeEventListener('resize', this.resizeListener); // Remove this as well
         const scrollEl = this.scrollContainer();
-        if (scrollEl) scrollEl.nativeElement.removeEventListener('scroll', this.parallaxListener);
+        if (scrollEl) {
+          scrollEl.nativeElement.removeEventListener('scroll', this.parallaxListener);
+          scrollEl.nativeElement.removeEventListener('scroll', this.updateActiveNavOnScrollHandler);
+        }
         if (this.unlistenMouseUp) this.unlistenMouseUp();
         if (this.unlistenTouchEnd) this.unlistenTouchEnd();
       }
