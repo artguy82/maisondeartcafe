@@ -957,7 +957,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
           // Sections located after the sticky nav need offset to not be obscured
           const sectionsAfterNav = ['programs', 'group', 'faq', 'contact'];
           if (sectionsAfterNav.includes(sectionId)) {
-            offset = 70; // Adjusted for sticky nav height (~55px) + breathing room
+            offset = 46; // Adjusted for sticky nav height (~55px) + breathing room
           }
       }
       
