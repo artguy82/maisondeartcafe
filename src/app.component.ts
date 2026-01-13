@@ -957,11 +957,16 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       
       let offset = 0;
       if (isDesktop) {
+          // Desktop: Sticky Nav (~54px) appears after Intro
           // Sections located after the sticky nav need offset to not be obscured
           const sectionsAfterNav = ['programs', 'group', 'faq', 'contact'];
           if (sectionsAfterNav.includes(sectionId)) {
-            offset = 46; // Adjusted for sticky nav height (~55px) + breathing room
+            offset = 45; 
           }
+      } else {
+          // Mobile: Header Area (64px)
+          // User requested removal of offset for mobile
+          offset = 0;
       }
       
       const elementPosition = element.offsetTop;
