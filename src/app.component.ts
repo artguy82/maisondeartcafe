@@ -53,6 +53,8 @@ interface SliderDragState {
   velocityX: number;
   animationFrameId?: number;
   isScrolling?: boolean;
+  minTranslate?: number; // Added for hard stop calculation
+  maxTranslate?: number; // Added for hard stop calculation
 }
 
 @Component({
@@ -64,6 +66,7 @@ interface SliderDragState {
     '(window:resize)': 'onResize()',
     '(document:mouseup)': 'onGlobalEnd($event)',
     '(document:touchend)': 'onGlobalEnd($event)',
+    '(document:touchcancel)': 'onGlobalEnd($event)',
     '(document:mousemove)': 'onGlobalMove($event)',
     '(document:touchmove)': 'onGlobalMove($event)'
   },
@@ -980,19 +983,52 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   
   private calculateMaxIndices() {
     if (!isPlatformBrowser(this.platformId)) return;
-    const getVisibleCount = (sliderEl: HTMLElement | undefined): number => {
-        if (!sliderEl) return 1;
+
+    const calculate = (sliderName: string): number => {
+        const sliderEl = this.getSliderElement(sliderName);
+        const container = sliderEl?.parentElement;
+        if (!sliderEl || !container) return 0;
+        
         const firstChild = sliderEl.firstElementChild as HTMLElement;
-        if (!firstChild) return 1;
+        if (!firstChild) return 0;
+
+        // Get container padding to ensure we scroll enough to show visual balance
+        const style = window.getComputedStyle(sliderEl);
+        const paddingLeft = parseFloat(style.paddingLeft) || 0;
+        const paddingRight = parseFloat(style.paddingRight) || 0;
+
         const childWidth = firstChild.offsetWidth;
-        const containerWidth = sliderEl.parentElement?.offsetWidth || 0;
-        return Math.max(1, Math.floor(containerWidth / childWidth));
+        // Use parseFloat for gap to ensure precision (parseInt might strip 1.5rem to 1)
+        const gap = parseFloat(style.gap || '0');
+        const itemWidth = childWidth + gap;
+        
+        // Total visible width of the container
+        const containerWidth = container.clientWidth;
+        
+        // Total width of all items
+        const itemCount = sliderEl.children.length;
+        const totalContentWidth = (itemCount * childWidth) + ((itemCount - 1) * gap);
+        
+        // If content fits, no sliding needed
+        if (totalContentWidth <= containerWidth) return 0;
+
+        // Maximum scrollable pixels including padding for balance
+        const maxScroll = Math.max(0, totalContentWidth + paddingLeft + paddingRight - containerWidth);
+        
+        // If remaining scroll is very small (e.g. just padding/gap adjustments), don't create a whole new step
+        const rawSteps = maxScroll / itemWidth;
+        const floorSteps = Math.floor(rawSteps);
+        const remainder = maxScroll - (floorSteps * itemWidth);
+        
+        // Threshold: if less than 10% of item width or 20px, round down.
+        // This avoids creating a "Next" step that only moves the slider 1px.
+        return (remainder < 20 || remainder < itemWidth * 0.1) ? floorSteps : Math.ceil(rawSteps);
     };
+    
     this.maxIndices.update(current => ({
-        ...current,
-        experience: Math.max(0, this.experiences.length - getVisibleCount(this.experienceSlider()?.nativeElement)),
-        class: Math.max(0, this.oneDayClasses.length - getVisibleCount(this.classSlider()?.nativeElement)),
-        special: Math.max(0, this.specialPrograms.length - getVisibleCount(this.specialSlider()?.nativeElement)),
+        experience: calculate('experience'),
+        class: calculate('class'),
+        special: calculate('special'),
     }));
   }
 
@@ -1004,7 +1040,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!firstChild) return;
     
     const childWidth = firstChild.offsetWidth;
-    const gap = parseInt(window.getComputedStyle(sliderEl).gap || '0', 10);
+    const style = window.getComputedStyle(sliderEl);
+    // Use parseFloat for gap
+    const gap = parseFloat(style.gap || '0');
 
     let targetTranslateX: number;
 
@@ -1016,11 +1054,39 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         const indexSignal = this[`${sliderName}Index` as keyof this] as any;
         const index = indexSignal();
         targetTranslateX = -index * (childWidth + gap);
+
+        // Clamping Logic for Non-Infinite Sliders
+        // Ensure that button navigation does not overshoot the visual hard-stop limit
+        const container = sliderEl.parentElement;
+        if (container) {
+            const paddingLeft = parseFloat(style.paddingLeft) || 0;
+            const paddingRight = parseFloat(style.paddingRight) || 0;
+            const itemCount = sliderEl.children.length;
+            const totalContentWidth = (itemCount * childWidth) + ((itemCount - 1) * gap);
+            const containerWidth = container.clientWidth;
+            
+            // Calculate exact same boundary used in dragStart
+            const maxScroll = Math.max(0, totalContentWidth + paddingLeft + paddingRight - containerWidth);
+            const minTranslate = -maxScroll;
+            
+            // Clamp targetTranslateX so it's not "more negative" than minTranslate
+            if (targetTranslateX < minTranslate) {
+                targetTranslateX = minTranslate;
+            }
+        }
     }
-    this.sliderDragState[sliderName].currentTranslate = targetTranslateX;
+    
+    // Explicitly sync the state here to ensure buttons work after a drag
+    if(this.sliderDragState[sliderName]) {
+        this.sliderDragState[sliderName].currentTranslate = targetTranslateX;
+        this.sliderDragState[sliderName].isDragging = false; // Force clear dragging state just in case
+    }
+
     if (transition) this.renderer.addClass(sliderEl, 'slider-transition');
     else this.renderer.removeClass(sliderEl, 'slider-transition');
+    
     this.renderer.setStyle(sliderEl, 'transform', `translateX(${targetTranslateX}px)`);
+    
     if (transition) {
         if (this.sliderTransitionTimers[sliderName]) clearTimeout(this.sliderTransitionTimers[sliderName]);
         this.sliderTransitionTimers[sliderName] = setTimeout(() => {
@@ -1039,18 +1105,43 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     if (state.isScrolling === undefined) {
       const deltaX = Math.abs(clientX - state.startX);
       const deltaY = Math.abs(clientY - state.startY);
-      state.isScrolling = deltaY > deltaX;
+      // Wait for a small threshold to decide intent
+      if (deltaX > 5 || deltaY > 5) {
+          state.isScrolling = deltaY > deltaX;
+      }
     }
 
-    if (state.isScrolling) {
+    // If decided that it IS a vertical scroll (page scroll)
+    if (state.isScrolling === true) {
       this.dragEnd(sliderName);
       return;
     }
-    event.preventDefault();
+    
+    // If we are here, it is either undecided or horizontal drag.
+    // Prevent default to stop browser navigation or native scroll interference
+    if (event.cancelable && state.isScrolling === false) {
+        event.preventDefault();
+    } else if (!event.type.startsWith('touch')) {
+        event.preventDefault(); // Always prevent for mouse to avoid text selection
+    }
+
+    // If still undecided, don't move yet
+    if (state.isScrolling === undefined) return;
 
     const currentX = clientX;
     const diff = currentX - state.startX;
-    state.currentTranslate = state.startTranslate + diff;
+    let newTranslate = state.startTranslate + diff;
+    
+    // Hard stop logic using pre-calculated boundaries
+    if (state.maxTranslate !== undefined && newTranslate > state.maxTranslate) {
+      newTranslate = state.maxTranslate; // Sticky stop
+      // Optional: Add resistance effect here if desired (newTranslate = state.maxTranslate + (overDrag / 3))
+    }
+    if (state.minTranslate !== undefined && newTranslate < state.minTranslate) {
+      newTranslate = state.minTranslate; // Sticky stop
+    }
+
+    state.currentTranslate = newTranslate;
 
     const sliderEl = this.getSliderElement(sliderName);
     if (sliderEl) {
@@ -1059,10 +1150,17 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     const now = performance.now();
     const timeDelta = now - state.lastTimestamp;
-    const posDelta = currentX - state.lastX;
-    state.velocityX = (posDelta / timeDelta) * (1000 / 60);
-    state.lastX = currentX;
-    state.lastTimestamp = now;
+    
+    if (timeDelta > 0) {
+        const posDelta = currentX - state.lastX;
+        // Simple smoothing for velocity calculation
+        const currentVelocity = (posDelta / timeDelta) * (1000 / 60);
+        // Blend new velocity with previous (20% old, 80% new) to smooth out jitters
+        state.velocityX = (state.velocityX * 0.2) + (currentVelocity * 0.8);
+        
+        state.lastX = currentX;
+        state.lastTimestamp = now;
+    }
   }
 
   private dragEnd(sliderName: string) {
@@ -1083,15 +1181,26 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!firstChild) return;
 
     const childWidth = firstChild.offsetWidth;
-    const gap = parseInt(window.getComputedStyle(sliderEl).gap || '0', 10);
+    // Use parseFloat for gap
+    const gap = parseFloat(window.getComputedStyle(sliderEl).gap || '0');
     const itemWidth = childWidth + gap;
+    if (itemWidth <= 0) return;
 
-    let projectedTranslate = state.currentTranslate + state.velocityX * 10;
+    // Use a standard multiplier (5) for predictable kinetic scroll effect.
+    let projectedTranslate = state.currentTranslate + state.velocityX * 5;
     
     const indexSignal = (this as any)[`${sliderName}Index`];
-    const maxIndex = (this.maxIndices() as any)[sliderName];
+    const maxIndex = this.maxIndices()[sliderName as keyof typeof this.maxIndices];
 
     let newIndex = Math.round(-projectedTranslate / itemWidth);
+    
+    // Check if we are physically at the "hard stop" limit. 
+    // If projectedTranslate pushes us past minTranslate (visual end), snap to maxIndex.
+    if (state.minTranslate !== undefined && projectedTranslate < state.minTranslate + 5) {
+       newIndex = maxIndex;
+    }
+
+    // Clamp index to respect boundaries strictly
     newIndex = Math.max(0, Math.min(newIndex, maxIndex));
 
     indexSignal.set(newIndex);
@@ -1110,7 +1219,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!firstChild) return;
 
     const itemWidth = firstChild.offsetWidth;
-    const gap = parseInt(window.getComputedStyle(sliderEl).gap || '0', 10);
+    // Use parseFloat for gap
+    const gap = parseFloat(window.getComputedStyle(sliderEl).gap || '0');
     const itemWidthWithGap = itemWidth + gap;
     const originalItems = sliderName === 'review' ? this.reviews : this.reviewsLayer2;
     const totalContentWidth = originalItems.length * itemWidthWithGap;
@@ -1153,11 +1263,15 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.popupImageDragState.isScrolling === undefined) {
       const deltaX = Math.abs(clientX - this.popupImageDragState.startX);
       const deltaY = Math.abs(clientY - this.popupImageDragState.startY);
-      this.popupImageDragState.isScrolling = deltaY > deltaX;
+      if (deltaX > 5 || deltaY > 5) {
+          this.popupImageDragState.isScrolling = deltaY > deltaX;
+      }
     }
 
     if (this.popupImageDragState.isScrolling) return;
-    event.preventDefault();
+    
+    if (event.cancelable) event.preventDefault();
+
     const diff = clientX - this.popupImageDragState.startX;
     const newTranslate = this.popupImageDragState.startTranslate + diff;
     this.popupImageTranslateX.set(newTranslate);
@@ -1217,7 +1331,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     const firstChild = sliderEl.firstElementChild as HTMLElement;
     if (firstChild) {
       const itemWidth = firstChild.offsetWidth;
-      const gap = parseInt(window.getComputedStyle(sliderEl).gap || '0', 10);
+      // Use parseFloat for gap
+      const gap = parseFloat(window.getComputedStyle(sliderEl).gap || '0');
       const itemWidthWithGap = itemWidth + gap;
       const totalContentWidth = this.reviews.length * itemWidthWithGap;
       const wrapPoint = -(totalContentWidth + (this.CLONE_COUNT * itemWidthWithGap));
@@ -1343,6 +1458,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     if (sliderName.startsWith('review')) {
       if (sliderName === 'review') this.pauseReviewAutoScroll();
       else this.pauseReviewAutoScrollLayer2();
+      state.minTranslate = undefined;
+      state.maxTranslate = undefined;
     }
   
     state.isDragging = true;
@@ -1354,6 +1471,29 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     if (sliderEl) {
       state.startTranslate = this.getTranslateX(sliderEl);
       this.renderer.removeClass(sliderEl, 'slider-transition');
+
+      // Calculate Hard Stop Boundaries only for non-infinite sliders
+      if (!sliderName.startsWith('review')) {
+          const container = sliderEl.parentElement;
+          const firstChild = sliderEl.firstElementChild as HTMLElement;
+          if (container && firstChild) {
+              const style = window.getComputedStyle(sliderEl);
+              const paddingLeft = parseFloat(style.paddingLeft) || 0;
+              const paddingRight = parseFloat(style.paddingRight) || 0;
+              // Use parseFloat for gap
+              const gap = parseFloat(style.gap || '0');
+              const childWidth = firstChild.offsetWidth;
+              const itemCount = sliderEl.children.length;
+              const totalContentWidth = (itemCount * childWidth) + ((itemCount - 1) * gap);
+              const containerWidth = container.clientWidth;
+              
+              // Ensure we scroll enough to show the right padding at the end
+              const maxScroll = Math.max(0, totalContentWidth + paddingLeft + paddingRight - containerWidth);
+              
+              state.minTranslate = -maxScroll;
+              state.maxTranslate = 0;
+          }
+      }
     }
     
     state.currentTranslate = state.startTranslate;

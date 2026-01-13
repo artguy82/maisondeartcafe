@@ -1,3 +1,5 @@
+
+
 <!-- Desktop Background / Wrapper -->
 <div class="relative w-full h-full wave-bg flex flex-col lg:flex-row items-center lg:items-stretch justify-center px-0 lg:px-12 lg:pt-12 gap-8 lg:gap-8 xl:gap-16 overflow-hidden overscroll-none touch-none">
   
@@ -383,8 +385,7 @@
             </div>
           </div>
           <div class="overflow-hidden slider-container"
-            (mousedown)="dragStart($event, 'experience')" (touchstart)="dragStart($event, 'experience')"
-            (mousemove)="dragging($event, 'experience')" (touchmove)="dragging($event, 'experience')">
+            (mousedown)="dragStart($event, 'experience')" (touchstart)="dragStart($event, 'experience')">
             <div #experienceSlider class="flex gap-4 px-4 md:px-8">
               @for (item of experiences; track item.title) {
                 <div class="w-[85vw] md:w-96 flex-shrink-0">
@@ -425,8 +426,7 @@
             </div>
           </div>
           <div class="overflow-hidden slider-container"
-            (mousedown)="dragStart($event, 'class')" (touchstart)="dragStart($event, 'class')"
-            (mousemove)="dragging($event, 'class')" (touchmove)="dragging($event, 'class')">
+            (mousedown)="dragStart($event, 'class')" (touchstart)="dragStart($event, 'class')">
             <div #classSlider class="flex gap-4 px-4 md:px-8">
               @for (item of oneDayClasses; track item.title) {
                 <div class="w-[85vw] md:w-96 flex-shrink-0">
@@ -469,8 +469,7 @@
             </div>
           </div>
           <div class="overflow-hidden slider-container"
-            (mousedown)="dragStart($event, 'special')" (touchstart)="dragStart($event, 'special')"
-            (mousemove)="dragging($event, 'special')" (touchmove)="dragging($event, 'special')">
+            (mousedown)="dragStart($event, 'special')" (touchstart)="dragStart($event, 'special')">
             <div #specialSlider class="flex gap-4 px-4 md:px-8">
               @for (item of specialPrograms; track item.title) {
                 <div class="w-[90vw] md:w-[480px] flex-shrink-0">
@@ -570,8 +569,7 @@
           </div>
           
           <div class="overflow-hidden slider-container"
-            (mousedown)="dragStart($event, 'review')" (touchstart)="dragStart($event, 'review')"
-            (mousemove)="dragging($event, 'review')" (touchmove)="dragging($event, 'review')">
+            (mousedown)="dragStart($event, 'review')" (touchstart)="dragStart($event, 'review')">
             <div #reviewSlider class="flex gap-4 px-2 md:px-4">
               @for (review of displayReviews(); track $index) {
                 <div class="w-[80vw] md:w-96 flex-shrink-0">
@@ -606,8 +604,7 @@
           </div>
 
           <div class="overflow-hidden slider-container mt-4"
-            (mousedown)="dragStart($event, 'reviewLayer2')" (touchstart)="dragStart($event, 'reviewLayer2')"
-            (mousemove)="dragging($event, 'reviewLayer2')" (touchmove)="dragging($event, 'reviewLayer2')">
+            (mousedown)="dragStart($event, 'reviewLayer2')" (touchstart)="dragStart($event, 'reviewLayer2')">
             <div #reviewSliderLayer2 class="flex gap-4 px-2 md:px-4">
               @for (review of displayReviewsLayer2(); track $index) {
                 <div class="w-[80vw] md:w-96 flex-shrink-0">
@@ -995,12 +992,7 @@
         <!-- Image Slider (New Draggable Slider) -->
         <div #popupImageSliderContainer class="relative w-full aspect-square flex-shrink-0 bg-gray-200 cursor-grab overflow-hidden slider-container"
             (mousedown)="popupImageDragStart($event)"
-            (touchstart)="popupImageDragStart($event)"
-            (mousemove)="popupImageDragging($event)"
-            (touchmove)="popupImageDragging($event)"
-            (mouseup)="popupImageDragEnd()"
-            (touchend)="popupImageDragEnd()"
-            (mouseleave)="popupImageDragEnd()">
+            (touchstart)="popupImageDragStart($event)">
           
           <div class="flex h-full w-full will-change-transform"
                [style.transform]="'translateX(' + popupImageTranslateX() + 'px)'"
