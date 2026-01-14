@@ -1,6 +1,6 @@
 
 
-import { Component, signal, OnInit, OnDestroy, inject, PLATFORM_ID, ElementRef, Renderer2, AfterViewInit, viewChild, ChangeDetectionStrategy } from '@angular/core';
+import { Component, signal, OnInit, OnDestroy, inject, PLATFORM_ID, ElementRef, Renderer2, AfterViewInit, viewChild, ChangeDetectionStrategy, effect, Injector } from '@angular/core';
 import { CommonModule, NgOptimizedImage, isPlatformBrowser } from '@angular/common';
 
 interface PricingTier {
@@ -73,10 +73,14 @@ interface SliderDragState {
   styles: [`
     :host {
       display: block;
-      height: 100vh;
-      height: 100dvh;
       width: 100%;
-      overflow: hidden;
+    }
+    @media (min-width: 1024px) {
+      :host {
+        height: 100vh;
+        height: 100dvh;
+        overflow: hidden;
+      }
     }
     .font-cursive {
       font-family: 'Dancing Script', cursive;
@@ -238,6 +242,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   openFaqIndex = signal<number | null>(null);
 
   private platformId = inject(PLATFORM_ID);
+  isDesktop = signal(false);
+  private scrollUnlisteners: (() => void)[] = [];
+  private injector = inject(Injector);
   
   bannerImages: string[] = [
     'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/main.jpg',
@@ -610,19 +617,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     { question: '몇 세 부터 체험 가능 한가요?', answer: '아트를 즐기는 나이는 따로 없답니다. 붓을 들수 있는 나이면 누구나 체험 가능 하며 4세도 엄마와 함께 체험 가능 합니다. 커플, 회사원, 주부, 부모님 모두 즐겁게 체험 가능 합니다.' }
   ];
 
-  private readonly resizeListener = () => {
-    this.calculateMaxIndices();
-    this.calculateSectionOffsets();
-    this.updateSliderPosition('experience', false);
-    this.updateSliderPosition('class', false);
-    this.updateSliderPosition('special', false);
-    this.updateSliderPosition('review', false);
-    this.updateSliderPosition('reviewLayer2', false);
-  };
-
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
-      window.addEventListener('resize', this.resizeListener);
+      this.isDesktop.set(window.innerWidth >= 1024);
     }
     
     // Fill dummy data for demonstration if arrays are small
@@ -647,14 +644,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit() {
     if (isPlatformBrowser(this.platformId)) {
-      const scrollEl = this.scrollContainer();
-      if (scrollEl) {
-        scrollEl.nativeElement.addEventListener('scroll', this.parallaxListener, { passive: true });
-        scrollEl.nativeElement.addEventListener('scroll', this.updateActiveNavOnScrollHandler, { passive: true });
-        
-        // Initialize ScrollSpy
-        this.setupScrollSpy();
-      }
+      effect(() => {
+        this.isDesktop(); // Establish dependency on the signal
+        this.setupScrollListeners();
+      }, { injector: this.injector });
 
       this.unlistenMouseUp = this.renderer.listen('window', 'mouseup', () => this.handleDragEnd());
       this.unlistenTouchEnd = this.renderer.listen('window', 'touchend', () => this.handleDragEnd());
@@ -683,13 +676,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnDestroy() {
     if (isPlatformBrowser(this.platformId)) {
-      window.removeEventListener('resize', this.resizeListener);
-      const scrollEl = this.scrollContainer();
-      if (scrollEl) {
-        scrollEl.nativeElement.removeEventListener('scroll', this.parallaxListener);
-        scrollEl.nativeElement.removeEventListener('scroll', this.updateActiveNavOnScrollHandler);
-      }
-      
+      this.scrollUnlisteners.forEach(unlisten => unlisten());
       this.unlistenMouseUp?.();
       this.unlistenTouchEnd?.();
       this.scrollSpyObserver?.disconnect();
@@ -723,6 +710,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onResize() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.isDesktop.set(window.innerWidth >= 1024);
+    }
     this.calculateMaxIndices();
     this.calculateSectionOffsets();
     this.updateSliderPosition('experience', false);
@@ -741,15 +731,39 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.popupImageDragState.isDragging) this.popupImageDragEnd();
   }
 
+  private setupScrollListeners() {
+    // Cleanup previous listeners
+    this.scrollUnlisteners.forEach(unlisten => unlisten());
+    this.scrollUnlisteners = [];
+    this.scrollSpyObserver?.disconnect();
+
+    const scrollTarget = this.isDesktop() ? this.scrollContainer()?.nativeElement : window;
+    const scrollRoot = this.isDesktop() ? this.scrollContainer()?.nativeElement : null;
+
+    if (scrollTarget) {
+        this.scrollUnlisteners.push(
+            this.renderer.listen(scrollTarget, 'scroll', this.parallaxListener)
+        );
+        this.scrollUnlisteners.push(
+            this.renderer.listen(scrollTarget, 'scroll', this.updateActiveNavOnScrollHandler)
+        );
+    }
+    this.setupScrollSpy(scrollRoot);
+  }
+  
+  private getScrollTop(): number {
+    if (this.isDesktop()) {
+        return this.scrollContainer()?.nativeElement.scrollTop ?? 0;
+    }
+    return window.scrollY || document.documentElement.scrollTop;
+  }
+
   // --- Scroll Spy for Menu Color ---
-  private setupScrollSpy() {
+  private setupScrollSpy(rootEl: HTMLElement | null) {
     if (!isPlatformBrowser(this.platformId)) return;
-    
-    const scrollContainerEl = this.scrollContainer()?.nativeElement;
-    if (!scrollContainerEl) return;
 
     const options = {
-      root: scrollContainerEl,
+      root: rootEl,
       rootMargin: '0px 0px -90% 0px', 
       threshold: 0
     };
@@ -774,22 +788,22 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   private calculateSectionOffsets() {
     if (!isPlatformBrowser(this.platformId)) return;
     this.sectionOffsets.clear();
-    const scrollEl = this.scrollContainer()?.nativeElement;
-    if (!scrollEl) return;
+    
+    const scrollContainerEl = this.isDesktop() ? this.scrollContainer()?.nativeElement : null;
 
     this.navSections.forEach(id => {
         const el = document.getElementById(id);
         if (el) {
+            // offsetTop is relative to the offsetParent, which is what we need in both cases.
             this.sectionOffsets.set(id, el.offsetTop);
         }
     });
   }
 
   private updateActiveNavOnScroll() {
-    const scrollEl = this.scrollContainer()?.nativeElement;
-    if (!scrollEl) return;
-    
-    const triggerOffset = scrollEl.scrollTop + 46 + 100;
+    const scrollTop = this.getScrollTop();
+    const navOffset = this.isDesktop() ? 46 + 100 : 100;
+    const triggerOffset = scrollTop + navOffset;
 
     let currentSection: string | null = null;
     for (const [id, offsetTop] of this.sectionOffsets.entries()) {
@@ -875,16 +889,14 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private updateParallax() {
     const applyEffect = (elRef: ElementRef<HTMLElement> | undefined, speed: number) => {
-        const scrollEl = this.scrollContainer();
-        if (!elRef || !scrollEl) return;
+        if (!elRef) return;
         const el = elRef.nativeElement;
-        const container = scrollEl.nativeElement;
         const section = el.closest('section') as HTMLElement;
         if (!section) return;
 
-        const scrollTop = container.scrollTop;
+        const scrollTop = this.getScrollTop();
+        const containerHeight = this.isDesktop() ? this.scrollContainer()!.nativeElement.offsetHeight : window.innerHeight;
         const sectionTop = section.offsetTop;
-        const containerHeight = container.offsetHeight;
         
         const sectionTopRelativeToVisible = sectionTop - scrollTop;
         if (sectionTopRelativeToVisible < containerHeight && sectionTopRelativeToVisible > -section.offsetHeight) {
@@ -951,27 +963,23 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.closeMenu();
     if (!isPlatformBrowser(this.platformId)) return;
     const element = document.getElementById(sectionId);
-    const scrollContainerEl = this.scrollContainer()?.nativeElement;
-    if (element && scrollContainerEl) {
-      const isDesktop = window.innerWidth >= 768;
-      
+    if (element) {
       let offset = 0;
-      if (isDesktop) {
-          // Desktop: Sticky Nav (~54px) appears after Intro
-          // Sections located after the sticky nav need offset to not be obscured
+      if (this.isDesktop()) {
           const sectionsAfterNav = ['programs', 'group', 'faq', 'contact'];
           if (sectionsAfterNav.includes(sectionId)) {
             offset = 45; 
           }
-      } else {
-          // Mobile: Header Area (64px)
-          // User requested removal of offset for mobile
-          offset = 0;
       }
       
       const elementPosition = element.offsetTop;
       const offsetPosition = elementPosition - offset;
-      scrollContainerEl.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+
+      if (this.isDesktop()) {
+        this.scrollContainer()?.nativeElement.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+      } else {
+        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+      }
     }
   }
   

@@ -1,7 +1,7 @@
 
 
 <!-- Desktop Background / Wrapper -->
-<div class="relative w-full h-full wave-bg flex flex-col lg:flex-row items-center lg:items-stretch justify-center px-0 lg:px-12 lg:pt-12 gap-8 lg:gap-8 xl:gap-16 overflow-hidden overscroll-none touch-none">
+<div class="relative w-full lg:h-full wave-bg flex flex-col lg:flex-row items-center lg:items-stretch justify-center px-0 lg:px-12 lg:pt-12 gap-8 lg:gap-8 xl:gap-16 lg:overflow-hidden lg:overscroll-none lg:touch-none">
   
   <!-- Left Side: Brand Info (Desktop Only) -->
   <aside class="hidden lg:flex flex-col items-start justify-center max-w-md z-20 space-y-6 xl:space-y-8 shrink-0">
@@ -88,7 +88,7 @@
   </aside>
 
   <!-- Right Side: Tablet/Device Frame -->
-  <div class="touch-pan-y relative z-10 w-full h-full lg:w-auto grow lg:max-w-[820px] lg:h-full bg-white lg:rounded-t-[2.5rem] lg:shadow-2xl flex flex-col lg:border-[8px] lg:border-b-0 lg:border-gray-900 box-border ring-1 ring-white/20 lg:overflow-hidden">
+  <div class="touch-pan-y relative z-10 w-full lg:w-auto grow lg:max-w-[820px] lg:h-full bg-white lg:rounded-t-[2.5rem] lg:shadow-2xl flex flex-col lg:border-[8px] lg:border-b-0 lg:border-gray-900 box-border ring-1 ring-white/20 lg:overflow-hidden">
     
     <!-- Original SPA View -->
     <header class="absolute top-0 left-0 right-0 z-50 h-16 flex items-center px-4 lg:px-6 pointer-events-none">
@@ -194,7 +194,7 @@
     }
 
     <!-- Scrollable Content Area -->
-    <main #scrollContainer class="touch-pan-y scroll-container relative w-full h-full overflow-y-auto overflow-x-hidden pt-0 bg-white lg:rounded-t-[calc(2.5rem-8px)]">
+    <main #scrollContainer class="touch-pan-y scroll-container relative w-full lg:h-full lg:overflow-y-auto overflow-x-hidden pt-0 bg-white lg:rounded-t-[calc(2.5rem-8px)]">
       
       <!-- 1. Main Banner -->
       <section id="home" class="relative z-10 w-full h-screen flex items-center justify-center overflow-hidden bg-black lg:rounded-t-[calc(2.5rem-8px)]">
@@ -236,12 +236,12 @@
       <section id="intro" class="relative z-10 min-h-screen flex items-center py-20 px-6 bg-[#fdfbf8] overflow-hidden">
         <!-- Floating Images -->
         <div #floatingImage1 class="absolute bottom-16 md:bottom-0 left-0 z-[5] w-64 h-80 md:w-[30rem] md:h-[40rem] lg:w-[32rem] lg:h-[40rem] pointer-events-none">
-          <div class="relative w-full h-full">
+          <div style="position: relative; width: 100%; height: 100%;">
             <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/bear.png" alt="Floating bear painting illustration" fill class="object-contain object-left-bottom" priority>
           </div>
         </div>
         <div #floatingImage2 class="absolute top-24 md:top-0 right-0 z-[5] w-64 h-80 md:w-[30rem] md:h-[40rem] lg:w-[32rem] lg:h-[40rem] pointer-events-none">
-          <div class="relative w-full h-full">
+          <div style="position: relative; width: 100%; height: 100%;">
             <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/bear2.png" alt="Floating bear with plant illustration" fill class="object-contain object-right-top" priority>
           </div>
         </div>
