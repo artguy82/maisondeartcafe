@@ -1,7 +1,6 @@
-
-
 import { Component, signal, OnInit, OnDestroy, inject, PLATFORM_ID, ElementRef, Renderer2, AfterViewInit, viewChild, ChangeDetectionStrategy, effect, Injector } from '@angular/core';
 import { CommonModule, NgOptimizedImage, isPlatformBrowser } from '@angular/common';
+import { FirebaseService } from './app/firebase.service';
 
 interface PricingTier {
   price: string;
@@ -15,6 +14,7 @@ interface Recommendation {
 }
 
 interface ProgramItem {
+  id: string; // Unique identifier for likes
   title: string;
   desc: string;
   image: string;
@@ -225,11 +225,38 @@ interface SliderDragState {
     .popup-open { animation: popup-fade-in 0.3s ease-out forwards; }
     .popup-panel-open { animation: popup-scale-in 0.3s ease-out forwards; }
     .text-shadow-custom { text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6); }
+
+    @keyframes heart-beat {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+      100% { transform: scale(1); }
+    }
+    .like-button.liked .heart-icon {
+      animation: heart-beat 0.5s ease-in-out;
+    }
+
+    @keyframes bounce-subtle {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-6px);
+      }
+    }
+    .speech-bubble-anim {
+      animation: bounce-subtle 2s ease-in-out infinite;
+    }
+    .floating-bounce {
+      animation: bounce-subtle 3s ease-in-out infinite;
+    }
+    .floating-bounce-delayed {
+      animation: bounce-subtle 3s ease-in-out infinite;
+      animation-delay: 1.5s;
+    }
   `]
 })
 export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   isMenuOpen = signal(false);
-  isMenuTextDark = signal(false);
   activeDesktopNav = signal<string | null>(null);
 
   isPopupOpen = signal(false);
@@ -241,7 +268,16 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   
   openFaqIndex = signal<number | null>(null);
 
+  isLikeBubbleVisible = signal(false);
+  isLikeBubbleDismissed = signal(false);
+
+  // New signal for Mobile Menu Button Color
+  isMenuButtonDark = signal(false);
+  
   private platformId = inject(PLATFORM_ID);
+  private firebaseService = inject(FirebaseService);
+  isLikeFeatureAvailable = this.firebaseService.isAvailable;
+  
   isDesktop = signal(false);
   private scrollUnlisteners: (() => void)[] = [];
   private injector = inject(Injector);
@@ -270,6 +306,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   private animationTimeoutId: any;
 
   reviewIndex = signal(0);
+  reviewLayer2Index = signal(0);
   experienceIndex = signal(0);
   classIndex = signal(0);
   specialIndex = signal(0);
@@ -312,8 +349,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   private renderer = inject(Renderer2);
   private readonly parallaxListener = () => this.updateParallax();
   private readonly updateActiveNavOnScrollHandler = () => this.updateActiveNavOnScroll();
-  
-  private scrollSpyObserver?: IntersectionObserver;
 
   private sliderDragState: { [key: string]: SliderDragState } = {
     experience: { isDragging: false, startX: 0, startY: 0, startTranslate: 0, currentTranslate: 0, lastX: 0, lastTimestamp: 0, velocityX: 0, isScrolling: undefined },
@@ -343,10 +378,43 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   popupImageSliderTransition = signal(true);
 
   private readonly navSections = ['intro', 'programs', 'group', 'faq', 'contact'];
+  private readonly allScrollSections = ['home', 'intro', 'healing-art', 'programs', 'reviews', 'group', 'faq', 'quote-divider', 'contact'];
+  // Sections with dark backgrounds where the button should be light (white)
+  private readonly darkSections = new Set(['home', 'healing-art', 'quote-divider', 'contact']);
+  
   private sectionOffsets = new Map<string, number>();
+
+  likeCounts = signal<Record<string, number>>({});
+  likedPrograms = signal<Set<string>>(new Set());
+
+  // Base counts for programs to simulate popularity
+  private initialLikeCountsMap: Record<string, number> = {
+    '대형 도안 채색': 187,
+    '캔버스 아크릴 드로잉': 202,
+    '백드롭 페인팅': 241,
+    '아트토이 베어브릭': 197,
+    '오일 파스텔': 129,
+    '액션! 추상 백드롭 페인팅': 21,
+    '발포세라믹 오브제 아트': 17,
+    '아로마 캔들 아트': 147,
+    '테라리움 힐링 아트': 55,
+    '아트티콘(기프티콘)': 139,
+    '초등 방과후 창작 놀이터': 38,
+    '취미 드로잉 프로젝트': 19
+  };
+
+  private slugify(text: string): string {
+    return text.toString().toLowerCase()
+      .replace(/\s+/g, '-')           // Replace spaces with -
+      .replace(/[^\w\-\uac00-\ud7a3]+/g, '') // Remove all non-word chars, but keep Korean
+      .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+      .replace(/^-+/, '')             // Trim - from start of text
+      .replace(/-+$/, '');            // Trim - from end of text
+  }
 
   experiences: ProgramItem[] = [
     { 
+      id: this.slugify('대형 도안 채색'),
       title: '대형 도안 채색', 
       desc: '거대한 캔버스에 나만의 색을 입히는 몰입형 체험', 
       image: 'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/pro2.jpg', 
@@ -363,6 +431,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 그림 실력에 관계없이 누구나 멋진 작품을 완성할 수 있으며, 그 과정 자체로 깊은 힐링과 성취감을 느낄 수 있습니다. 친구, 연인, 가족과 함께 혹은 혼자서도 즐기기 좋은 메종디아트의 대표 힐링 프로그램입니다.` 
     },
     { 
+      id: this.slugify('캔버스 아크릴 드로잉'),
       title: '캔버스 아크릴 드로잉', 
       desc: '아크릴 물감의 질감을 느끼며 완성하는 나만의 작품', 
       image: 'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/pro1.jpg', 
@@ -379,6 +448,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 사랑하는 반려동물, 잊지 못할 여행의 풍경, 혹은 마음속의 추상적인 이미지를 세상에 하나뿐인 작품으로 만들어보세요. 전문가의 코칭으로 처음이어도 괜찮아요.` 
     },
     { 
+      id: this.slugify('백드롭 페인팅'),
       title: '백드롭 페인팅', 
       desc: '질감 보조제를 활용한 트렌디한 추상화 그리기', 
       image: 'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/pro3.jpg', 
@@ -395,6 +465,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 정해진 규칙 없이 감각에 따라 완성하는 현대적인 예술 활동으로, 당신의 공간에 감각적인 포인트를 더해줄 것입니다.` 
     },
     { 
+      id: this.slugify('아트토이 베어브릭'),
       title: '아트토이 베어브릭', 
       desc: '나만의 디자인으로 꾸미는 세상에 하나뿐인 베어브릭', 
       image: 'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/pro5.jpg', 
@@ -411,6 +482,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 커플 아이템으로, 혹은 아이의 창의력을 키워주는 특별한 놀이로 강력 추천합니다. 완성된 베어브릭은 훌륭한 인테리어 소품이 됩니다.` 
     },
     { 
+      id: this.slugify('오일 파스텔'),
       title: '오일 파스텔', 
       desc: '부드러운 색감과 터치로 완성하는 따뜻한 그림', 
       image: 'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/pro7.jpg', 
@@ -430,6 +502,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   oneDayClasses: ProgramItem[] = [
     { 
+      id: this.slugify('액션! 추상 백드롭 페인팅'),
       title: '액션! 추상 백드롭 페인팅', 
       desc: '에너지를 발산하며 만드는 역동적인 추상 예술', 
       image: 'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/pro9.jpg', 
@@ -446,6 +519,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 미술 실력이나 기교는 중요하지 않습니다. 오직 당신의 감정과 에너지가 작품이 되는 역동적인 예술 활동으로, 쌓여있던 스트레스를 해소하고 내면의 활기를 되찾을 수 있습니다.` 
     },
     { 
+      id: this.slugify('발포세라믹 오브제 아트'),
       title: '발포세라믹 오브제 아트', 
       desc: '독특한 질감의 세라믹 오브제를 만드는 공예 시간', 
       image: 'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/pro8.jpg', 
@@ -462,6 +536,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 독특한 질감과 형태로 당신의 공간을 더욱 특별하게 만들어 줄 감각적인 인테리어 소품을 직접 완성해보세요.` 
     },
     { 
+      id: this.slugify('아로마 캔들 아트'),
       title: '아로마 캔들 아트', 
       desc: '향기와 아름다움을 동시에 담은 캔들 만들기', 
       image: 'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/pro6.jpg', 
@@ -478,6 +553,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 내가 직접 만든 향기로운 캔들은 지친 하루 끝에 아늑한 위로를 선사할 것입니다. 소중한 사람을 위한 특별한 선물로도 더할 나위 없이 좋습니다.` 
     },
     { 
+      id: this.slugify('테라리움 힐링 아트'),
       title: '테라리움 힐링 아트', 
       desc: '작은 유리병 속에 나만의 정원을 꾸미는 시간', 
       image: 'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/pro4.jpg', 
@@ -497,6 +573,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   specialPrograms: ProgramItem[] = [
     {
+      id: this.slugify('아트티콘(기프티콘)'),
       title: '아트티콘(기프티콘)',
       desc: '더 많이, 더 알뜰하게 즐기는 메종디아트 아트 패스',
       image: 'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/artticon.jpg',
@@ -516,6 +593,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       ]
     },
     {
+      id: this.slugify('초등 방과후 창작 놀이터'),
       title: '초등 방과후 창작 놀이터',
       desc: '초등학생 만을 위한 방과후 창작 아트 공간',
       image: 'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/after.jpg',
@@ -537,6 +615,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     },
     {
+      id: this.slugify('취미 드로잉 프로젝트'),
       title: '취미 드로잉 프로젝트',
       desc: '완성까지 회차 제한 없이 여유롭게 이어가는 장기 프로젝트',
       image: 'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/hobby.jpg',
@@ -618,8 +697,34 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   ];
 
   ngOnInit() {
+    // 1. Initialize local base counts
+    const baseCounts: Record<string, number> = {};
+    for (const [title, count] of Object.entries(this.initialLikeCountsMap)) {
+      baseCounts[this.slugify(title)] = count;
+    }
+    this.likeCounts.set(baseCounts);
+
     if (isPlatformBrowser(this.platformId)) {
       this.isDesktop.set(window.innerWidth >= 1024);
+      
+      if (this.isLikeFeatureAvailable()) {
+        // Fetch total counts first
+        this.firebaseService.getLikes().then(counts => {
+          // 2. Merge server counts with base counts
+          this.likeCounts.update(current => {
+            const merged = { ...current };
+            for (const [id, count] of Object.entries(counts)) {
+              merged[id] = (merged[id] || 0) + count;
+            }
+            return merged;
+          });
+        });
+        
+        // Then get the current user's specific likes
+        this.firebaseService.getLikedProgramsForCurrentUser().then(likedSet => {
+          this.likedPrograms.set(likedSet);
+        });
+      }
     }
     
     // Fill dummy data for demonstration if arrays are small
@@ -647,6 +752,19 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       effect(() => {
         this.isDesktop(); // Establish dependency on the signal
         this.setupScrollListeners();
+      }, { injector: this.injector });
+
+      effect(() => {
+        // Body scroll lock for mobile menu
+        if (!this.isDesktop() && this.isMenuOpen()) {
+            this.renderer.addClass(document.body, 'overflow-hidden');
+        } else {
+            // Only remove the class if no popups are open.
+            // This prevents the menu from interfering with popup scroll lock.
+            if (!this.isPopupOpen() && !this.isProgramPopupOpen()) {
+                this.renderer.removeClass(document.body, 'overflow-hidden');
+            }
+        }
       }, { injector: this.injector });
 
       this.unlistenMouseUp = this.renderer.listen('window', 'mouseup', () => this.handleDragEnd());
@@ -679,7 +797,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       this.scrollUnlisteners.forEach(unlisten => unlisten());
       this.unlistenMouseUp?.();
       this.unlistenTouchEnd?.();
-      this.scrollSpyObserver?.disconnect();
       this.reviewCountObserver?.disconnect();
     }
     
@@ -722,6 +839,65 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.updateSliderPosition('reviewLayer2', false);
   }
 
+  hideLikeBubble() {
+    this.isLikeBubbleDismissed.set(true);
+    this.isLikeBubbleVisible.set(false);
+  }
+
+  async handleLike(program: ProgramItem, event: MouseEvent) {
+    event.stopPropagation();
+    if (!this.firebaseService.isUserAuthenticated()) {
+      console.warn("User not authenticated yet, cannot like.");
+      // Optionally, show a message to the user
+      return;
+    }
+    
+    const programId = program.id;
+    const isCurrentlyLiked = this.likedPrograms().has(programId);
+
+    // Optimistic UI Update
+    this.likedPrograms.update(currentSet => {
+      const newSet = new Set(currentSet);
+      if (isCurrentlyLiked) {
+        newSet.delete(programId);
+      } else {
+        newSet.add(programId);
+      }
+      return newSet;
+    });
+
+    this.likeCounts.update(currentCounts => {
+      const newCounts = { ...currentCounts };
+      const currentCount = newCounts[programId] || 0;
+      newCounts[programId] = isCurrentlyLiked ? Math.max(0, currentCount - 1) : currentCount + 1;
+      return newCounts;
+    });
+
+    // Sync with Firebase
+    const result = await this.firebaseService.toggleLike(programId);
+
+    // Handle potential errors from the backend
+    if (result === 'error') {
+      console.error(`Failed to sync like status for ${programId}. Reverting UI.`);
+      // Revert UI changes if the Firebase operation failed
+      this.likedPrograms.update(currentSet => {
+        const newSet = new Set(currentSet);
+        if (isCurrentlyLiked) {
+          newSet.add(programId); // It was liked, we tried to unlike, so add it back
+        } else {
+          newSet.delete(programId); // It wasn't liked, we tried to like, so delete it
+        }
+        return newSet;
+      });
+       this.likeCounts.update(currentCounts => {
+        const newCounts = { ...currentCounts };
+        const currentCount = newCounts[programId] || (isCurrentlyLiked ? 0 : 1);
+        newCounts[programId] = isCurrentlyLiked ? currentCount + 1 : Math.max(0, currentCount - 1);
+        return newCounts;
+      });
+    }
+  }
+  
   private handleDragEnd(): void {
     if (this.sliderDragState.experience.isDragging) this.dragEnd('experience');
     if (this.sliderDragState.class.isDragging) this.dragEnd('class');
@@ -735,10 +911,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     // Cleanup previous listeners
     this.scrollUnlisteners.forEach(unlisten => unlisten());
     this.scrollUnlisteners = [];
-    this.scrollSpyObserver?.disconnect();
 
     const scrollTarget = this.isDesktop() ? this.scrollContainer()?.nativeElement : window;
-    const scrollRoot = this.isDesktop() ? this.scrollContainer()?.nativeElement : null;
 
     if (scrollTarget) {
         this.scrollUnlisteners.push(
@@ -748,7 +922,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             this.renderer.listen(scrollTarget, 'scroll', this.updateActiveNavOnScrollHandler)
         );
     }
-    this.setupScrollSpy(scrollRoot);
   }
   
   private getScrollTop(): number {
@@ -758,43 +931,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     return window.scrollY || document.documentElement.scrollTop;
   }
 
-  // --- Scroll Spy for Menu Color ---
-  private setupScrollSpy(rootEl: HTMLElement | null) {
-    if (!isPlatformBrowser(this.platformId)) return;
-
-    const options = {
-      root: rootEl,
-      rootMargin: '0px 0px -90% 0px', 
-      threshold: 0
-    };
-
-    this.scrollSpyObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const id = entry.target.id;
-          const lightSections = ['intro', 'programs', 'reviews', 'group', 'faq'];
-          this.isMenuTextDark.set(lightSections.includes(id));
-        }
-      });
-    }, options);
-
-    const sections = ['home', 'intro', 'healing-art', 'programs', 'reviews', 'group', 'faq', 'quote-divider', 'contact'];
-    sections.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) this.scrollSpyObserver?.observe(el);
-    });
-  }
-
   private calculateSectionOffsets() {
     if (!isPlatformBrowser(this.platformId)) return;
     this.sectionOffsets.clear();
     
-    const scrollContainerEl = this.isDesktop() ? this.scrollContainer()?.nativeElement : null;
-
-    this.navSections.forEach(id => {
+    this.allScrollSections.forEach(id => {
         const el = document.getElementById(id);
         if (el) {
-            // offsetTop is relative to the offsetParent, which is what we need in both cases.
             this.sectionOffsets.set(id, el.offsetTop);
         }
     });
@@ -802,19 +945,77 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private updateActiveNavOnScroll() {
     const scrollTop = this.getScrollTop();
-    const navOffset = this.isDesktop() ? 46 + 100 : 100;
-    const triggerOffset = scrollTop + navOffset;
+    const container = this.isDesktop() ? this.scrollContainer()?.nativeElement : document.documentElement;
+    const scrollHeight = container ? container.scrollHeight : 0;
+    const clientHeight = container ? container.clientHeight : 0;
+    const isAtBottom = scrollHeight > 0 && (Math.ceil(scrollTop + clientHeight) >= scrollHeight);
+    const buffer = this.isDesktop() ? 49 : 10;
+    const triggerOffset = scrollTop + buffer;
 
-    let currentSection: string | null = null;
-    for (const [id, offsetTop] of this.sectionOffsets.entries()) {
-        if (offsetTop <= triggerOffset) {
-            currentSection = id;
+    // --- Desktop Nav Highlight Logic ---
+    let currentNavId: string | null = null;
+    let lastSectionId: string | null = null; // Helper for legacy desktop logic if needed
+
+    if (isAtBottom) {
+        const ids = Array.from(this.sectionOffsets.keys()).reverse();
+        for (const id of ids) {
+            if (this.navSections.includes(id)) {
+                currentNavId = id;
+                break;
+            }
+        }
+    } else {
+        for (const [id, offsetTop] of this.sectionOffsets.entries()) {
+            if (offsetTop <= triggerOffset) {
+                if (this.navSections.includes(id)) {
+                    currentNavId = id;
+                }
+                lastSectionId = id;
+            } else {
+                break;
+            }
+        }
+    }
+    this.activeDesktopNav.set(currentNavId);
+
+    // --- Mobile Menu Button Color Logic ---
+    const buttonTriggerPoint = scrollTop + 32; // Approx center of header
+    let currentSectionIdForButton = 'home';
+    for (const id of this.allScrollSections) {
+        const offset = this.sectionOffsets.get(id) ?? 0;
+        if (offset <= buttonTriggerPoint) {
+            currentSectionIdForButton = id;
         } else {
             break;
         }
     }
-    this.activeDesktopNav.set(currentSection);
-  };
+    // If section is NOT in darkSections, background is light, so button should be dark.
+    this.isMenuButtonDark.set(!this.darkSections.has(currentSectionIdForButton));
+
+    // --- Mobile Like Bubble Visibility Logic (More Robust) ---
+    if (this.isLikeBubbleDismissed()) {
+        this.isLikeBubbleVisible.set(false);
+        return;
+    }
+
+    if (this.isDesktop()) {
+        // Desktop: use simple section detection
+        this.isLikeBubbleVisible.set(lastSectionId === 'programs');
+    } else {
+        // Mobile: use precise bounding box to handle dynamic heights/layout shifts
+        const programsEl = document.getElementById('programs');
+        if (programsEl) {
+            const rect = programsEl.getBoundingClientRect();
+            // Trigger when the top of the section is near the top of the viewport (e.g., under the header)
+            // and the section is still visible.
+            // 100px buffer allows it to trigger just before it hits the very top, or while it's passing.
+            const isVisible = rect.top <= 0 && rect.bottom > 64;
+            this.isLikeBubbleVisible.set(isVisible);
+        } else {
+            this.isLikeBubbleVisible.set(false);
+        }
+    }
+  }
 
   private getTranslateX(element: HTMLElement): number {
     if (!isPlatformBrowser(this.platformId)) return 0;
@@ -849,6 +1050,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     const clonesStart = this.reviewsLayer2.slice(-cloneCount);
     const clonesEnd = this.reviewsLayer2.slice(0, cloneCount);
     this.displayReviewsLayer2.set([...clonesStart, ...this.reviewsLayer2, ...clonesEnd]);
+    this.reviewLayer2Index.set(cloneCount);
   }
 
   private setupReviewCountObserver() {
@@ -1062,7 +1264,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     if (sliderName === 'review') {
         targetTranslateX = -this.reviewIndex() * (childWidth + gap);
     } else if (sliderName === 'reviewLayer2') {
-        targetTranslateX = this.getTranslateX(sliderEl);
+        targetTranslateX = -this.reviewLayer2Index() * (childWidth + gap);
     } else {
         const indexSignal = this[`${sliderName}Index` as keyof this] as any;
         const index = indexSignal();
@@ -1253,15 +1455,19 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             this.reviewIndex.update(i => i + originalItems.length);
         }
     } else { 
+        // Layer 2 Moves RIGHT.
+        // Wrap when hitting start of ClonesStart (offset 0).
         const wrapPoint = 0;
-        if (currentTranslate > wrapPoint) {
+        if (currentTranslate >= wrapPoint) {
             currentTranslate -= totalContentWidth;
             this.renderer.setStyle(sliderEl, 'transform', `translateX(${currentTranslate}px)`);
+            this.reviewLayer2Index.update(i => i + originalItems.length);
         }
-        const startPoint = -(totalContentWidth);
+        const startPoint = -(totalContentWidth + (this.CLONE_COUNT * itemWidthWithGap));
         if (currentTranslate < startPoint) {
             currentTranslate += totalContentWidth;
             this.renderer.setStyle(sliderEl, 'transform', `translateX(${currentTranslate}px)`);
+            this.reviewLayer2Index.update(i => i - originalItems.length);
         }
     }
     state.currentTranslate = currentTranslate;
@@ -1311,12 +1517,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.popupImageTranslateX.set(-newIndex * itemWidth);
   }
 
-  private pauseReviewAutoScroll() {
+  public pauseReviewAutoScroll() {
     this.isReviewSliderPaused.set(true);
     if (this.reviewAutoScrollTimeout) clearTimeout(this.reviewAutoScrollTimeout);
   }
 
-  private resumeReviewAutoScroll(delay: number = 0) {
+  public resumeReviewAutoScroll(delay: number = 0) {
     if (this.reviewAutoScrollTimeout) clearTimeout(this.reviewAutoScrollTimeout);
     this.reviewAutoScrollTimeout = setTimeout(() => {
       this.isReviewSliderPaused.set(false);
@@ -1358,12 +1564,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.reviewAnimationId = requestAnimationFrame((t) => this.animateReviewScroll(t));
   }
 
-  private pauseReviewAutoScrollLayer2() {
+  public pauseReviewAutoScrollLayer2() {
     this.isReviewSliderLayer2Paused.set(true);
     if (this.reviewAutoScrollTimeoutLayer2) clearTimeout(this.reviewAutoScrollTimeoutLayer2);
   }
 
-  private resumeReviewAutoScrollLayer2(delay: number = 0) {
+  public resumeReviewAutoScrollLayer2(delay: number = 0) {
     if (this.reviewAutoScrollTimeoutLayer2) clearTimeout(this.reviewAutoScrollTimeoutLayer2);
     this.reviewAutoScrollTimeoutLayer2 = setTimeout(() => {
       this.isReviewSliderLayer2Paused.set(false);
@@ -1390,10 +1596,14 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     const firstChild = sliderEl.firstElementChild as HTMLElement;
     if (firstChild) {
       const itemWidth = firstChild.offsetWidth;
-      const totalContentWidth = this.reviewsLayer2.length * itemWidth;
+      const gap = parseFloat(window.getComputedStyle(sliderEl).gap || '0');
+      const itemWidthWithGap = itemWidth + gap;
+      const totalContentWidth = this.reviewsLayer2.length * itemWidthWithGap;
+      
       const wrapPoint = 0;
       if (currentTranslate >= wrapPoint) {
         currentTranslate -= totalContentWidth;
+        this.reviewLayer2Index.update(i => i + this.reviewsLayer2.length);
       }
     }
     this.renderer.setStyle(sliderEl, 'transform', `translateX(${currentTranslate}px)`);

@@ -1,5 +1,3 @@
-
-
 <!-- Desktop Background / Wrapper -->
 <div class="relative w-full lg:h-full wave-bg flex flex-col lg:flex-row items-center lg:items-stretch justify-center px-0 lg:px-12 lg:pt-12 gap-8 lg:gap-8 xl:gap-16 lg:overflow-hidden lg:overscroll-none lg:touch-none">
   
@@ -91,7 +89,7 @@
   <div class="touch-pan-y relative z-10 w-full lg:w-auto grow lg:max-w-[820px] lg:h-full bg-white lg:rounded-t-[2.5rem] lg:shadow-2xl flex flex-col lg:border-[8px] lg:border-b-0 lg:border-gray-900 box-border ring-1 ring-white/20 lg:overflow-hidden">
     
     <!-- Original SPA View -->
-    <header class="absolute top-0 left-0 right-0 z-50 h-16 flex items-center px-4 lg:px-6 pointer-events-none">
+    <header class="fixed lg:absolute top-0 left-0 right-0 z-50 h-16 flex items-center px-4 lg:px-6 pointer-events-none">
       <!-- Logo for Mobile Menu Header -->
       @if (isMenuOpen()) {
         <div class="font-extralight text-xl tracking-widest text-gray-800 md:hidden ml-4 pointer-events-auto">
@@ -102,10 +100,10 @@
       }
 
       <!-- Mobile/Tablet Hamburger -->
-      <!-- The button color changes based on section: Dark text for light sections, White text for dark sections -->
-      <button class="ml-auto p-2 drop-shadow-lg md:hidden transition-colors duration-300 pointer-events-auto" 
-              [class.text-gray-800]="isMenuOpen() || isMenuTextDark()"
-              [class.text-white]="!isMenuOpen() && !isMenuTextDark()"
+      <!-- Adjusted to change color based on section background instead of mix-blend-difference -->
+      <button class="ml-auto p-2 md:hidden pointer-events-auto z-50 transition-colors duration-300" 
+              [class.text-gray-900]="isMenuOpen() || isMenuButtonDark()"
+              [class.text-white]="!isMenuOpen() && !isMenuButtonDark()"
               (click)="toggleMenu()">
         @if (!isMenuOpen()) {
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
@@ -114,10 +112,18 @@
         }
       </button>
     </header>
+    
+    <!-- Mobile Like Bubble -->
+    <div class="md:hidden fixed top-10 left-0 right-0 w-full flex justify-center pointer-events-none z-30 transition-opacity duration-300 ease-in-out"
+         [class.opacity-0]="!isLikeBubbleVisible()">
+      <div (click)="hideLikeBubble()" class="bg-orange-500 text-white text-xs rounded-full px-3 py-1 shadow-lg whitespace-nowrap font-bold cursor-pointer pointer-events-auto speech-bubble-anim" style="font-family: 'Paperozi', sans-serif;">
+        프로그램이 마음에 들었다면 ♡ 꾹!
+      </div>
+    </div>
 
     <!-- Mobile Menu Overlay -->
     @if (isMenuOpen()) {
-      <div class="absolute inset-0 z-40 bg-white/95 backdrop-blur-sm md:hidden flex flex-col justify-center animate-fade-in p-6 pt-20">
+      <div class="fixed inset-0 z-40 bg-white/95 backdrop-blur-sm md:hidden flex flex-col justify-center animate-fade-in p-6 pt-20">
         
         <!-- Wrapper for content, handles landscape split -->
         <div class="w-full flex flex-col sm:flex-row items-center justify-center gap-x-8">
@@ -194,7 +200,7 @@
     }
 
     <!-- Scrollable Content Area -->
-    <main #scrollContainer class="touch-pan-y scroll-container relative w-full lg:h-full lg:overflow-y-auto overflow-x-hidden pt-0 bg-white lg:rounded-t-[calc(2.5rem-8px)]">
+    <main #scrollContainer class="touch-pan-y scroll-container relative w-full lg:h-full lg:overflow-y-auto pt-0 bg-white lg:rounded-t-[calc(2.5rem-8px)]">
       
       <!-- 1. Main Banner -->
       <section id="home" class="relative z-10 w-full h-screen flex items-center justify-center overflow-hidden bg-black lg:rounded-t-[calc(2.5rem-8px)]">
@@ -236,12 +242,12 @@
       <section id="intro" class="relative z-10 min-h-screen flex items-center py-20 px-6 bg-[#fdfbf8] overflow-hidden">
         <!-- Floating Images -->
         <div #floatingImage1 class="absolute bottom-16 md:bottom-0 left-0 z-[5] w-64 h-80 md:w-[30rem] md:h-[40rem] lg:w-[32rem] lg:h-[40rem] pointer-events-none">
-          <div style="position: relative; width: 100%; height: 100%;">
+          <div class="floating-bounce" style="position: relative; width: 100%; height: 100%;">
             <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/bear.png" alt="Floating bear painting illustration" fill class="object-contain object-left-bottom" priority>
           </div>
         </div>
         <div #floatingImage2 class="absolute top-24 md:top-0 right-0 z-[5] w-64 h-80 md:w-[30rem] md:h-[40rem] lg:w-[32rem] lg:h-[40rem] pointer-events-none">
-          <div style="position: relative; width: 100%; height: 100%;">
+          <div class="floating-bounce-delayed" style="position: relative; width: 100%; height: 100%;">
             <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/bear2.png" alt="Floating bear with plant illustration" fill class="object-contain object-right-top" priority>
           </div>
         </div>
@@ -337,7 +343,21 @@
       <!-- New Sticky Desktop Navigation -->
       <nav class="hidden md:flex sticky top-0 z-[100] justify-center items-center gap-x-8 lg:gap-x-12 py-4 bg-white/90 backdrop-blur-sm border-b border-gray-100 shadow-sm w-full lg:rounded-t-[calc(2.5rem-8px)]">
         <button (click)="scrollToSection('intro')" class="text-sm font-semibold text-gray-700 hover:text-orange-500 transition-colors" [class.text-orange-500]="activeDesktopNav() === 'intro'">힐링아트</button>
-        <button (click)="scrollToSection('programs')" class="text-sm font-semibold text-gray-700 hover:text-orange-500 transition-colors" [class.text-orange-500]="activeDesktopNav() === 'programs'">프로그램</button>
+        <div class="relative">
+          <button (click)="scrollToSection('programs')" class="text-sm font-semibold text-gray-700 hover:text-orange-500 transition-colors" [class.text-orange-500]="activeDesktopNav() === 'programs'">프로그램</button>
+          <div (click)="hideLikeBubble()"
+               class="absolute top-full mt-3 left-1/2 -translate-x-1/2 w-max cursor-pointer z-20 transition-opacity duration-300 ease-in-out"
+               [class.opacity-0]="!isLikeBubbleVisible()"
+               [class.pointer-events-none]="!isLikeBubbleVisible()">
+            <div class="relative speech-bubble-anim">
+              <div class="bg-orange-500 text-white text-[10px] rounded-md px-2.5 py-1 shadow-lg whitespace-nowrap font-bold" style="font-family: 'Paperozi', sans-serif;">
+                프로그램이 마음에 들었다면 ♡ 꾹!
+              </div>
+              <!-- Tail of the bubble -->
+              <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[6px] border-b-orange-500"></div>
+            </div>
+          </div>
+        </div>
         <button (click)="scrollToSection('group')" class="text-sm font-semibold text-gray-700 hover:text-orange-500 transition-colors" [class.text-orange-500]="activeDesktopNav() === 'group'">단체/출강/행사</button>
         <button (click)="scrollToSection('faq')" class="text-sm font-semibold text-gray-700 hover:text-orange-500 transition-colors" [class.text-orange-500]="activeDesktopNav() === 'faq'">자주 묻는 질문</button>
         <button (click)="scrollToSection('contact')" class="text-sm font-semibold text-gray-700 hover:text-orange-500 transition-colors" [class.text-orange-500]="activeDesktopNav() === 'contact'">이용안내</button>
@@ -359,7 +379,7 @@
             <div class="flex gap-4 items-start bg-gray-50 border border-gray-200 rounded-2xl p-6 md:p-8 text-left">
                 <!-- Icon -->
                 <div class="flex-shrink-0 text-orange-500 mt-0.5">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10"></circle>
                         <line x1="12" y1="8" x2="12" y2="12"></line>
                         <line x1="12" y1="16" x2="12.01" y2="16"></line>
@@ -391,11 +411,24 @@
           <div class="overflow-hidden slider-container"
             (mousedown)="dragStart($event, 'experience')" (touchstart)="dragStart($event, 'experience')">
             <div #experienceSlider class="flex gap-4 px-4 md:px-8">
-              @for (item of experiences; track item.title) {
+              @for (item of experiences; track item.id) {
                 <div class="w-[85vw] md:w-96 flex-shrink-0">
                   <div class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-gray-100 h-full flex flex-col">
                     <div class="relative h-48 overflow-hidden">
                       <img [ngSrc]="item.image" [alt]="item.title" fill class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" draggable="false" priority>
+                      @if (isLikeFeatureAvailable()) {
+                        <button (click)="handleLike(item, $event)"
+                                class="like-button absolute top-2 right-2 z-10 flex items-center gap-2 text-gray-700 bg-white/70 backdrop-blur-sm rounded-full py-1 pl-2 pr-3 shadow-md transition-transform hover:scale-105 active:scale-95 group/like"
+                                [class.liked]="likedPrograms().has(item.id)">
+                          <svg class="w-5 h-5 heart-icon transition-colors duration-300" 
+                              [class.text-red-500]="likedPrograms().has(item.id)" 
+                              [class.group-hover/like:text-red-400]="!likedPrograms().has(item.id)"
+                              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path [attr.fill-rule]="likedPrograms().has(item.id) ? 'evenodd' : 'nonzero'" d="M12.001 4.529a5.998 5.998 0 018.242 8.242L12 21l-8.243-8.229a5.998 5.998 0 018.242-8.242z" [attr.fill]="likedPrograms().has(item.id) ? 'currentColor' : 'none'" [attr.stroke]="likedPrograms().has(item.id) ? 'none' : 'currentColor'" stroke-width="1.5" />
+                          </svg>
+                          <span class="font-bold text-sm min-w-[16px] text-left" [class.text-red-500]="likedPrograms().has(item.id)">{{ likeCounts()[item.id] || 0 }}</span>
+                        </button>
+                      }
                     </div>
                     <div class="p-5 flex flex-col flex-grow">
                       <div class="flex flex-wrap gap-2 mb-2">
@@ -432,12 +465,25 @@
           <div class="overflow-hidden slider-container"
             (mousedown)="dragStart($event, 'class')" (touchstart)="dragStart($event, 'class')">
             <div #classSlider class="flex gap-4 px-4 md:px-8">
-              @for (item of oneDayClasses; track item.title) {
+              @for (item of oneDayClasses; track item.id) {
                 <div class="w-[85vw] md:w-96 flex-shrink-0">
                   <div class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-gray-100 h-full flex flex-col">
                     <div class="relative h-48 overflow-hidden">
                       <img [ngSrc]="item.image" [alt]="item.title" fill class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" draggable="false" priority>
-                       <div class="absolute top-2 right-2 bg-white/90 px-2 py-1 rounded text-xs font-bold text-gray-800">예약필수</div>
+                       <div class="absolute top-2 left-2 bg-white/90 px-2 py-1 rounded text-xs font-bold text-gray-800">예약필수</div>
+                      @if (isLikeFeatureAvailable()) {
+                        <button (click)="handleLike(item, $event)"
+                                class="like-button absolute top-2 right-2 z-10 flex items-center gap-2 text-gray-700 bg-white/70 backdrop-blur-sm rounded-full py-1 pl-2 pr-3 shadow-md transition-transform hover:scale-105 active:scale-95 group/like"
+                                [class.liked]="likedPrograms().has(item.id)">
+                          <svg class="w-5 h-5 heart-icon transition-colors duration-300"
+                              [class.text-red-500]="likedPrograms().has(item.id)"
+                              [class.group-hover/like:text-red-400]="!likedPrograms().has(item.id)"
+                              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path [attr.fill-rule]="likedPrograms().has(item.id) ? 'evenodd' : 'nonzero'" d="M12.001 4.529a5.998 5.998 0 018.242 8.242L12 21l-8.243-8.229a5.998 5.998 0 018.242-8.242z" [attr.fill]="likedPrograms().has(item.id) ? 'currentColor' : 'none'" [attr.stroke]="likedPrograms().has(item.id) ? 'none' : 'currentColor'" stroke-width="1.5" />
+                          </svg>
+                          <span class="font-bold text-sm min-w-[16px] text-left" [class.text-red-500]="likedPrograms().has(item.id)">{{ likeCounts()[item.id] || 0 }}</span>
+                        </button>
+                      }
                     </div>
                     <div class="p-5 flex flex-col flex-grow">
                       <div class="flex flex-wrap gap-2 mb-2">
@@ -475,20 +521,37 @@
           <div class="overflow-hidden slider-container"
             (mousedown)="dragStart($event, 'special')" (touchstart)="dragStart($event, 'special')">
             <div #specialSlider class="flex gap-4 px-4 md:px-8">
-              @for (item of specialPrograms; track item.title) {
+              @for (item of specialPrograms; track item.id) {
                 <div class="w-[90vw] md:w-[480px] flex-shrink-0">
                   <div class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-gray-100 h-full flex flex-col">
                     <div class="relative h-60 overflow-hidden">
                       <img [ngSrc]="item.image" [alt]="item.title" fill class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" draggable="false" priority>
+                      @if (isLikeFeatureAvailable()) {
+                        <button (click)="handleLike(item, $event)"
+                                class="like-button absolute top-2 right-2 z-10 flex items-center gap-2 text-gray-700 bg-white/70 backdrop-blur-sm rounded-full py-1 pl-2 pr-3 shadow-md transition-transform hover:scale-105 active:scale-95 group/like"
+                                [class.liked]="likedPrograms().has(item.id)">
+                          <svg class="w-5 h-5 heart-icon transition-colors duration-300"
+                              [class.text-red-500]="likedPrograms().has(item.id)"
+                              [class.group-hover/like:text-red-400]="!likedPrograms().has(item.id)"
+                              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path [attr.fill-rule]="likedPrograms().has(item.id) ? 'evenodd' : 'nonzero'" d="M12.001 4.529a5.998 5.998 0 018.242 8.242L12 21l-8.243-8.229a5.998 5.998 0 018.242-8.242z" [attr.fill]="likedPrograms().has(item.id) ? 'currentColor' : 'none'" [attr.stroke]="likedPrograms().has(item.id) ? 'none' : 'currentColor'" stroke-width="1.5" />
+                          </svg>
+                          <span class="font-bold text-sm min-w-[16px] text-left" [class.text-red-500]="likedPrograms().has(item.id)">{{ likeCounts()[item.id] || 0 }}</span>
+                        </button>
+                      }
                     </div>
                     <div class="p-6 flex flex-col flex-grow">
-                      <div class="flex flex-wrap gap-2 mb-3">
-                        @for (tag of item.tags; track tag) {
-                          <span class="text-[10px] bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-medium">#{{tag}}</span>
-                        }
+                      <div class="flex justify-between items-start">
+                        <div>
+                          <div class="flex flex-wrap gap-2 mb-3">
+                            @for (tag of item.tags; track tag) {
+                              <span class="text-[10px] bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-medium">#{{tag}}</span>
+                            }
+                          </div>
+                          <h5 class="text-xl font-bold text-gray-800 mb-1">{{item.title}}</h5>
+                          <p class="text-sm font-bold text-orange-600 mb-3">{{item.desc}}</p>
+                        </div>
                       </div>
-                      <h5 class="text-xl font-bold text-gray-800 mb-1">{{item.title}}</h5>
-                      <p class="text-sm font-bold text-orange-600 mb-3">{{item.desc}}</p>
                       
                       <div class="flex-grow">
                         <!-- Sub Description List -->
@@ -540,7 +603,6 @@
                           </div>
                         }
                       </div>
-
                     </div>
                   </div>
                 </div>
@@ -843,7 +905,7 @@
                <div class="hidden md:block lg:hidden mt-8 w-full">
                 <div class="space-y-3">
                     <!-- Primary CTA -->
-                    <a href="https://pcmap.place.naver.com/restaurant/1276609996/booking?entry=pll&fromNxList=true&fromPanelNum=2&locale=ko&searchText=%EB%A9%94%EC%A2%85%EB%94%94%EC%95%8A%ED%8A%B8&svcName=map_pcv5&timestamp=202601041429" target="_blank" class="w-full flex items-center justify-center px-6 py-3 text-white rounded-full animated-gradient-bg">
+                    <a href="https://pcmap.place.naver.com/restaurant/1276609996/booking?entry=pll&fromNxList=true&fromPanelNum=2&locale=ko&searchText=%EB%A9%94%EC%A2%85%EB%94%94%EC%95%84%ED%8A%B8&svcName=map_pcv5&timestamp=202601041429" target="_blank" class="w-full flex items-center justify-center px-6 py-3 text-white rounded-full animated-gradient-bg">
                         <span class="relative z-10 flex items-center justify-center gap-3">
                             <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/booking.png" alt="Booking Icon" width="18" height="18">
                             <span class="font-bold text-base whitespace-nowrap">예약 바로 가기</span>
