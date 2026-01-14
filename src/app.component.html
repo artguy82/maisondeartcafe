@@ -422,7 +422,7 @@
                                 [class.liked]="likedPrograms().has(item.id)">
                           <svg class="w-5 h-5 heart-icon transition-colors duration-300" 
                               [class.text-red-500]="likedPrograms().has(item.id)" 
-                              [class.group-hover/like:text-red-400]="!likedPrograms().has(item.id)"
+                              [ngClass]="{ 'group-hover/like:text-red-400': !likedPrograms().has(item.id) }"
                               xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                             <path [attr.fill-rule]="likedPrograms().has(item.id) ? 'evenodd' : 'nonzero'" d="M12.001 4.529a5.998 5.998 0 018.242 8.242L12 21l-8.243-8.229a5.998 5.998 0 018.242-8.242z" [attr.fill]="likedPrograms().has(item.id) ? 'currentColor' : 'none'" [attr.stroke]="likedPrograms().has(item.id) ? 'none' : 'currentColor'" stroke-width="1.5" />
                           </svg>
@@ -477,7 +477,7 @@
                                 [class.liked]="likedPrograms().has(item.id)">
                           <svg class="w-5 h-5 heart-icon transition-colors duration-300"
                               [class.text-red-500]="likedPrograms().has(item.id)"
-                              [class.group-hover/like:text-red-400]="!likedPrograms().has(item.id)"
+                              [ngClass]="{ 'group-hover/like:text-red-400': !likedPrograms().has(item.id) }"
                               xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                             <path [attr.fill-rule]="likedPrograms().has(item.id) ? 'evenodd' : 'nonzero'" d="M12.001 4.529a5.998 5.998 0 018.242 8.242L12 21l-8.243-8.229a5.998 5.998 0 018.242-8.242z" [attr.fill]="likedPrograms().has(item.id) ? 'currentColor' : 'none'" [attr.stroke]="likedPrograms().has(item.id) ? 'none' : 'currentColor'" stroke-width="1.5" />
                           </svg>
@@ -532,7 +532,7 @@
                                 [class.liked]="likedPrograms().has(item.id)">
                           <svg class="w-5 h-5 heart-icon transition-colors duration-300"
                               [class.text-red-500]="likedPrograms().has(item.id)"
-                              [class.group-hover/like:text-red-400]="!likedPrograms().has(item.id)"
+                              [ngClass]="{ 'group-hover/like:text-red-400': !likedPrograms().has(item.id) }"
                               xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                             <path [attr.fill-rule]="likedPrograms().has(item.id) ? 'evenodd' : 'nonzero'" d="M12.001 4.529a5.998 5.998 0 018.242 8.242L12 21l-8.243-8.229a5.998 5.998 0 018.242-8.242z" [attr.fill]="likedPrograms().has(item.id) ? 'currentColor' : 'none'" [attr.stroke]="likedPrograms().has(item.id) ? 'none' : 'currentColor'" stroke-width="1.5" />
                           </svg>
@@ -1087,7 +1087,7 @@
               <!-- Dots -->
               <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
                 @for(dot of program.images; track $index) {
-                  <button (click)="setProgramImage($index); $event.stopPropagation()" class="w-2 h-2 rounded-full transition-colors shadow-sm" [class.bg-white]="programImageIndex() === $index" [class.bg-white/40]="programImageIndex() !== $index"></button>
+                  <button (click)="setProgramImage($index); $event.stopPropagation()" class="w-2 h-2 rounded-full transition-colors shadow-sm" [ngClass]="programImageIndex() === $index ? 'bg-white' : 'bg-white/40'"></button>
                 }
               </div>
             }
