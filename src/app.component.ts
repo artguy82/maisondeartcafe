@@ -416,7 +416,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     { 
       id: this.slugify('대형 도안 채색'),
       title: '대형 도안 채색', 
-      desc: '거대한 캔버스에 나만의 색을 입히는 몰입형 체험', 
+      desc: '거대한 도안이 그려진 종이에 나만의 색을 입히는 몰입형 체험', 
       image: 'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/pro2.jpg', 
       tags: ['집중력', '힐링', '초보자가능'], 
       images: [
@@ -450,7 +450,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     { 
       id: this.slugify('백드롭 페인팅'),
       title: '백드롭 페인팅', 
-      desc: '질감 보조제를 활용한 트렌디한 추상화 그리기', 
+      desc: '질감 보조제를 활용한 트렌디한 입체화 그리기', 
       image: 'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/pro3.jpg', 
       tags: ['인테리어', '감성'], 
       images: [
