@@ -312,7 +312,7 @@
       <section id="healing-art" class="relative z-10 py-24 md:py-32 bg-gray-800 text-white overflow-hidden">
         <!-- Parallax Background Container -->
         <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
-          <div #parallaxBg class="absolute top-[-15%] left-0 w-full h-[130%]">
+          <div #parallaxBg class="absolute top-[-75%] left-0 w-full h-[250%]">
             <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/healing.jpg" 
                  fill 
                  class="absolute top-0 left-0 w-full h-full object-cover" 
@@ -922,198 +922,182 @@
                             <span class="font-medium">카톡 문의</span>
                         </a>
                     </div>
-                    <div class="grid grid-cols-3 gap-3">
-                        <a href="https://m.smartstore.naver.com/maisondeartcafe" target="_blank" class="flex items-center justify-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white rounded-full transition-colors text-sm">
-                            <span class="font-extrabold text-green-600">N</span>
-                            <span class="font-bold">스토어</span>
-                        </a>
-                        <a href="https://m.blog.naver.com/maisondeart" target="_blank" class="flex items-center justify-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white rounded-full transition-colors text-sm">
-                            <span class="font-extrabold text-green-600">N</span>
-                            <span class="font-bold">블로그</span>
-                        </a>
-                        <a href="https://www.instagram.com/maisondeartcafe/" target="_blank" class="flex items-center justify-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white rounded-full transition-colors text-sm">
-                            <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                              <defs>
-                                <linearGradient id="instagram-gradient-footer" x1="0%" y1="0%" x2="100%" y2="100%">
-                                  <stop offset="0%" style="stop-color:#feda75;"></stop>
-                                  <stop offset="25%" style="stop-color:#fa7e1e;"></stop>
-                                  <stop offset="50%" style="stop-color:#d62976;"></stop>
-                                  <stop offset="75%" style="stop-color:#962fbf;"></stop>
-                                  <stop offset="100%" style="stop-color:#4f5bd5;"></stop>
-                                </linearGradient>
-                              </defs>
-                              <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke="url(#instagram-gradient-footer)"></rect>
-                              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" stroke="url(#instagram-gradient-footer)"></path>
-                              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke="url(#instagram-gradient-footer)"></line>
-                            </svg>
-                            <span class="font-bold">인스타</span>
-                        </a>
-                    </div>
                 </div>
                </div>
             </div>
           </div>
-      
-          <!-- Bottom Section: Copyright & Legal -->
-          <div class="border-t border-gray-800 pt-8 text-xs text-gray-600">
-             <p class="text-center sm:text-left mb-3">상호명: 메종디아트 | 대표자: 김대영 | 사업자등록번호: 768-04-02325</p>
-             <div class="flex flex-col sm:flex-row justify-between items-center gap-2">
-                <p class="font-bold text-gray-500">&copy; 2022. MAISON D'ART.</p>
-                <div class="flex items-center gap-4">
-                    <button (click)="openPopup('terms')" class="text-gray-500 hover:text-white transition-colors font-semibold">이용약관</button>
-                    <span class="text-gray-700">|</span>
-                    <button (click)="openPopup('privacy')" class="text-gray-500 hover:text-white transition-colors font-bold">개인정보처리방침</button>
-                </div>
-             </div>
+          
+          <!-- Bottom Section: Copyright -->
+          <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
+            <p>&copy; 2024 MAISON D'ART. All rights reserved.</p>
+            <div class="flex gap-4 mt-4 md:mt-0">
+               <button (click)="openPopup('terms')" class="hover:text-white transition-colors">이용약관</button>
+               <button (click)="openPopup('privacy')" class="hover:text-white transition-colors">개인정보처리방침</button>
+            </div>
           </div>
         </div>
       </footer>
+      
+      <!-- Popups -->
+      <!-- Program Detail Popup -->
+      @if (isProgramPopupOpen() && selectedProgram()) {
+        <div class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6" role="dialog" aria-modal="true">
+          <div class="absolute inset-0 bg-black/80 backdrop-blur-sm animate-fade-in" (click)="closeProgramPopup()"></div>
+          
+          <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col md:flex-row popup-panel-open">
+            <button (click)="closeProgramPopup()" class="absolute top-4 right-4 z-20 p-2 bg-black/20 hover:bg-black/40 text-white rounded-full transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            <!-- Image Slider Section -->
+            <div class="w-full md:w-1/2 h-64 md:h-auto bg-gray-100 relative group select-none">
+                <!-- Slider Wrapper -->
+                <div class="overflow-hidden w-full h-full relative touch-pan-y"
+                     (mousedown)="popupImageDragStart($event)" (touchstart)="popupImageDragStart($event)">
+                    <div #popupImageSliderContainer class="flex h-full"
+                         [class.transition-transform]="popupImageSliderTransition()"
+                         [class.duration-300]="popupImageSliderTransition()"
+                         [style.transform]="'translateX(' + popupImageTranslateX() + 'px)'">
+                        @for (img of (selectedProgram()?.images || [selectedProgram()?.image]); track $index) {
+                            <div class="w-full h-full flex-shrink-0 relative">
+                                <img [ngSrc]="img || ''" fill class="object-cover" [alt]="selectedProgram()?.title + ' image ' + ($index + 1)" draggable="false">
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Navigation Arrows -->
+                @if ((selectedProgram()?.images?.length || 0) > 1) {
+                    <button (click)="prevProgramImage()" class="absolute left-2 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white p-2 rounded-full backdrop-blur-sm transition-opacity opacity-0 group-hover:opacity-100 focus:opacity-100 z-10" aria-label="Previous Image">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
+                    <button (click)="nextProgramImage()" class="absolute right-2 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white p-2 rounded-full backdrop-blur-sm transition-opacity opacity-0 group-hover:opacity-100 focus:opacity-100 z-10" aria-label="Next Image">
+                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                    <!-- Indicators -->
+                    <div class="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-10 pointer-events-none">
+                        @for (img of selectedProgram()?.images; track $index; let i = $index) {
+                            <div class="w-2 h-2 rounded-full transition-colors duration-300 shadow-sm"
+                                 [class.bg-white]="programImageIndex() === i"
+                                 [class.scale-125]="programImageIndex() === i"
+                                 [class.bg-white-50]="programImageIndex() !== i"></div>
+                        }
+                    </div>
+                }
+            </div>
+
+            <!-- Content Section -->
+            <div class="w-full md:w-1/2 p-6 md:p-8 flex flex-col h-[60vh] md:h-auto overflow-y-auto">
+              <div class="mb-6">
+                <div class="flex flex-wrap gap-2 mb-3">
+                    @for (tag of selectedProgram()?.tags; track tag) {
+                        <span class="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full font-bold">#{{tag}}</span>
+                    }
+                </div>
+                <h3 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">{{selectedProgram()?.title}}</h3>
+                <p class="text-orange-600 font-medium">{{selectedProgram()?.desc}}</p>
+              </div>
+
+              <div class="prose prose-sm text-gray-600 mb-8 leading-relaxed">
+                 @if (selectedProgram()?.subDescription) {
+                    <ul class="space-y-2 mb-4 list-none pl-0">
+                      @for(desc of selectedProgram()?.subDescription; track desc) {
+                        <li class="flex items-start gap-2">
+                          <span class="text-purple-500 mt-1 flex-shrink-0">✔</span>
+                          <span>{{desc}}</span>
+                        </li>
+                      }
+                    </ul>
+                 } @else {
+                    <p class="whitespace-pre-line">{{selectedProgram()?.detailedDesc}}</p>
+                 }
+
+                 @if (selectedProgram()?.pricing) {
+                    <div class="bg-gray-50 rounded-xl p-4 border border-gray-100 mt-4 not-prose">
+                        @if(selectedProgram()?.pricingTitle) {
+                           <h4 class="font-bold text-gray-800 flex items-center gap-2 mb-3 text-sm border-b border-gray-200 pb-2">
+                             🎁 {{selectedProgram()?.pricingTitle}}
+                           </h4>
+                         }
+                         <div class="space-y-2">
+                             @for(p of selectedProgram()?.pricing; track p.price) {
+                               <div class="flex justify-between items-center text-sm">
+                                 <span class="font-medium text-gray-600" [class.font-bold]="p.highlight" [class.text-gray-800]="p.highlight">{{p.price}}</span>
+                                 <span class="font-bold" [class.text-pink-600]="p.highlight" [class.text-pink-500]="!p.highlight">{{p.bonus}}</span>
+                               </div>
+                             }
+                         </div>
+                    </div>
+                 }
+
+                 @if (selectedProgram()?.recommendations) {
+                     <div class="mt-6 not-prose">
+                         <h4 class="font-bold text-gray-800 mb-2 text-sm">👍 {{selectedProgram()?.recommendations?.title}}</h4>
+                         <ul class="space-y-1">
+                           @for(rec of selectedProgram()?.recommendations?.items; track rec) {
+                             <li class="text-sm text-gray-600 flex items-start gap-2">
+                               <span class="text-gray-300">•</span> {{rec}}
+                             </li>
+                           }
+                         </ul>
+                     </div>
+                 }
+              </div>
+
+              <div class="mt-auto pt-6 border-t border-gray-100 flex gap-3">
+                 <button (click)="closeProgramPopup()" class="flex-1 py-3 px-4 border border-gray-300 text-gray-700 font-bold rounded-xl hover:bg-gray-50 transition-colors">닫기</button>
+                 <a href="https://pcmap.place.naver.com/restaurant/1276609996/booking?entry=pll&fromNxList=true&fromPanelNum=2&locale=ko&searchText=%EB%A9%94%EC%A2%85%EB%94%94%EC%95%84%ED%8A%B8&svcName=map_pcv5&timestamp=202601041429" target="_blank" class="flex-1 py-3 px-4 bg-orange-500 text-white font-bold rounded-xl hover:bg-orange-600 transition-colors text-center shadow-lg shadow-orange-200">예약하기</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Terms / Privacy Popup -->
+      @if (isPopupOpen()) {
+        <div class="fixed inset-0 z-[100] flex items-center justify-center p-4" role="dialog" aria-modal="true">
+           <div class="absolute inset-0 bg-black/60 backdrop-blur-sm animate-fade-in" (click)="closePopup()"></div>
+           <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[80vh] flex flex-col popup-panel-open overflow-hidden">
+              <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                  <h3 class="font-bold text-lg text-gray-800">
+                    {{ popupContent() === 'terms' ? '이용약관' : '개인정보처리방침' }}
+                  </h3>
+                  <button (click)="closePopup()" class="p-1 rounded-full hover:bg-gray-200 transition-colors text-gray-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+              </div>
+              <div class="p-6 overflow-y-auto leading-relaxed text-sm text-gray-600">
+                  @if (popupContent() === 'terms') {
+                    <p><strong>제1조 (목적)</strong><br>본 약관은 메종디아트(이하 "회사")가 제공하는 서비스 이용과 관련하여 회사와 이용자의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.</p>
+                    <br>
+                    <p><strong>제2조 (예약 및 환불)</strong><br>1. 예약은 네이버 예약을 통해 진행됩니다.<br>2. 당일 취소 시 환불이 불가할 수 있습니다.</p>
+                    <br>
+                    <p><strong>제3조 (체험 규정)</strong><br>1. 1인 1음료/체험 원칙을 준수해야 합니다.<br>2. 기물 파손 시 배상 책임이 있을 수 있습니다.</p>
+                    <br>
+                    <p>(상세 내용은 매장 내 비치된 약관을 따릅니다.)</p>
+                  } @else {
+                    <p><strong>1. 개인정보 수집 항목</strong><br>성명, 연락처, 예약 정보 등 서비스 이용에 필요한 최소한의 정보.</p>
+                    <br>
+                    <p><strong>2. 수집 목적</strong><br>예약 확인, 고객 상담, 마케팅 자료(동의 시) 활용.</p>
+                    <br>
+                    <p><strong>3. 보유 기간</strong><br>목적 달성 시 즉시 파기하며, 법령에 따른 보존 필요 시 해당 기간 동안 보관합니다.</p>
+                  }
+              </div>
+              <div class="p-5 border-t border-gray-100 bg-gray-50 text-right">
+                  <button (click)="closePopup()" class="px-6 py-2 bg-gray-800 text-white font-bold rounded-lg hover:bg-gray-700 transition-colors text-sm">확인</button>
+              </div>
+           </div>
+        </div>
+      }
+
     </main>
   </div>
-
-  <!-- Policy Popup Overlay -->
-  @if (isPopupOpen()) {
-    <div class="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm popup-open" (click)="closePopup()">
-      <!-- Popup Panel -->
-      <div class="relative w-full max-w-2xl max-h-[80vh] bg-white rounded-lg shadow-xl m-4 flex flex-col popup-panel-open" (click)="$event.stopPropagation()">
-        <!-- Header -->
-        <div class="flex items-center justify-between p-4 border-b flex-shrink-0">
-          @if (popupContent() === 'terms') {
-            <h3 class="text-lg font-bold text-gray-800">이용약관</h3>
-          } @else if (popupContent() === 'privacy') {
-            <h3 class="text-lg font-bold text-gray-800">개인정보처리방침</h3>
-          }
-          <button (click)="closePopup()" class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
-        </div>
-        <!-- Content -->
-        <div class="p-6 overflow-y-auto text-sm text-gray-700 leading-relaxed no-scrollbar">
-          @switch (popupContent()) {
-            @case ('terms') {
-              <div class="space-y-4">
-                <h4 class="font-bold text-base text-gray-800">제1조(목적)</h4>
-                <p>이 약관은 메종디아트 회사(전자상거래 사업자)가 운영하는 메종디아트 사이버 몰(이하 “몰”이라 한다)에서 제공하는 인터넷 관련 서비스(이하 “서비스”라 한다)를 이용함에 있어 사이버 몰과 이용자의 권리․의무 및 책임사항을 규정함을 목적으로 합니다.</p>
-                
-                <h4 class="font-bold text-base text-gray-800">제2조(정의)</h4>
-                <ol class="list-decimal list-inside space-y-2 pl-2">
-                    <li>“몰”이란 메종디아트 회사가 재화 또는 용역(이하 “재화 등”이라 함)을 이용자에게 제공하기 위하여 컴퓨터 등 정보통신설비를 이용하여 재화 등을 거래할 수 있도록 설정한 가상의 영업장을 말하며, 아울러 사이버몰을 운영하는 사업자의 의미로도 사용합니다.</li>
-                    <li>“이용자”란 “몰”에 접속하여 이 약관에 따라 “몰”이 제공하는 서비스를 받는 회원 및 비회원을 말합니다.</li>
-                    <li>‘회원’이라 함은 “몰”에 회원등록을 한 자로서, 계속적으로 “몰”이 제공하는 서비스를 이용할 수 있는 자를 말합니다.</li>
-                    <li>‘비회원’이라 함은 회원에 가입하지 않고 “몰”이 제공하는 서비스를 이용하는 자를 말합니다.</li>
-                </ol>
-
-                <h4 class="font-bold text-base text-gray-800">제3조 (약관 등의 명시와 설명 및 개정)</h4>
-                <ol class="list-decimal list-inside space-y-2 pl-2">
-                    <li>“몰”은 이 약관의 내용과 상호 및 대표자 성명, 영업소 소재지 주소(소비자의 불만을 처리할 수 있는 곳의 주소를 포함), 전화번호, 사업자등록번호, 통신판매업 신고번호, 개인정보보호책임자등을 이용자가 쉽게 알 수 있도록 메종디아트 사이버몰의 초기 서비스화면(전면)에 게시합니다. 다만, 약관의 내용은 이용자가 연결화면을 통하여 볼 수 있도록 할 수 있습니다.</li>
-                    <li>“몰”은 이용자가 약관에 동의하기에 앞서 약관에 정하여져 있는 내용 중 청약철회․배송책임․환불조건 등과 같은 중요한 내용을 이용자가 이해할 수 있도록 별도의 연결화면 또는 팝업화면 등을 제공하여 이용자의 확인을 구하여야 합니다.</li>
-                    <li>“몰”은 「전자상거래 등에서의 소비자보호에 관한 법률」, 「약관의 규제에 관한 법률」, 「전자문서 및 전자거래기본법」, 「전자금융거래법」, 「전자서명법」, 「정보통신망 이용촉진 및 정보보호 등에 관한 법률」, 「방문판매 등에 관한 법률」, 「소비자기본법」 등 관련 법을 위배하지 않는 범위에서 이 약관을 개정할 수 있습니다.</li>
-                </ol>
-                <p class="text-xs text-gray-500">이하 내용은 관련 법령에 따릅니다.</p>
-              </div>
-            }
-            @case ('privacy') {
-              <div class="space-y-4">
-                <p class="font-bold">메종디아트('maisondeart.com'이하 '메종디아트')은(는) 「개인정보 보호법」 제30조에 따라 정보주체의 개인정보를 보호하고 이와 관련한 고충을 신속하고 원활하게 처리할 수 있도록 하기 위하여 다음과 같이 개인정보 처리방침을 수립·공개합니다.</p>
-                
-                <h4 class="font-bold text-base text-gray-800">제1조(개인정보의 처리 목적)</h4>
-                <p>메종디아트는 다음의 목적을 위하여 개인정보를 처리합니다. 처리하고 있는 개인정보는 다음의 목적 이외의 용도로는 이용되지 않으며, 이용 목적이 변경되는 경우에는 「개인정보 보호법」 제18조에 따라 별도의 동의를 받는 등 필요한 조치를 이행할 예정입니다.</p>
-                <ol class="list-decimal list-inside space-y-2 pl-2">
-                    <li>홈페이지 회원가입 및 관리: 회원 가입의사 확인, 회원제 서비스 제공에 따른 본인 식별·인증, 회원자격 유지·관리, 서비스 부정이용 방지, 각종 고지·통지, 고충처리 목적으로 개인정보를 처리합니다.</li>
-                    <li>재화 또는 서비스 제공: 물품배송, 서비스 제공, 계약서·청구서 발송, 콘텐츠 제공, 맞춤서비스 제공, 본인인증, 연령인증, 요금결제·정산, 채권추심을 목적으로 개인정보를 처리합니다.</li>
-                    <li>마케팅 및 광고에의 활용: 신규 서비스(제품) 개발 및 맞춤 서비스 제공, 이벤트 및 광고성 정보 제공 및 참여기회 제공 , 인구통계학적 특성에 따른 서비스 제공 및 광고 게재 , 접속빈도 파악 또는 회원의 서비스 이용에 대한 통계 등을 목적으로 개인정보를 처리합니다.</li>
-                </ol>
-
-                <h4 class="font-bold text-base text-gray-800">제2조(개인정보의 처리 및 보유 기간)</h4>
-                <ol class="list-decimal list-inside space-y-2 pl-2">
-                    <li>메종디아트는 법령에 따른 개인정보 보유·이용기간 또는 정보주체로부터 개인정보를 수집 시에 동의받은 개인정보 보유·이용기간 내에서 개인정보를 처리·보유합니다.</li>
-                    <li>각각의 개인정보 처리 및 보유 기간은 다음과 같습니다: 홈페이지 회원가입 및 관리 : 사업자/단체 홈페이지 탈퇴시까지. 다만, 다음의 사유에 해당하는 경우에는 해당 사유 종료시까지
-                        <ul class="list-disc list-inside space-y-1 pl-4">
-                            <li>관계 법령 위반에 따른 수사·조사 등이 진행중인 경우에는 해당 수사·조사 종료시까지</li>
-                            <li>홈페이지 이용에 따른 채권·채무관계 잔존시에는 해당 채권·채무관계 정산시까지</li>
-                        </ul>
-                    </li>
-                </ol>
-                <p class="text-xs text-gray-500">이하 내용은 관련 법령에 따릅니다.</p>
-              </div>
-            }
-          }
-        </div>
-      </div>
-    </div>
-  }
-
-  <!-- Program Details Popup -->
-  @if (isProgramPopupOpen() && selectedProgram(); as program) {
-    <div class="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm popup-open" (click)="closeProgramPopup()">
-      
-      <!-- Popup Panel -->
-      <div class="relative w-full max-w-md bg-white rounded-xl shadow-xl m-4 flex flex-col popup-panel-open overflow-hidden max-h-[90vh]" (click)="$event.stopPropagation()">
-        
-        <!-- Header with close button on top of image -->
-         <div class="absolute top-0 right-0 z-20 p-2">
-            <button (click)="closeProgramPopup()" class="text-white/80 hover:text-white bg-black/30 rounded-full p-1.5 transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-            </button>
-          </div>
-
-        <!-- Image Slider (New Draggable Slider) -->
-        <div #popupImageSliderContainer class="relative w-full aspect-square flex-shrink-0 bg-gray-200 cursor-grab overflow-hidden slider-container"
-            (mousedown)="popupImageDragStart($event)"
-            (touchstart)="popupImageDragStart($event)">
-          
-          <div class="flex h-full w-full will-change-transform"
-               [style.transform]="'translateX(' + popupImageTranslateX() + 'px)'"
-               [class.slider-transition]="popupImageSliderTransition()">
-            @if (program.images && program.images.length > 0) {
-              @for(image of program.images; track $index; let i = $index) {
-                <div class="w-full h-full flex-shrink-0 relative select-none">
-                  <img [ngSrc]="image" [alt]="program.title + ' image ' + (i + 1)" fill class="object-cover pointer-events-none" priority>
-                </div>
-              }
-            } @else {
-               <div class="w-full h-full flex-shrink-0 relative select-none">
-                  <img [ngSrc]="program.image" [alt]="program.title" fill class="object-cover pointer-events-none" priority>
-                </div>
-            }
-          </div>
-
-            <!-- Slider Controls -->
-            @if(program.images && program.images.length > 1) {
-              <button (click)="prevProgramImage(); $event.stopPropagation()" class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 text-white p-1 rounded-full hover:bg-black/60 transition-colors z-10">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-              </button>
-              <button (click)="nextProgramImage(); $event.stopPropagation()" class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 text-white p-1 rounded-full hover:bg-black/60 transition-colors z-10">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-              </button>
-              <!-- Dots -->
-              <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
-                @for(dot of program.images; track $index) {
-                  <button (click)="setProgramImage($index); $event.stopPropagation()" class="w-2 h-2 rounded-full transition-colors shadow-sm" [ngClass]="programImageIndex() === $index ? 'bg-white' : 'bg-white/40'"></button>
-                }
-              </div>
-            }
-        </div>
-
-        <!-- Content -->
-        <div class="p-5 overflow-y-auto no-scrollbar">
-          <h3 class="text-xl font-bold text-gray-800 mb-2">{{ program.title }}</h3>
-          <div class="flex flex-wrap gap-2 mb-4">
-            @for (tag of program.tags; track tag) {
-              <span class="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full font-semibold">#{{tag}}</span>
-            }
-          </div>
-          <p class="text-sm text-gray-600 leading-relaxed whitespace-pre-line">{{ program.detailedDesc || program.desc }}</p>
-        </div>
-
-        <!-- Footer Actions -->
-        <div class="p-4 border-t border-gray-100 mt-auto flex-shrink-0">
-          <a href="https://pcmap.place.naver.com/restaurant/1276609996/booking?entry=pll&fromNxList=true&fromPanelNum=2&locale=ko&searchText=%EB%A9%94%EC%A2%85%EB%94%94%EC%95%84%ED%8A%B8&svcName=map_pcv5&timestamp=202601041429" target="_blank" class="w-full flex items-center justify-center px-4 py-2.5 text-white rounded-full animated-gradient-bg text-sm font-bold">
-            <span class="relative z-10 flex items-center justify-center gap-2">
-              <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/booking.png" alt="Booking Icon" width="16" height="16">
-              <span>예약 바로 가기</span>
-            </span>
-          </a>
-        </div>
-      </div>
-    </div>
-  }
 </div>
