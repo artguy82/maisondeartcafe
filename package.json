@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --index index.html --browser index.tsx --output-path dist",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
