@@ -557,7 +557,7 @@
                         <!-- Sub Description List -->
                         @if (item.subDescription) {
                           <ul class="space-y-1.5 mb-4">
-                            @for(desc of item.subDescription; track desc) {
+                            @for (desc of item.subDescription; track desc) {
                               <li class="text-sm text-gray-600 font-normal flex items-start gap-2">
                                 <span class="text-purple-400 mt-0.5 flex-shrink-0">✔</span>
                                 <span class="leading-relaxed">{{desc}}</span>
@@ -578,7 +578,7 @@
                                  <span class="text-base">🎁</span> {{item.pricingTitle}}
                                </h6>
                              }
-                             @for(p of item.pricing; track p.price) {
+                             @for (p of item.pricing; track p.price) {
                                <div class="flex justify-between items-center py-1.5 border-b border-purple-100/50 last:border-0" [class.bg-white]="p.highlight" [class.rounded-lg]="p.highlight" [class.px-2]="p.highlight" [class.-mx-2]="p.highlight" [class.shadow-sm]="p.highlight">
                                  <span class="font-bold text-gray-700 text-sm" [class.text-purple-900]="p.highlight">{{p.price}}</span>
                                  <span class="font-extrabold text-sm" [class.text-pink-600]="p.highlight" [class.text-pink-500]="!p.highlight">{{p.bonus}}</span>
@@ -594,7 +594,7 @@
                                <span class="text-base">👍</span> {{item.recommendations.title}}
                              </h6>
                              <ul class="space-y-1">
-                               @for(rec of item.recommendations.items; track rec) {
+                               @for (rec of item.recommendations.items; track rec) {
                                  <li class="text-xs text-gray-600 flex items-start gap-2 leading-relaxed">
                                    <span class="text-gray-400 mt-0.5">•</span> {{rec}}
                                  </li>
@@ -957,7 +957,7 @@
           
           <!-- Bottom Section: Copyright -->
           <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
-            <p>&copy; 2024 MAISON D'ART. All rights reserved.</p>
+            <p>&copy; 2022-{{ currentYear }} MAISON D'ART. All rights reserved.</p>
             <div class="flex gap-4 mt-4 md:mt-0">
                <button (click)="openPopup('terms')" class="hover:text-white transition-colors">이용약관</button>
                <button (click)="openPopup('privacy')" class="hover:text-white transition-colors">개인정보처리방침</button>
@@ -1042,7 +1042,7 @@
             <div class="prose prose-sm text-gray-600 leading-relaxed">
                 @if (selectedProgram()?.subDescription) {
                   <ul class="space-y-2 mb-4 list-none pl-0">
-                    @for(desc of selectedProgram()?.subDescription; track desc) {
+                    @for (desc of selectedProgram()?.subDescription; track desc) {
                       <li class="flex items-start gap-2">
                         <span class="text-purple-500 mt-1 flex-shrink-0">✔</span>
                         <span>{{desc}}</span>
@@ -1061,7 +1061,7 @@
                           </h4>
                         }
                         <div class="space-y-2">
-                            @for(p of selectedProgram()?.pricing; track p.price) {
+                            @for (p of selectedProgram()?.pricing; track p.price) {
                               <div class="flex justify-between items-center text-sm">
                                 <span class="font-medium text-gray-600" [class.font-bold]="p.highlight" [class.text-gray-800]="p.highlight">{{p.price}}</span>
                                 <span class="font-bold" [class.text-pink-600]="p.highlight" [class.text-pink-500]="!p.highlight">{{p.bonus}}</span>
@@ -1075,7 +1075,7 @@
                     <div class="mt-6 not-prose">
                         <h4 class="font-bold text-gray-800 mb-2 text-sm">👍 {{selectedProgram()?.recommendations?.title}}</h4>
                         <ul class="space-y-1">
-                          @for(rec of selectedProgram()?.recommendations?.items; track rec) {
+                          @for (rec of selectedProgram()?.recommendations?.items; track rec) {
                             <li class="text-sm text-gray-600 flex items-start gap-2">
                               <span class="text-gray-300">•</span> {{rec}}
                             </li>

@@ -92,6 +92,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   // New signal for Mobile Menu Button Color
   isMenuButtonDark = signal(false);
   
+  currentYear = new Date().getFullYear();
+
   private platformId = inject(PLATFORM_ID);
   private firebaseService = inject(FirebaseService);
   isLikeFeatureAvailable = this.firebaseService.isAvailable;
@@ -758,17 +760,24 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.allScrollSections.forEach(id => {
         const el = document.getElementById(id);
         if (el) {
-            this.sectionOffsets.set(id, el.offsetTop);
+            if (this.isDesktop()) {
+                // In desktop mode, offsetTop is relative to the scrolling container (<main>), which is correct.
+                this.sectionOffsets.set(id, (el as HTMLElement).offsetTop);
+            } else {
+                // In mobile/tablet mode, the window is the scroll context. We need the absolute position from the top of the document.
+                this.sectionOffsets.set(id, el.getBoundingClientRect().top + window.scrollY);
+            }
         }
     });
   }
 
   private updateActiveNavOnScroll() {
     const scrollTop = this.getScrollTop();
-    const isStickyNavVisible = isPlatformBrowser(this.platformId) && window.innerWidth >= 768;
-    const defaultBuffer = isStickyNavVisible ? 60 : 10;
+    const windowWidth = isPlatformBrowser(this.platformId) ? window.innerWidth : 1024;
+    const isStickyNavVisible = windowWidth >= 768;
+    const defaultBuffer = isStickyNavVisible ? 49 : 10;
 
-    // --- Desktop Nav Highlight Logic ---
+    // --- Nav Highlight Logic ---
     let currentNavId: string | null = null;
     let lastSectionId: string | null = null;
 
@@ -786,7 +795,26 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         break;
       }
     }
+
+    // Edge case: If scrolled to the absolute bottom, force 'contact' to be active.
+    if (isPlatformBrowser(this.platformId)) {
+      if (this.isDesktop()) {
+        const scrollEl = this.scrollContainer()?.nativeElement;
+        // Use a small buffer (e.g., 2px) for floating point inaccuracies
+        if (scrollEl && (scrollEl.scrollHeight - scrollEl.scrollTop - scrollEl.clientHeight < 2)) {
+            currentNavId = 'contact';
+        }
+      } else {
+        // For mobile/tablet, use window properties which are more reliable
+        const scrollHeight = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+        if (scrollHeight - scrollTop - window.innerHeight < 2) {
+          currentNavId = 'contact';
+        }
+      }
+    }
+    
     this.activeDesktopNav.set(currentNavId);
+
 
     // --- Mobile Menu Button Color Logic ---
     const buttonTriggerPoint = scrollTop + 32; // Approx center of header
@@ -974,24 +1002,35 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   scrollToSection(sectionId: string) {
     this.closeMenu();
     if (!isPlatformBrowser(this.platformId)) return;
-    const element = document.getElementById(sectionId);
-    if (element) {
-      let offset = 0;
-      if (this.isDesktop()) {
-          const sectionsAfterNav = ['programs', 'group', 'faq', 'contact'];
-          if (sectionsAfterNav.includes(sectionId)) {
-            offset = 45; 
-          }
-      }
-      
-      const elementPosition = element.offsetTop;
-      const offsetPosition = elementPosition - offset;
 
-      if (this.isDesktop()) {
-        this.scrollContainer()?.nativeElement.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+    const targetElement = document.getElementById(sectionId);
+    if (!targetElement) {
+        console.error(`Could not find element for section: ${sectionId}`);
+        return;
+    }
+
+    if (sectionId === 'intro') {
+      const scrollContainer = this.isDesktop() ? this.scrollContainer()?.nativeElement : window;
+
+      if (this.isDesktop() && scrollContainer instanceof HTMLElement) {
+        // Desktop mode: scroll within the <main> container. 
+        // offsetTop is correct here since sections are direct children.
+        scrollContainer.scrollTo({
+          top: targetElement.offsetTop,
+          behavior: 'smooth'
+        });
       } else {
-        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+        // Mobile/Tablet mode: scroll the window.
+        // getBoundingClientRect is more robust for calculating scroll position.
+        const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({
+          top: targetPosition,
+          behavior: 'smooth'
+        });
       }
+    } else {
+      // Default behavior for all other sections, respecting scroll-padding-top
+      targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
   
