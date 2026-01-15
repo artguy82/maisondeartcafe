@@ -59,7 +59,6 @@ interface SliderDragState {
 
 @Component({
   selector: 'app-root',
-  standalone: true,
   imports: [CommonModule, NgOptimizedImage],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
