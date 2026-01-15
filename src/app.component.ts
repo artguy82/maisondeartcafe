@@ -766,14 +766,17 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   private updateActiveNavOnScroll() {
     const scrollTop = this.getScrollTop();
     const isStickyNavVisible = isPlatformBrowser(this.platformId) && window.innerWidth >= 768;
-    const buffer = isStickyNavVisible ? 60 : 10;
-    const triggerOffset = scrollTop + buffer;
+    const defaultBuffer = isStickyNavVisible ? 60 : 10;
 
     // --- Desktop Nav Highlight Logic ---
     let currentNavId: string | null = null;
     let lastSectionId: string | null = null;
 
     for (const [id, offsetTop] of this.sectionOffsets.entries()) {
+      // Use a specific buffer for the 'contact' section to match its scroll-to position.
+      const sectionBuffer = (id === 'contact' && isStickyNavVisible) ? 45 : defaultBuffer;
+      const triggerOffset = scrollTop + sectionBuffer;
+      
       if (offsetTop <= triggerOffset) {
         if (this.navSections.includes(id)) {
           currentNavId = id;
