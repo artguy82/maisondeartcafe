@@ -59,8 +59,10 @@ interface SliderDragState {
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [CommonModule, NgOptimizedImage],
   templateUrl: './app.component.html',
+  styleUrl: './app.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '(window:resize)': 'onResize()',
@@ -69,191 +71,7 @@ interface SliderDragState {
     '(document:touchcancel)': 'onGlobalEnd($event)',
     '(document:mousemove)': 'onGlobalMove($event)',
     '(document:touchmove)': 'onGlobalMove($event)'
-  },
-  styles: [`
-    :host {
-      display: block;
-      width: 100%;
-    }
-    @media (min-width: 1024px) {
-      :host {
-        height: 100vh;
-        height: 100dvh;
-        overflow: hidden;
-      }
-    }
-    .font-cursive {
-      font-family: 'Dancing Script', cursive;
-    }
-    .quote-icon {
-      font-size: 4rem;
-      line-height: 1;
-      opacity: 0.1;
-      font-family: serif;
-    }
-    @media (min-width: 768px) {
-      .scroll-container {
-        scroll-padding-top: 60px;
-      }
-    }
-    
-    .banner-image {
-      opacity: 0;
-      transform: scale(1.05);
-      transition: opacity 1.5s ease-in-out, transform 0s linear 1.5s;
-    }
-    .banner-image.active {
-      opacity: 1;
-      transform: scale(1.15);
-      transition: opacity 1.5s ease-in-out, transform 7s linear;
-    }
-    @keyframes line-expand {
-      from { width: 0%; }
-      to { width: 100%; }
-    }
-    .line-anim-container::before,
-    .line-anim-container::after {
-      content: '';
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      height: 1px;
-      background-color: rgba(255, 255, 255, 0.7);
-      animation: line-expand 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-      animation-delay: 1.4s;
-    }
-    .line-anim-container::before { top: -2px; }
-    .line-anim-container::after { bottom: -2px; }
-
-    @keyframes slide-up-fade-in {
-      from { opacity: 0; transform: translateY(25px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .banner-anim-item {
-      opacity: 0;
-      animation: slide-up-fade-in 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-    }
-    .anim-delay-1 { animation-delay: 0.2s; }
-    .anim-delay-2 { animation-delay: 0.4s; }
-    .anim-delay-3 { animation-delay: 0.6s; }
-    .anim-delay-4 { animation-delay: 0.8s; }
-
-    @keyframes slide-right-fade-in {
-      from { opacity: 0; transform: translateX(-25px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-    .aside-anim-item {
-      opacity: 0;
-      animation-duration: 0.7s;
-      animation-timing-function: cubic-bezier(0.25, 1, 0.5, 1);
-      animation-fill-mode: forwards;
-    }
-    .anim-slide-from-left { animation-name: slide-right-fade-in; }
-    .anim-slide-from-bottom { animation-name: slide-up-fade-in; }
-    .aside-delay-1 { animation-delay: 0.2s; }
-    .aside-delay-2 { animation-delay: 0.4s; }
-    .aside-delay-3 { animation-delay: 0.6s; }
-    .aside-delay-4 { animation-delay: 0.8s; }
-    .aside-delay-5 { animation-delay: 1.0s; }
-    .aside-delay-6 { animation-delay: 1.2s; }
-    .aside-delay-7 { animation-delay: 1.4s; }
-    .aside-delay-8 { animation-delay: 1.6s; }
-    .aside-delay-9 { animation-delay: 1.8s; }
-    
-    @keyframes fade-in {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    .animate-fade-in { animation: fade-in 0.3s ease-in-out; }
-
-    @keyframes gradient-x {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-    }
-    .animated-gradient-bg { position: relative; z-index: 1; }
-    .animated-gradient-bg::before {
-      content: ''; position: absolute; top: 0; right: 0; bottom: 0; left: 0;
-      background: linear-gradient(to right, #ec4899, #ef4444, #f59e0b);
-      background-size: 200% 200%;
-      animation: gradient-x 5s ease infinite;
-      transition: opacity 0.3s ease-in-out;
-      z-index: -1;
-      border-radius: 9999px;
-    }
-    
-    @keyframes blink { 50% { opacity: 0; } }
-    .typing-cursor {
-      display: inline-block; width: 2px; height: 1em; background-color: currentColor;
-      margin-left: 2px; animation: blink 1s infinite step-end;
-      margin-bottom: 0; vertical-align: text-bottom;
-    }
-
-    /* Background Style - Custom Image */
-    .wave-bg {
-      background-image: url('https://raw.githubusercontent.com/artguy82/maisondeart/main/web/image2.png');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-    }
-
-    /* Responsive Adjustments */
-    @media (max-height: 850px) and (min-width: 1024px) {
-      aside .text-5xl { font-size: 2.25rem; }
-      aside .font-cursive.text-6xl { font-size: 3rem; }
-      aside .text-7xl { font-size: 3.75rem; line-height: 1; }
-      aside .text-lg { font-size: 1rem; line-height: 1.5rem; }
-      aside.space-y-6 > :not([hidden]) ~ :not([hidden]) { margin-top: 1rem; }
-      aside .py-4 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
-      aside .py-3 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
-      aside .px-6 { padding-left: 1.25rem; padding-right: 1.25rem; }
-    }
-    
-    /* Hide separator and description on very short screens */
-    @media (max-height: 720px) and (min-width: 1024px) {
-      aside > .aside-anim-item.aside-delay-2,
-      aside > .aside-anim-item.aside-delay-3 {
-        display: none;
-      }
-    }
-
-    .slider-container { cursor: grab; user-select: none; touch-action: pan-y; }
-    .slider-container.dragging { cursor: grabbing; }
-    .slider-transition { transition: transform 500ms cubic-bezier(0.23, 1, 0.32, 1); }
-
-    @keyframes popup-fade-in { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes popup-scale-in { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1;} }
-    .popup-open { animation: popup-fade-in 0.3s ease-out forwards; }
-    .popup-panel-open { animation: popup-scale-in 0.3s ease-out forwards; }
-    .text-shadow-custom { text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6); }
-
-    @keyframes heart-beat {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.3); }
-      100% { transform: scale(1); }
-    }
-    .like-button.liked .heart-icon {
-      animation: heart-beat 0.5s ease-in-out;
-    }
-
-    @keyframes bounce-subtle {
-      0%, 100% {
-        transform: translateY(0);
-      }
-      50% {
-        transform: translateY(-6px);
-      }
-    }
-    .speech-bubble-anim {
-      animation: bounce-subtle 2s ease-in-out infinite;
-    }
-    .floating-bounce {
-      animation: bounce-subtle 3s ease-in-out infinite;
-    }
-    .floating-bounce-delayed {
-      animation: bounce-subtle 3s ease-in-out infinite;
-      animation-delay: 1.5s;
-    }
-  `]
+  }
 })
 export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   isMenuOpen = signal(false);
@@ -402,6 +220,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     '초등 방과후 창작 놀이터': 38,
     '취미 드로잉 프로젝트': 19
   };
+  
+  private preloadedPrograms = new Set<string>();
 
   private slugify(text: string): string {
     return text.toString().toLowerCase()
@@ -652,7 +472,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     { name: '오** 님', date: '2일 전', content: '인테리어가 감성적이라 사진 찍기에도 너무 좋아요. 작품이랑 같이 인생샷 많이 건졌습니다. 완전 추천!', rating: 5, avatar: 'https://picsum.photos/seed/avatar11/40/40' },
     { name: '신** 님', date: '1주 전', content: '도안 종류가 많아서 고르는 재미가 있었어요. 다음엔 더 어려운 도안에 도전해보고 싶네요! 사장님 실력도 좋으셔서 많이 배웠습니다.', rating: 5, avatar: 'https://picsum.photos/seed/avatar12/40/40', program: '대형 도안 채색' },
     { name: '권** 님', date: '3주 전', content: '부모님 모시고 갔는데, 소녀처럼 좋아하시는 모습 보니 저도 기뻤어요. 세대 불문하고 모두가 즐길 수 있는 최고의 장소인 것 같아요. 부모님께 특별한 추억을 선물해드렸네요.', rating: 5, avatar: 'https://picsum.photos/seed/avatar13/40/40' },
-    { name: '안** 님', date: '1달 전', content: '아이가 만든 베어브릭, 집에 오자마자 제일 잘 보이는 곳에 장식했어요. 자기 작품이라며 애지중지하는 모습이 너무 귀엽네요. 아이들 창의력 키우기에도 좋은 것 같아요.', rating: 5, avatar: 'https://picsum.photos/seed/avatar14/40/40', program: '아트토이 베어브릭' },
+    { name: '안** 님', date: '1달 전', content: '아이가 만든 베어브릭, 집에 오자마다 제일 잘 보이는 곳에 장식했어요. 자기 작품이라며 애지중지하는 모습이 너무 귀엽네요. 아이들 창의력 키우기에도 좋은 것 같아요.', rating: 5, avatar: 'https://picsum.photos/seed/avatar14/40/40', program: '아트토이 베어브릭' },
     { name: '송** 님', date: '2달 전', content: '깨끗하고 재료 관리도 잘 되어 있어서 쾌적하게 이용했습니다. 모든 게 만족스러웠던 곳이에요. 재방문 의사 200%입니다.', rating: 5, avatar: 'https://picsum.photos/seed/avatar15/40/40' },
     { name: '유** 님', date: '1주 전', content: '완성한 작품을 예쁘게 포장해주셔서 좋았어요. 선물 받는 느낌! 세심한 배려에 감동했습니다. 친구에게 바로 선물했는데 정말 좋아했어요.', rating: 5, avatar: 'https://picsum.photos/seed/avatar16/40/40' },
     { name: '문** 님', date: '3주 전', content: '생각보다 시간이 훌쩍 가서 놀랐어요. 그만큼 몰입도가 엄청난 체험입니다. 잡생각 없애는 데 최고예요!', rating: 5, avatar: 'https://picsum.photos/seed/avatar17/40/40' },
@@ -945,36 +765,23 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private updateActiveNavOnScroll() {
     const scrollTop = this.getScrollTop();
-    const container = this.isDesktop() ? this.scrollContainer()?.nativeElement : document.documentElement;
-    const scrollHeight = container ? container.scrollHeight : 0;
-    const clientHeight = container ? container.clientHeight : 0;
-    const isAtBottom = scrollHeight > 0 && (Math.ceil(scrollTop + clientHeight) >= scrollHeight);
-    const buffer = this.isDesktop() ? 49 : 10;
+    const isStickyNavVisible = isPlatformBrowser(this.platformId) && window.innerWidth >= 768;
+    const buffer = isStickyNavVisible ? 60 : 10;
     const triggerOffset = scrollTop + buffer;
 
     // --- Desktop Nav Highlight Logic ---
     let currentNavId: string | null = null;
-    let lastSectionId: string | null = null; // Helper for legacy desktop logic if needed
+    let lastSectionId: string | null = null;
 
-    if (isAtBottom) {
-        const ids = Array.from(this.sectionOffsets.keys()).reverse();
-        for (const id of ids) {
-            if (this.navSections.includes(id)) {
-                currentNavId = id;
-                break;
-            }
+    for (const [id, offsetTop] of this.sectionOffsets.entries()) {
+      if (offsetTop <= triggerOffset) {
+        if (this.navSections.includes(id)) {
+          currentNavId = id;
         }
-    } else {
-        for (const [id, offsetTop] of this.sectionOffsets.entries()) {
-            if (offsetTop <= triggerOffset) {
-                if (this.navSections.includes(id)) {
-                    currentNavId = id;
-                }
-                lastSectionId = id;
-            } else {
-                break;
-            }
-        }
+        lastSectionId = id;
+      } else {
+        break;
+      }
     }
     this.activeDesktopNav.set(currentNavId);
 
@@ -1774,5 +1581,21 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.popupImageDragState.startX = event.type.startsWith('touch') ? (event as TouchEvent).touches[0].clientX : (event as MouseEvent).clientX;
     this.popupImageDragState.startY = event.type.startsWith('touch') ? (event as TouchEvent).touches[0].clientY : (event as MouseEvent).clientY;
     this.popupImageDragState.startTranslate = this.popupImageTranslateX();
+  }
+
+  public preloadProgramImages(program: ProgramItem): void {
+    if (!isPlatformBrowser(this.platformId) || this.preloadedPrograms.has(program.id)) {
+      return;
+    }
+
+    this.preloadedPrograms.add(program.id);
+    const imagesToPreload = program.images?.length ? program.images : [program.image];
+
+    imagesToPreload.forEach(imageUrl => {
+      if (imageUrl) {
+        const img = new Image();
+        img.src = imageUrl;
+      }
+    });
   }
 }
