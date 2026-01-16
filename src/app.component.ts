@@ -100,6 +100,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   isDesktop = signal(false);
   private scrollUnlisteners: (() => void)[] = [];
   private injector = inject(Injector);
+  private lastWindowWidth = 0; // To track width changes specifically
   
   bannerImages: string[] = [
     'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/main.jpg',
@@ -569,6 +570,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit() {
     if (isPlatformBrowser(this.platformId)) {
+      this.lastWindowWidth = window.innerWidth; // Initialize width
+
       effect(() => {
         this.isDesktop(); // Establish dependency on the signal
         this.setupScrollListeners();
@@ -647,16 +650,25 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onResize() {
-    if (isPlatformBrowser(this.platformId)) {
-      this.isDesktop.set(window.innerWidth >= 1024);
-    }
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    // Fix: Ignore resize events where only height changes (e.g., mobile address bar toggle)
+    // This prevents sliders from resetting and images from jittering on scroll
+    const currentWidth = window.innerWidth;
+    if (currentWidth === this.lastWindowWidth) return;
+    this.lastWindowWidth = currentWidth;
+
+    this.isDesktop.set(window.innerWidth >= 1024);
     this.calculateMaxIndices();
     this.calculateSectionOffsets();
+    
+    // Only update static sliders.
+    // Review sliders are auto-scrolling and handled by animation loop, so we don't force-update them here.
     this.updateSliderPosition('experience', false);
     this.updateSliderPosition('class', false);
     this.updateSliderPosition('special', false);
-    this.updateSliderPosition('review', false);
-    this.updateSliderPosition('reviewLayer2', false);
+    // Removed: this.updateSliderPosition('review', false); 
+    // Removed: this.updateSliderPosition('reviewLayer2', false);
   }
 
   hideLikeBubble() {
