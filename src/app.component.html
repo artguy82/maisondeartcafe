@@ -241,12 +241,12 @@
       <!-- 2. Introduction (Revamped & Softened) -->
       <section id="intro" class="relative z-10 min-h-screen flex items-center py-20 px-6 bg-[#fdfbf8] overflow-hidden">
         <!-- Floating Images -->
-        <div #floatingImage1 class="absolute bottom-16 md:bottom-0 left-0 z-[5] w-64 h-80 md:w-[30rem] md:h-[40rem] lg:w-[32rem] lg:h-[40rem] pointer-events-none">
+        <div #floatingImage1 class="absolute bottom-16 md:bottom-0 left-0 z-[5] w-64 h-80 md:w-[30rem] md:h-[40rem] lg:w-[32rem] lg:h-[40rem] pointer-events-none parallax-element">
           <div class="floating-bounce fill-image-container">
             <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/bear.png" alt="Floating bear painting illustration" fill class="object-contain object-left-bottom" priority>
           </div>
         </div>
-        <div #floatingImage2 class="absolute top-24 md:top-0 right-0 z-[5] w-64 h-80 md:w-[30rem] md:h-[40rem] lg:w-[32rem] lg:h-[40rem] pointer-events-none">
+        <div #floatingImage2 class="absolute top-24 md:top-0 right-0 z-[5] w-64 h-80 md:w-[30rem] md:h-[40rem] lg:w-[32rem] lg:h-[40rem] pointer-events-none parallax-element">
           <div class="floating-bounce-delayed fill-image-container">
             <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/bear2.png" alt="Floating bear with plant illustration" fill class="object-contain object-right-top" priority>
           </div>
@@ -312,7 +312,7 @@
       <section id="healing-art" class="relative z-10 py-24 md:py-32 bg-gray-800 text-white overflow-hidden">
         <!-- Parallax Background Container -->
         <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
-          <div #parallaxBg class="absolute top-[-75%] left-0 w-full h-[250%]">
+          <div #parallaxBg class="absolute top-[-75%] left-0 w-full h-[250%] parallax-element">
             <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/healing.jpg" 
                  fill 
                  class="absolute top-0 left-0 w-full h-full object-cover" 
@@ -633,7 +633,7 @@
       <section id="reviews" #reviewsSection class="relative z-10 py-16 bg-orange-50 overflow-hidden">
         <!-- Parallax Background Container -->
         <div class="absolute inset-0 z-0 overflow-hidden">
-          <div #reviewParallaxBg class="absolute top-[-15%] left-0 w-full h-[130%]">
+          <div #reviewParallaxBg class="absolute top-[-15%] left-0 w-full h-[130%] parallax-element">
             <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/edi3.jpg" fill class="object-cover opacity-40" alt="드로잉 도구들이 놓여있는 카페 내부 모습" priority>
           </div>
         </div>
@@ -845,7 +845,7 @@
       <section id="quote-divider" class="relative z-10 h-64 md:h-80 bg-gray-800 overflow-hidden">
         <!-- Parallax Background Container -->
         <div class="absolute inset-0 z-0 overflow-hidden">
-          <div #groupFooterParallaxBg class="absolute top-[-25%] left-0 w-full h-[150%]">
+          <div #groupFooterParallaxBg class="absolute top-[-25%] left-0 w-full h-[150%] parallax-element">
             <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/cate2.jpg" fill class="object-cover opacity-90" alt="Drawing tools and paints on a wooden table" priority>
           </div>
         </div>

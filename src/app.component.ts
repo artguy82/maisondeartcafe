@@ -166,8 +166,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   popupImageSliderContainer = viewChild<ElementRef<HTMLElement>>('popupImageSliderContainer');
   
   private renderer = inject(Renderer2);
-  private readonly parallaxListener = () => this.updateParallax();
-  private readonly updateActiveNavOnScrollHandler = () => this.updateActiveNavOnScroll();
+  private ticking = false;
 
   private sliderDragState: { [key: string]: SliderDragState } = {
     experience: { isDragging: false, startX: 0, startY: 0, startTranslate: 0, currentTranslate: 0, lastX: 0, lastTimestamp: 0, velocityX: 0, isScrolling: undefined },
@@ -736,12 +735,19 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     const scrollTarget = this.isDesktop() ? this.scrollContainer()?.nativeElement : window;
 
     if (scrollTarget) {
-        this.scrollUnlisteners.push(
-            this.renderer.listen(scrollTarget, 'scroll', this.parallaxListener)
-        );
-        this.scrollUnlisteners.push(
-            this.renderer.listen(scrollTarget, 'scroll', this.updateActiveNavOnScrollHandler)
-        );
+      const scrollHandler = () => {
+        if (!this.ticking) {
+          window.requestAnimationFrame(() => {
+            this.updateParallax();
+            this.updateActiveNavOnScroll();
+            this.ticking = false;
+          });
+          this.ticking = true;
+        }
+      };
+      this.scrollUnlisteners.push(
+        this.renderer.listen(scrollTarget, 'scroll', scrollHandler)
+      );
     }
   }
   
