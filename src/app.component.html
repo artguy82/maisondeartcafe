@@ -379,7 +379,7 @@
             <div class="flex gap-4 items-start bg-gray-50 border border-gray-200 rounded-2xl p-6 md:p-8 text-left">
                 <!-- Icon -->
                 <div class="flex-shrink-0 text-orange-500 mt-0.5">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10"></circle>
                         <line x1="12" y1="8" x2="12" y2="12"></line>
                         <line x1="12" y1="16" x2="12.01" y2="16"></line>
@@ -412,10 +412,15 @@
             (mousedown)="dragStart($event, 'experience')" (touchstart)="dragStart($event, 'experience')">
             <div #experienceSlider class="flex gap-4 px-4 md:px-8">
               @for (item of experiences; track item.id) {
-                <div class="w-[85vw] md:w-96 flex-shrink-0" (mouseenter)="preloadProgramImages(item)" (touchstart)="preloadProgramImages(item)">
+                <div class="w-[85vw] md:w-96 flex-shrink-0 hardware-accelerate" (mouseenter)="preloadProgramImages(item)" (touchstart)="preloadProgramImages(item)">
                   <div class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-gray-100 h-full flex flex-col">
                     <div class="relative h-48 overflow-hidden">
-                      <img [ngSrc]="item.image" [alt]="item.title" fill class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" draggable="false" priority>
+                      <img [ngSrc]="item.image" 
+                           [alt]="item.title" 
+                           fill 
+                           class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                           draggable="false" 
+                           sizes="(max-width: 768px) 85vw, (max-width: 1200px) 40vw, 25vw">
                       @if (isLikeFeatureAvailable()) {
                         <button (click)="handleLike(item, $event)"
                                 class="like-button absolute top-2 right-2 z-10 flex items-center gap-2 text-gray-700 bg-white/70 backdrop-blur-sm rounded-full py-1 pl-2 pr-3 shadow-md transition-transform hover:scale-105 active:scale-95 group/like"
@@ -466,10 +471,15 @@
             (mousedown)="dragStart($event, 'class')" (touchstart)="dragStart($event, 'class')">
             <div #classSlider class="flex gap-4 px-4 md:px-8">
               @for (item of oneDayClasses; track item.id) {
-                <div class="w-[85vw] md:w-96 flex-shrink-0" (mouseenter)="preloadProgramImages(item)" (touchstart)="preloadProgramImages(item)">
+                <div class="w-[85vw] md:w-96 flex-shrink-0 hardware-accelerate" (mouseenter)="preloadProgramImages(item)" (touchstart)="preloadProgramImages(item)">
                   <div class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-gray-100 h-full flex flex-col">
                     <div class="relative h-48 overflow-hidden">
-                      <img [ngSrc]="item.image" [alt]="item.title" fill class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" draggable="false" priority>
+                      <img [ngSrc]="item.image" 
+                           [alt]="item.title" 
+                           fill 
+                           class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                           draggable="false"
+                           sizes="(max-width: 768px) 85vw, (max-width: 1200px) 40vw, 25vw">
                        <div class="absolute top-2 left-2 bg-white/90 px-2 py-1 rounded text-xs font-bold text-gray-800">예약필수</div>
                       @if (isLikeFeatureAvailable()) {
                         <button (click)="handleLike(item, $event)"
@@ -522,10 +532,15 @@
             (mousedown)="dragStart($event, 'special')" (touchstart)="dragStart($event, 'special')">
             <div #specialSlider class="flex gap-4 px-4 md:px-8">
               @for (item of specialPrograms; track item.id) {
-                <div class="w-[90vw] md:w-[480px] flex-shrink-0">
+                <div class="w-[90vw] md:w-[480px] flex-shrink-0 hardware-accelerate">
                   <div class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-gray-100 h-full flex flex-col">
                     <div class="relative h-60 overflow-hidden">
-                      <img [ngSrc]="item.image" [alt]="item.title" fill class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" draggable="false" priority>
+                      <img [ngSrc]="item.image" 
+                           [alt]="item.title" 
+                           fill 
+                           class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                           draggable="false"
+                           sizes="(max-width: 768px) 90vw, (max-width: 1200px) 50vw, 33vw">
                       @if (isLikeFeatureAvailable()) {
                         <button (click)="handleLike(item, $event)"
                                 class="like-button absolute top-2 right-2 z-10 flex items-center gap-2 text-gray-700 bg-white/70 backdrop-blur-sm rounded-full py-1 pl-2 pr-3 shadow-md transition-transform hover:scale-105 active:scale-95 group/like"
@@ -638,7 +653,7 @@
             (mousedown)="dragStart($event, 'review')" (touchstart)="dragStart($event, 'review')">
             <div #reviewSlider class="flex gap-4 px-2 md:px-4">
               @for (review of displayReviews(); track $index) {
-                <div class="w-[80vw] md:w-96 flex-shrink-0">
+                <div class="w-[80vw] md:w-96 flex-shrink-0 hardware-accelerate">
                   <div class="bg-white p-5 rounded-2xl shadow-sm border border-orange-100 relative h-full flex flex-col">
                     <div class="absolute top-4 right-5 text-orange-200 quote-icon font-serif">"</div>
                     <div class="flex-shrink-0">
@@ -673,7 +688,7 @@
             (mousedown)="dragStart($event, 'reviewLayer2')" (touchstart)="dragStart($event, 'reviewLayer2')">
             <div #reviewSliderLayer2 class="flex gap-4 px-2 md:px-4">
               @for (review of displayReviewsLayer2(); track $index) {
-                <div class="w-[80vw] md:w-96 flex-shrink-0">
+                <div class="w-[80vw] md:w-96 flex-shrink-0 hardware-accelerate">
                   <div class="bg-white p-5 rounded-2xl shadow-sm border border-orange-100 relative h-full flex flex-col">
                     <div class="absolute top-4 right-5 text-orange-200 quote-icon font-serif">"</div>
                     <div class="flex-shrink-0">
