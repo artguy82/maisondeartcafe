@@ -111,7 +111,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   
   bannerImages: string[] = [
     'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/main.jpg',
-    'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/main.jpg',
+    'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/main2.jpg',
     'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/main3.jpg',
     'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/main4.jpg',
     'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/main5.jpg'
@@ -569,11 +569,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.currentWordIndex.set(Math.floor(Math.random() * this.rollingWords.length));
 
     this.bannerInterval = setInterval(() => {
-        let nextIndex;
-        do {
-            nextIndex = Math.floor(Math.random() * this.bannerImages.length);
-        } while (nextIndex === this.currentBannerIndex());
-        this.currentBannerIndex.set(nextIndex);
+        this.currentBannerIndex.update(index => (index + 1) % this.bannerImages.length);
     }, 7000);
 
     this.startTypingAnimationLoop();
