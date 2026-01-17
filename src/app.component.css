@@ -28,6 +28,9 @@
   opacity: 0;
   transform: scale(1.05);
   transition: opacity 1.5s ease-in-out, transform 0s linear 1.5s;
+  /* Prevent layout shifts during transition */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 .banner-image.active {
   opacity: 1;
@@ -150,23 +153,27 @@
 /* --- PERFORMANCE FIXES FOR MOBILE SLIDERS --- */
 /* Hardware accelerate slider items to prevent repainting/flickering on scroll */
 .hardware-accelerate {
-  will-change: transform;
-  transform: translateZ(0); /* Force GPU layer */
+  /* REMOVED: will-change: transform; -> Caused aggressive layer discarding on mobile */
+  transform: translate3d(0,0,0); /* Force GPU layer strictly */
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   perspective: 1000px;
 }
 
 /* --- Parallax Performance --- */
 .parallax-element {
-  will-change: transform;
-  /* Hardware acceleration for mobile performance */
-  transform: translateZ(0);
-  -webkit-backface-visibility: hidden;
+  /* REMOVED: will-change: transform; -> This signals browser to create separate layer, which gets discarded when off-screen on mobile */
+  /* Using translate3d in JS is sufficient for smoothness without the flicker side-effect */
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   perspective: 1000px;
+  /* Ensure it doesn't flicker on repaint */
+  transform-style: preserve-3d; 
 }
+
 .floating-bounce, .floating-bounce-delayed {
-  will-change: transform;
+  /* REMOVED: will-change: transform; */
+  transform: translateZ(0); /* Minimal acceleration */
 }
 
 @keyframes popup-fade-in { from { opacity: 0; } to { opacity: 1; } }
