@@ -57,6 +57,13 @@ interface SliderDragState {
   maxTranslate?: number; // Added for hard stop calculation
 }
 
+interface ParallaxCache {
+  el: HTMLElement;
+  speed: number;
+  sectionTop: number;
+  sectionHeight: number;
+}
+
 @Component({
   selector: 'app-root',
   imports: [CommonModule, NgOptimizedImage],
@@ -223,6 +230,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   };
   
   private preloadedPrograms = new Set<string>();
+  private parallaxCache: ParallaxCache[] = [];
 
   private slugify(text: string): string {
     return text.toString().toLowerCase()
@@ -597,6 +605,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       setTimeout(() => {
         this.calculateMaxIndices();
         this.calculateSectionOffsets();
+        this.initParallaxCache();
         this.updateActiveNavOnScroll();
         this.updateSliderPosition('experience');
         this.updateSliderPosition('class');
@@ -661,6 +670,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isDesktop.set(window.innerWidth >= 1024);
     this.calculateMaxIndices();
     this.calculateSectionOffsets();
+    this.initParallaxCache();
     
     // Only update static sliders.
     // Review sliders are auto-scrolling and handled by animation loop, so we don't force-update them here.
@@ -944,31 +954,55 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.countUpAnimationId = requestAnimationFrame(step);
   }
 
+  private initParallaxCache() {
+      if (!isPlatformBrowser(this.platformId)) return;
+      
+      this.parallaxCache = [];
+      const add = (elRef: ElementRef<HTMLElement> | undefined, speed: number) => {
+          if (!elRef) return;
+          const el = elRef.nativeElement;
+          const section = el.closest('section') as HTMLElement;
+          if (!section) return;
+          
+          let sectionTop = 0;
+          if (this.isDesktop()) {
+            // In Desktop mode, 'main' is the scroll container and sections are relative to it.
+            sectionTop = section.offsetTop;
+          } else {
+            // In Mobile mode, window is the scroll container.
+            // We cache the absolute position in the document to avoid layout thrashing.
+            // Note: This needs re-calc on resize (which handles this fn call)
+            sectionTop = section.getBoundingClientRect().top + window.scrollY;
+          }
+
+          this.parallaxCache.push({
+              el,
+              speed,
+              sectionTop: sectionTop,
+              sectionHeight: section.offsetHeight
+          });
+      };
+
+      add(this.parallaxBg(), -0.2);
+      add(this.reviewParallaxBg(), -0.1);
+      add(this.groupFooterParallaxBg(), -0.05);
+      add(this.floatingImage1(), 0.1);
+      add(this.floatingImage2(), -0.1);
+  }
+
   private updateParallax() {
-    const applyEffect = (elRef: ElementRef<HTMLElement> | undefined, speed: number) => {
-        if (!elRef) return;
-        const el = elRef.nativeElement;
-        const section = el.closest('section') as HTMLElement;
-        if (!section) return;
+    const scrollTop = this.getScrollTop();
+    const containerHeight = this.isDesktop() ? this.scrollContainer()!.nativeElement.offsetHeight : window.innerHeight;
 
-        const scrollTop = this.getScrollTop();
-        const containerHeight = this.isDesktop() ? this.scrollContainer()!.nativeElement.offsetHeight : window.innerHeight;
-        const sectionTop = section.offsetTop;
-        
-        const sectionTopRelativeToVisible = sectionTop - scrollTop;
-        if (sectionTopRelativeToVisible < containerHeight && sectionTopRelativeToVisible > -section.offsetHeight) {
-            const translateY = sectionTopRelativeToVisible * speed;
-            this.renderer.setStyle(el, 'transform', `translate3d(0, ${translateY}px, 0)`);
+    this.parallaxCache.forEach(item => {
+        const sectionTopRelativeToVisible = item.sectionTop - scrollTop;
+        // Check visibility with a bit of buffer
+        if (sectionTopRelativeToVisible < containerHeight && sectionTopRelativeToVisible > -item.sectionHeight) {
+            const translateY = sectionTopRelativeToVisible * item.speed;
+            // Use direct style assignment for performance in loop
+            item.el.style.transform = `translate3d(0, ${translateY.toFixed(2)}px, 0)`; 
         }
-    };
-
-    if (isPlatformBrowser(this.platformId)) {
-        applyEffect(this.parallaxBg(), -0.2);
-        applyEffect(this.reviewParallaxBg(), -0.1);
-        applyEffect(this.groupFooterParallaxBg(), -0.05);
-        applyEffect(this.floatingImage1(), 0.1);
-        applyEffect(this.floatingImage2(), -0.1);
-    }
+    });
   }
 
   private startTypingAnimationLoop() {
