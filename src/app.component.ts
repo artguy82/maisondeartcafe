@@ -111,7 +111,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   
   bannerImages: string[] = [
     'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/main.jpg',
-    'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/main2.jpg',
+    'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/main.jpg',
     'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/main3.jpg',
     'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/main4.jpg',
     'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/main5.jpg'
@@ -209,6 +209,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly darkSections = new Set(['home', 'healing-art', 'quote-divider', 'contact']);
   
   private sectionOffsets = new Map<string, number>();
+
+  // Performance optimization: Cache viewport height to avoid layout thrashing during scroll events
+  private viewportHeight = 0;
 
   likeCounts = signal<Record<string, number>>({});
   likedPrograms = signal<Set<string>>(new Set());
@@ -579,6 +582,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   ngAfterViewInit() {
     if (isPlatformBrowser(this.platformId)) {
       this.lastWindowWidth = window.innerWidth; // Initialize width
+      
+      // Calculate initial viewport height
+      this.viewportHeight = this.isDesktop() ? this.scrollContainer()!.nativeElement.offsetHeight : window.innerHeight;
+      
+      // Explicitly load high-priority image for healing art section
+      const healingImg = new Image();
+      healingImg.src = 'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/healing.jpg';
 
       effect(() => {
         this.isDesktop(); // Establish dependency on the signal
@@ -668,6 +678,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.lastWindowWidth = currentWidth;
 
     this.isDesktop.set(window.innerWidth >= 1024);
+    
+    // Update cached viewport height on resize
+    this.viewportHeight = this.isDesktop() ? this.scrollContainer()!.nativeElement.offsetHeight : window.innerHeight;
+    
     this.calculateMaxIndices();
     this.calculateSectionOffsets();
     this.initParallaxCache();
@@ -992,17 +1006,19 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private updateParallax() {
     const scrollTop = this.getScrollTop();
-    const containerHeight = this.isDesktop() ? this.scrollContainer()!.nativeElement.offsetHeight : window.innerHeight;
+    // Optimized: Use cached viewportHeight instead of reading DOM (window.innerHeight/offsetHeight)
+    // This prevents layout thrashing during the scroll loop.
+    const height = this.viewportHeight;
 
-    this.parallaxCache.forEach(item => {
+    for (const item of this.parallaxCache) {
         const sectionTopRelativeToVisible = item.sectionTop - scrollTop;
         // Check visibility with a bit of buffer
-        if (sectionTopRelativeToVisible < containerHeight && sectionTopRelativeToVisible > -item.sectionHeight) {
+        if (sectionTopRelativeToVisible < height && sectionTopRelativeToVisible > -item.sectionHeight) {
             const translateY = sectionTopRelativeToVisible * item.speed;
-            // Use direct style assignment for performance in loop
+            // Use translate3d for GPU acceleration
             item.el.style.transform = `translate3d(0, ${translateY.toFixed(2)}px, 0)`; 
         }
-    });
+    }
   }
 
   private startTypingAnimationLoop() {

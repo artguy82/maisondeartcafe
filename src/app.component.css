@@ -159,6 +159,14 @@
 /* --- Parallax Performance --- */
 .parallax-element {
   will-change: transform;
+  /* Hardware acceleration for mobile performance */
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+.floating-bounce, .floating-bounce-delayed {
+  will-change: transform;
 }
 
 @keyframes popup-fade-in { from { opacity: 0; } to { opacity: 1; } }
