@@ -820,7 +820,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     for (const [id, offsetTop] of this.sectionOffsets.entries()) {
       // Use a specific buffer for the 'contact' section to match its scroll-to position.
-      const sectionBuffer = (id === 'contact' && isStickyNavVisible) ? 45 : defaultBuffer;
+      const sectionBuffer = (id === 'contact' && isStickyNavVisible) ? 40 : defaultBuffer;
       const triggerOffset = scrollTop + sectionBuffer;
       
       if (offsetTop <= triggerOffset) {
