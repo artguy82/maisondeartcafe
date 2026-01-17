@@ -792,7 +792,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     const scrollTop = this.getScrollTop();
     const windowWidth = isPlatformBrowser(this.platformId) ? window.innerWidth : 1024;
     const isStickyNavVisible = windowWidth >= 768;
-    const defaultBuffer = isStickyNavVisible ? 49 : 10;
+    const defaultBuffer = isStickyNavVisible ? 53 : 10;
 
     // --- Nav Highlight Logic ---
     let currentNavId: string | null = null;
