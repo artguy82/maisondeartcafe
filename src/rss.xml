@@ -2,7 +2,7 @@
 <rss version="2.0">
 <channel>
   <title>메종디아트 - 부산 기장 프리미엄 드로잉 카페 &amp; 힐링 아트</title>
-  <link>https://maisondeart.com/</link>
+  <link>https://maisondeartcafe.vercel.app/</link>
   <description>부산 기장 일광 신도시 오션뷰 드로잉 카페 메종디아트. 힐링아트, 원데이클래스, 이색데이트, 아이와 함께하는 미술 체험, 단체 워크샵, 출강 등 특별한 예술 경험을 제공합니다.</description>
   <language>ko</language>
   <pubDate>Mon, 01 Jan 2024 09:00:00 +0900</pubDate>
@@ -10,32 +10,32 @@
 
   <item>
     <title>메종디아트 드로잉 프로그램 - 힐링아트 &amp; 원데이클래스</title>
-    <link>https://maisondeart.com/#programs</link>
+    <link>https://maisondeartcafe.vercel.app/#programs</link>
     <description><![CDATA[부산드로잉카페 메종디아트의 대표 프로그램입니다. 대형 도안 채색, 캔버스 아크릴 드로잉, 백드롭 페인팅, 오일 파스텔, 액션드로잉 등 초보자도 쉽게 즐길 수 있는 힐링 미술체험입니다. 기장데이트, 커플체험, 가족체험으로 특별한 추억을 만들어보세요. 일광드로잉카페 중 최고의 오션뷰를 자랑합니다.]]></description>
     <category>미술체험</category>
     <category>원데이클래스</category>
     <category>커플체험</category>
-    <guid>https://maisondeart.com/#programs-drawing</guid>
+    <guid>https://maisondeartcafe.vercel.app/#programs-drawing</guid>
   </item>
 
   <item>
     <title>이색 공예 체험 - 아트토이, 테라리움, 캔들, 발포세라믹</title>
-    <link>https://maisondeart.com/#programs</link>
+    <link>https://maisondeartcafe.vercel.app/#programs</link>
     <description><![CDATA[다양한 재료를 활용한 창작아트 클래스입니다. 나만의 베어브릭 만들기(아트토이), 반려 이끼체험 테라리움, 향기로운 아로마 캔들아트, 친환경 소재 발포세라믹 오브제 아트 등을 체험할 수 있습니다. 아이들의 창의력을 키워주는 체험학습 및 자격증 과정으로도 추천합니다.]]></description>
     <category>공예체험</category>
     <category>창작아트</category>
     <category>체험학습</category>
-    <guid>https://maisondeart.com/#programs-craft</guid>
+    <guid>https://maisondeartcafe.vercel.app/#programs-craft</guid>
   </item>
 
   <item>
     <title>기업 단체 체험 및 출강 안내 - 워크샵, 팀빌딩, 비젼드로잉</title>
-    <link>https://maisondeart.com/#group</link>
+    <link>https://maisondeartcafe.vercel.app/#group</link>
     <description><![CDATA[메종디아트카페는 기업 연수, 관공서, 학교 등 단체체험 및 출강체험을 전문으로 합니다. 조직 활성화를 위한 팀빌딩 프로그램, 비젼드로잉, 팝아트 자화상 등 맞춤형 커리큘럼을 제공합니다. 넓은 공간 대관 및 행사 운영도 가능하여 부산 기장 지역 단체 모임 장소로 최적입니다.]]></description>
     <category>단체체험</category>
     <category>기업출강</category>
     <category>팀빌딩</category>
-    <guid>https://maisondeart.com/#group</guid>
+    <guid>https://maisondeartcafe.vercel.app/#group</guid>
   </item>
 
 </channel>
