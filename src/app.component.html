@@ -371,292 +371,304 @@
       </nav>
 
       <!-- 4. Programs -->
-      <section id="programs" class="relative z-10 py-16 bg-white">
-        <div class="text-center mb-12 px-4 md:px-8">
-          <h2 class="text-orange-500 text-sm font-bold tracking-widest mb-2">PROGRAMS</h2>
-          <h3 class="text-3xl md:text-4xl font-extrabold text-gray-800">체험 & 클래스</h3>
-          <p class="mt-4 text-gray-600 text-sm max-w-2xl mx-auto leading-relaxed">
-            다양한 목적에 맞춘 메종디아트만의 특별한 프로그램을 소개합니다.<br>
-            가볍게 즐기는 체험부터 전문적인 원데이 클래스까지 만나보세요.
-          </p>
+      <section id="programs" class="relative z-10 py-16 bg-white overflow-hidden">
+        <!-- Background Image -->
+        <div class="absolute inset-0 z-0">
+            <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/back.jpg" 
+                 fill 
+                 class="object-cover opacity-30" 
+                 alt="Programs Background Pattern"
+                 priority>
         </div>
 
-        <!-- Info Notice Box -->
-        <div class="max-w-[900px] mx-auto px-4 md:px-8 mb-12">
-            <div class="flex gap-4 items-start bg-gray-50 border border-gray-200 rounded-2xl p-6 md:p-8 text-left">
-                <!-- Icon -->
-                <div class="flex-shrink-0 text-orange-500 mt-0.5">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <line x1="12" y1="8" x2="12" y2="12"></line>
-                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                    </svg>
+        <div class="relative z-10">
+            <div class="text-center mb-12 px-4 md:px-8">
+              <h2 class="text-orange-500 text-sm font-bold tracking-widest mb-2">PROGRAMS</h2>
+              <h3 class="text-3xl md:text-4xl font-extrabold text-gray-800">체험 & 클래스</h3>
+              <p class="mt-4 text-gray-600 text-sm max-w-2xl mx-auto leading-relaxed">
+                다양한 목적에 맞춘 메종디아트만의 특별한 프로그램을 소개합니다.<br>
+                가볍게 즐기는 체험부터 전문적인 원데이 클래스까지 만나보세요.
+              </p>
+            </div>
+    
+            <!-- Info Notice Box -->
+            <div class="max-w-[900px] mx-auto px-4 md:px-8 mb-12">
+                <div class="flex gap-4 items-start bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl p-6 md:p-8 text-left shadow-sm">
+                    <!-- Icon -->
+                    <div class="flex-shrink-0 text-orange-500 mt-0.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                    </div>
+                    <!-- Content -->
+                    <div class="text-sm text-gray-600 space-y-1.5 font-normal leading-relaxed">
+                        <p class="text-gray-800 font-bold mb-1">메종디아트 체험 및 클래스는 '1인 1체험' 으로 '네이버 예약제' 로 운영 되고 있습니다.</p>
+                        <p>* 당일 예약일 경우 희망 <span class="font-bold text-gray-700">'체험시간 1시간 전'</span> 까지 예약이 가능 하니 이 점 참고 바랍니다.</p>
+                        <p>프로그램에 대한 상담을 원하실 경우라도 네이버 <span class="font-bold text-gray-700">'방문 예약'</span> 을 신청 해 주시면 감사하겠습니다.</p>
+                        <p>미취학 아동 보호자로 이용 원하 실 경우 <span class="font-bold text-gray-700">'보호자 입장권'</span> 구매 필수 입니다.</p>
+                        <p>모든 클래스 및 체험은 2시간 기준이며 기본 코칭과 마무리를 도와 드립니다.</p>
+                    </div>
                 </div>
-                <!-- Content -->
-                <div class="text-sm text-gray-600 space-y-1.5 font-normal leading-relaxed">
-                    <p class="text-gray-800 font-bold mb-1">메종디아트 체험 및 클래스는 '1인 1체험' 으로 '네이버 예약제' 로 운영 되고 있습니다.</p>
-                    <p>* 당일 예약일 경우 희망 <span class="font-bold text-gray-700">'체험시간 1시간 전'</span> 까지 예약이 가능 하니 이 점 참고 바랍니다.</p>
-                    <p>프로그램에 대한 상담을 원하실 경우라도 네이버 <span class="font-bold text-gray-700">'방문 예약'</span> 을 신청 해 주시면 감사하겠습니다.</p>
-                    <p>미취학 아동 보호자로 이용 원하 실 경우 <span class="font-bold text-gray-700">'보호자 입장권'</span> 구매 필수 입니다.</p>
-                    <p>모든 클래스 및 체험은 2시간 기준이며 기본 코칭과 마무리를 도와 드립니다.</p>
+            </div>
+    
+            <div id="experience-section" class="mb-12">
+              <div class="flex items-center justify-between mb-6 px-4 md:px-8">
+                <h4 class="text-xl font-bold text-gray-800">힐링아트 체험</h4>
+                <div class="flex items-center gap-2">
+                  <button (click)="prevExperience()" [disabled]="experienceIndex() === 0" class="bg-white hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed rounded-full p-2 shadow-sm transition-colors border border-gray-200">
+                    <svg class="w-4 h-4 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                  </button>
+                  <button (click)="nextExperience()" [disabled]="experienceIndex() >= getMaxIndex('experience')" class="bg-white hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed rounded-full p-2 shadow-sm transition-colors border border-gray-200">
+                     <svg class="w-4 h-4 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                  </button>
                 </div>
-            </div>
-        </div>
-
-        <div id="experience-section" class="mb-12">
-          <div class="flex items-center justify-between mb-6 px-4 md:px-8">
-            <h4 class="text-xl font-bold text-gray-800">힐링아트 체험</h4>
-            <div class="flex items-center gap-2">
-              <button (click)="prevExperience()" [disabled]="experienceIndex() === 0" class="bg-white hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed rounded-full p-2 shadow-sm transition-colors border border-gray-200">
-                <svg class="w-4 h-4 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
-              </button>
-              <button (click)="nextExperience()" [disabled]="experienceIndex() >= getMaxIndex('experience')" class="bg-white hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed rounded-full p-2 shadow-sm transition-colors border border-gray-200">
-                 <svg class="w-4 h-4 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-              </button>
-            </div>
-          </div>
-          <div class="overflow-hidden slider-container"
-            (mousedown)="dragStart($event, 'experience')" (touchstart)="dragStart($event, 'experience')">
-            <div #experienceSlider class="flex gap-4 px-4 md:px-8">
-              @for (item of experiences; track item.id) {
-                <div class="w-[85vw] md:w-96 flex-shrink-0 hardware-accelerate" (mouseenter)="preloadProgramImages(item)" (touchstart)="preloadProgramImages(item)">
-                  <div class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-gray-100 h-full flex flex-col">
-                    <div class="relative h-48 overflow-hidden bg-gray-100">
-                      <img [ngSrc]="item.image" 
-                           [alt]="item.title" 
-                           fill 
-                           class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-                           draggable="false" 
-                           sizes="(max-width: 768px) 85vw, (max-width: 1200px) 50vw, 33vw"
-                           [priority]="$index <= 1">
-                      @if (isLikeFeatureAvailable()) {
-                        <button (click)="handleLike(item, $event)"
-                                class="like-button absolute top-2 right-2 z-10 flex items-center gap-2 text-gray-700 bg-white/70 backdrop-blur-sm rounded-full py-1 pl-2 pr-3 shadow-md transition-transform hover:scale-105 active:scale-95 group/like"
-                                [class.liked]="likedPrograms().has(item.id)">
-                          <svg class="w-5 h-5 heart-icon transition-colors duration-300" 
-                              [class.text-red-500]="likedPrograms().has(item.id)" 
-                              [ngClass]="!likedPrograms().has(item.id) ? 'group-hover/like:text-red-400' : ''"
-                              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                            <path [attr.fill-rule]="likedPrograms().has(item.id) ? 'evenodd' : 'nonzero'" d="M12.001 4.529a5.998 5.998 0 018.242 8.242L12 21l-8.243-8.229a5.998 5.998 0 018.242-8.242z" [attr.fill]="likedPrograms().has(item.id) ? 'currentColor' : 'none'" [attr.stroke]="likedPrograms().has(item.id) ? 'none' : 'currentColor'" stroke-width="1.5" />
-                          </svg>
-                          <span class="font-bold text-sm min-w-[16px] text-left" [class.text-red-500]="likedPrograms().has(item.id)">{{ likeCounts()[item.id] || 0 }}</span>
-                        </button>
-                      }
-                    </div>
-                    <div class="p-5 flex flex-col flex-grow">
-                      <div class="flex flex-wrap gap-2 mb-2">
-                        @for (tag of item.tags; track tag) {
-                          <span class="text-[10px] bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full font-medium">#{{tag}}</span>
-                        }
-                      </div>
-                      <h5 class="text-lg font-bold text-gray-800 mb-1">{{item.title}}</h5>
-                      <p class="text-sm font-normal text-gray-500 flex-grow">{{item.desc}}</p>
-                      <div class="mt-auto pt-4">
-                        <button (click)="openProgramPopup(item)" class="w-full text-center py-2.5 px-4 bg-orange-100 text-orange-700 font-bold rounded-lg hover:bg-orange-200 transition-colors text-sm">자세히 보기</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              }
-            </div>
-          </div>
-          <div class="px-4 md:px-8 h-5"></div>
-        </div>
-
-        <div id="class-section" class="mb-12">
-           <div class="flex items-center justify-between mb-6 px-4 md:px-8">
-            <h4 class="text-xl font-bold text-gray-800">원데이 클래스</h4>
-            <div class="flex items-center gap-2">
-              <button (click)="prevClass()" [disabled]="classIndex() === 0" class="bg-white hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed rounded-full p-2 shadow-sm transition-colors border border-gray-200">
-                <svg class="w-4 h-4 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
-              </button>
-              <button (click)="nextClass()" [disabled]="classIndex() >= getMaxIndex('class')" class="bg-white hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed rounded-full p-2 shadow-sm transition-colors border border-gray-200">
-                 <svg class="w-4 h-4 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-              </button>
-            </div>
-          </div>
-          <div class="overflow-hidden slider-container"
-            (mousedown)="dragStart($event, 'class')" (touchstart)="dragStart($event, 'class')">
-            <div #classSlider class="flex gap-4 px-4 md:px-8">
-              @for (item of oneDayClasses; track item.id) {
-                <div class="w-[85vw] md:w-96 flex-shrink-0 hardware-accelerate" (mouseenter)="preloadProgramImages(item)" (touchstart)="preloadProgramImages(item)">
-                  <div class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-gray-100 h-full flex flex-col">
-                    <div class="relative h-48 overflow-hidden bg-gray-100">
-                      <img [ngSrc]="item.image" 
-                           [alt]="item.title" 
-                           fill 
-                           class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-                           draggable="false"
-                           sizes="(max-width: 768px) 85vw, (max-width: 1200px) 50vw, 33vw"
-                           [priority]="$index <= 1">
-                       <div class="absolute top-2 left-2 bg-white/90 px-2 py-1 rounded text-xs font-bold text-gray-800">예약필수</div>
-                      @if (isLikeFeatureAvailable()) {
-                        <button (click)="handleLike(item, $event)"
-                                class="like-button absolute top-2 right-2 z-10 flex items-center gap-2 text-gray-700 bg-white/70 backdrop-blur-sm rounded-full py-1 pl-2 pr-3 shadow-md transition-transform hover:scale-105 active:scale-95 group/like"
-                                [class.liked]="likedPrograms().has(item.id)">
-                          <svg class="w-5 h-5 heart-icon transition-colors duration-300"
-                              [class.text-red-500]="likedPrograms().has(item.id)"
-                              [ngClass]="!likedPrograms().has(item.id) ? 'group-hover/like:text-red-400' : ''"
-                              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                            <path [attr.fill-rule]="likedPrograms().has(item.id) ? 'evenodd' : 'nonzero'" d="M12.001 4.529a5.998 5.998 0 018.242 8.242L12 21l-8.243-8.229a5.998 5.998 0 018.242-8.242z" [attr.fill]="likedPrograms().has(item.id) ? 'currentColor' : 'none'" [attr.stroke]="likedPrograms().has(item.id) ? 'none' : 'currentColor'" stroke-width="1.5" />
-                          </svg>
-                          <span class="font-bold text-sm min-w-[16px] text-left" [class.text-red-500]="likedPrograms().has(item.id)">{{ likeCounts()[item.id] || 0 }}</span>
-                        </button>
-                      }
-                    </div>
-                    <div class="p-5 flex flex-col flex-grow">
-                      <div class="flex flex-wrap gap-2 mb-2">
-                        @for (tag of item.tags; track tag) {
-                          <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">#{{tag}}</span>
-                        }
-                      </div>
-                      <h5 class="text-lg font-bold text-gray-800 mb-1">{{item.title}}</h5>
-                      <p class="text-sm font-normal text-gray-500 flex-grow">{{item.desc}}</p>
-                      <div class="mt-auto pt-4">
-                        <button (click)="openProgramPopup(item)" class="w-full text-center py-2.5 px-4 bg-orange-100 text-orange-700 font-bold rounded-lg hover:bg-orange-200 transition-colors text-sm">자세히 보기</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              }
-            </div>
-          </div>
-           <div class="px-4 md:px-8 h-5"></div>
-        </div>
-
-        <!-- Special Programs Section (NEW) -->
-        <div id="special-section">
-          <div class="flex items-center justify-between mb-6 px-4 md:px-8">
-            <h4 class="text-xl font-bold text-gray-800">스페셜 프로그램</h4>
-            <div class="flex items-center gap-2">
-              <button (click)="prevSpecial()" [disabled]="specialIndex() === 0" class="bg-white hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed rounded-full p-2 shadow-sm transition-colors border border-gray-200">
-                <svg class="w-4 h-4 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
-              </button>
-              <button (click)="nextSpecial()" [disabled]="specialIndex() >= getMaxIndex('special')" class="bg-white hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed rounded-full p-2 shadow-sm transition-colors border border-gray-200">
-                 <svg class="w-4 h-4 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-              </button>
-            </div>
-          </div>
-          <div class="overflow-hidden slider-container"
-            (mousedown)="dragStart($event, 'special')" (touchstart)="dragStart($event, 'special')">
-            <div #specialSlider class="flex gap-4 px-4 md:px-8">
-              @for (item of specialPrograms; track item.id) {
-                <div class="w-[90vw] md:w-[480px] flex-shrink-0 hardware-accelerate">
-                  <div class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-gray-100 h-full flex flex-col">
-                    <div class="relative h-60 overflow-hidden bg-gray-100">
-                      <img [ngSrc]="item.image" 
-                           [alt]="item.title" 
-                           fill 
-                           class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-                           draggable="false"
-                           sizes="(max-width: 768px) 90vw, (max-width: 1200px) 50vw, 33vw"
-                           [priority]="$index <= 1">
-                      @if (isLikeFeatureAvailable()) {
-                        <button (click)="handleLike(item, $event)"
-                                class="like-button absolute top-2 right-2 z-10 flex items-center gap-2 text-gray-700 bg-white/70 backdrop-blur-sm rounded-full py-1 pl-2 pr-3 shadow-md transition-transform hover:scale-105 active:scale-95 group/like"
-                                [class.liked]="likedPrograms().has(item.id)">
-                          <svg class="w-5 h-5 heart-icon transition-colors duration-300"
-                              [class.text-red-500]="likedPrograms().has(item.id)"
-                              [ngClass]="!likedPrograms().has(item.id) ? 'group-hover/like:text-red-400' : ''"
-                              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                            <path [attr.fill-rule]="likedPrograms().has(item.id) ? 'evenodd' : 'nonzero'" d="M12.001 4.529a5.998 5.998 0 018.242 8.242L12 21l-8.243-8.229a5.998 5.998 0 018.242-8.242z" [attr.fill]="likedPrograms().has(item.id) ? 'currentColor' : 'none'" [attr.stroke]="likedPrograms().has(item.id) ? 'none' : 'currentColor'" stroke-width="1.5" />
-                          </svg>
-                          <span class="font-bold text-sm min-w-[16px] text-left" [class.text-red-500]="likedPrograms().has(item.id)">{{ likeCounts()[item.id] || 0 }}</span>
-                        </button>
-                      }
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                      <div class="flex justify-between items-start">
-                        <div>
-                          <div class="flex flex-wrap gap-2 mb-3">
+              </div>
+              <div class="overflow-hidden slider-container"
+                (mousedown)="dragStart($event, 'experience')" (touchstart)="dragStart($event, 'experience')">
+                <div #experienceSlider class="flex gap-4 px-4 md:px-8">
+                  @for (item of experiences; track item.id) {
+                    <div class="w-[85vw] md:w-96 flex-shrink-0 hardware-accelerate" (mouseenter)="preloadProgramImages(item)" (touchstart)="preloadProgramImages(item)">
+                      <div class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-gray-100 h-full flex flex-col">
+                        <div class="relative h-48 overflow-hidden bg-gray-100">
+                          <img [ngSrc]="item.image" 
+                               [alt]="item.title" 
+                               fill 
+                               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                               draggable="false" 
+                               sizes="(max-width: 768px) 85vw, (max-width: 1200px) 50vw, 33vw"
+                               [priority]="$index <= 1">
+                          @if (isLikeFeatureAvailable()) {
+                            <button (click)="handleLike(item, $event)"
+                                    class="like-button absolute top-2 right-2 z-10 flex items-center gap-2 text-gray-700 bg-white/70 backdrop-blur-sm rounded-full py-1 pl-2 pr-3 shadow-md transition-transform hover:scale-105 active:scale-95 group/like"
+                                    [class.liked]="likedPrograms().has(item.id)">
+                              <svg class="w-5 h-5 heart-icon transition-colors duration-300" 
+                                  [class.text-red-500]="likedPrograms().has(item.id)" 
+                                  [ngClass]="!likedPrograms().has(item.id) ? 'group-hover/like:text-red-400' : ''"
+                                  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path [attr.fill-rule]="likedPrograms().has(item.id) ? 'evenodd' : 'nonzero'" d="M12.001 4.529a5.998 5.998 0 018.242 8.242L12 21l-8.243-8.229a5.998 5.998 0 018.242-8.242z" [attr.fill]="likedPrograms().has(item.id) ? 'currentColor' : 'none'" [attr.stroke]="likedPrograms().has(item.id) ? 'none' : 'currentColor'" stroke-width="1.5" />
+                              </svg>
+                              <span class="font-bold text-sm min-w-[16px] text-left" [class.text-red-500]="likedPrograms().has(item.id)">{{ likeCounts()[item.id] || 0 }}</span>
+                            </button>
+                          }
+                        </div>
+                        <div class="p-5 flex flex-col flex-grow">
+                          <div class="flex flex-wrap gap-2 mb-2">
                             @for (tag of item.tags; track tag) {
-                              <span class="text-[10px] bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-medium">#{{tag}}</span>
+                              <span class="text-[10px] bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full font-medium">#{{tag}}</span>
                             }
                           </div>
-                          <h5 class="text-xl font-bold text-gray-800 mb-1">{{item.title}}</h5>
-                          <p class="text-sm font-bold text-orange-600 mb-3">{{item.desc}}</p>
+                          <h5 class="text-lg font-bold text-gray-800 mb-1">{{item.title}}</h5>
+                          <p class="text-sm font-normal text-gray-500 flex-grow">{{item.desc}}</p>
+                          <div class="mt-auto pt-4">
+                            <button (click)="openProgramPopup(item)" class="w-full text-center py-2.5 px-4 bg-orange-100 text-orange-700 font-bold rounded-lg hover:bg-orange-200 transition-colors text-sm">자세히 보기</button>
+                          </div>
                         </div>
                       </div>
-                      
-                      <div class="flex-grow">
-                        <!-- Sub Description List -->
-                        @if (item.subDescription) {
-                          <ul class="space-y-1.5 mb-4">
-                            @for (desc of item.subDescription; track desc) {
-                              <li class="text-sm text-gray-600 font-normal flex items-start gap-2">
-                                <span class="text-purple-400 mt-0.5 flex-shrink-0">✔</span>
-                                <span class="leading-relaxed">{{desc}}</span>
-                              </li>
+                    </div>
+                  }
+                </div>
+              </div>
+              <div class="px-4 md:px-8 h-5"></div>
+            </div>
+    
+            <div id="class-section" class="mb-12">
+               <div class="flex items-center justify-between mb-6 px-4 md:px-8">
+                <h4 class="text-xl font-bold text-gray-800">원데이 클래스</h4>
+                <div class="flex items-center gap-2">
+                  <button (click)="prevClass()" [disabled]="classIndex() === 0" class="bg-white hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed rounded-full p-2 shadow-sm transition-colors border border-gray-200">
+                    <svg class="w-4 h-4 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                  </button>
+                  <button (click)="nextClass()" [disabled]="classIndex() >= getMaxIndex('class')" class="bg-white hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed rounded-full p-2 shadow-sm transition-colors border border-gray-200">
+                     <svg class="w-4 h-4 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                  </button>
+                </div>
+              </div>
+              <div class="overflow-hidden slider-container"
+                (mousedown)="dragStart($event, 'class')" (touchstart)="dragStart($event, 'class')">
+                <div #classSlider class="flex gap-4 px-4 md:px-8">
+                  @for (item of oneDayClasses; track item.id) {
+                    <div class="w-[85vw] md:w-96 flex-shrink-0 hardware-accelerate" (mouseenter)="preloadProgramImages(item)" (touchstart)="preloadProgramImages(item)">
+                      <div class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-gray-100 h-full flex flex-col">
+                        <div class="relative h-48 overflow-hidden bg-gray-100">
+                          <img [ngSrc]="item.image" 
+                               [alt]="item.title" 
+                               fill 
+                               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                               draggable="false"
+                               sizes="(max-width: 768px) 85vw, (max-width: 1200px) 50vw, 33vw"
+                               [priority]="$index <= 1">
+                           <div class="absolute top-2 left-2 bg-white/90 px-2 py-1 rounded text-xs font-bold text-gray-800">예약필수</div>
+                          @if (isLikeFeatureAvailable()) {
+                            <button (click)="handleLike(item, $event)"
+                                    class="like-button absolute top-2 right-2 z-10 flex items-center gap-2 text-gray-700 bg-white/70 backdrop-blur-sm rounded-full py-1 pl-2 pr-3 shadow-md transition-transform hover:scale-105 active:scale-95 group/like"
+                                    [class.liked]="likedPrograms().has(item.id)">
+                              <svg class="w-5 h-5 heart-icon transition-colors duration-300"
+                                  [class.text-red-500]="likedPrograms().has(item.id)"
+                                  [ngClass]="!likedPrograms().has(item.id) ? 'group-hover/like:text-red-400' : ''"
+                                  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path [attr.fill-rule]="likedPrograms().has(item.id) ? 'evenodd' : 'nonzero'" d="M12.001 4.529a5.998 5.998 0 018.242 8.242L12 21l-8.243-8.229a5.998 5.998 0 018.242-8.242z" [attr.fill]="likedPrograms().has(item.id) ? 'currentColor' : 'none'" [attr.stroke]="likedPrograms().has(item.id) ? 'none' : 'currentColor'" stroke-width="1.5" />
+                              </svg>
+                              <span class="font-bold text-sm min-w-[16px] text-left" [class.text-red-500]="likedPrograms().has(item.id)">{{ likeCounts()[item.id] || 0 }}</span>
+                            </button>
+                          }
+                        </div>
+                        <div class="p-5 flex flex-col flex-grow">
+                          <div class="flex flex-wrap gap-2 mb-2">
+                            @for (tag of item.tags; track tag) {
+                              <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">#{{tag}}</span>
                             }
-                          </ul>
-                        } @else if (item.detailedDesc) {
-                           <div class="text-sm text-gray-600 font-normal leading-relaxed whitespace-pre-line">
-                            {{item.detailedDesc}}
                           </div>
-                        }
-
-                        <!-- Pricing Box (Art Ticon) -->
-                        @if (item.pricing) {
-                          <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4 border border-purple-100 mt-4 shadow-sm">
-                             @if(item.pricingTitle) {
-                               <h6 class="font-bold text-gray-800 flex items-center gap-2 mb-2 text-sm">
-                                 <span class="text-base">🎁</span> {{item.pricingTitle}}
-                               </h6>
-                             }
-                             @for (p of item.pricing; track p.price) {
-                               <div class="flex justify-between items-center py-1.5 border-b border-purple-100/50 last:border-0" [class.bg-white]="p.highlight" [class.rounded-lg]="p.highlight" [class.px-2]="p.highlight" [class.-mx-2]="p.highlight" [class.shadow-sm]="p.highlight">
-                                 <span class="font-bold text-gray-700 text-sm" [class.text-purple-900]="p.highlight">
-                                    <span class="inline-block mr-1 text-gray-400" [class.text-purple-400]="p.highlight">•</span>{{p.price}}
-                                 </span>
-                                 <span class="font-extrabold text-sm" [class.text-pink-600]="p.highlight" [class.text-pink-500]="!p.highlight">{{p.bonus}}</span>
-                               </div>
-                             }
+                          <h5 class="text-lg font-bold text-gray-800 mb-1">{{item.title}}</h5>
+                          <p class="text-sm font-normal text-gray-500 flex-grow">{{item.desc}}</p>
+                          <div class="mt-auto pt-4">
+                            <button (click)="openProgramPopup(item)" class="w-full text-center py-2.5 px-4 bg-orange-100 text-orange-700 font-bold rounded-lg hover:bg-orange-200 transition-colors text-sm">자세히 보기</button>
                           </div>
-                        }
-
-                        <!-- Recommendations Box -->
-                        @if (item.recommendations) {
-                          <div class="bg-gray-50 rounded-xl p-4 mt-4 border border-gray-100">
-                             <h6 class="font-bold text-gray-800 flex items-center gap-2 mb-2 text-sm">
-                               <span class="text-base">👍</span> {{item.recommendations.title}}
-                             </h6>
-                             <ul class="space-y-1">
-                               @for (rec of item.recommendations.items; track rec) {
-                                 <li class="text-xs text-gray-600 flex items-start gap-2 leading-relaxed">
-                                   <span class="text-gray-400 mt-0.5">•</span> {{rec}}
-                                 </li>
-                               }
-                             </ul>
-                          </div>
-                        }
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  }
                 </div>
-              }
+              </div>
+               <div class="px-4 md:px-8 h-5"></div>
             </div>
-          </div>
-           <div class="px-4 md:px-8 h-5"></div>
+    
+            <!-- Special Programs Section (NEW) -->
+            <div id="special-section">
+              <div class="flex items-center justify-between mb-6 px-4 md:px-8">
+                <h4 class="text-xl font-bold text-gray-800">스페셜 프로그램</h4>
+                <div class="flex items-center gap-2">
+                  <button (click)="prevSpecial()" [disabled]="specialIndex() === 0" class="bg-white hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed rounded-full p-2 shadow-sm transition-colors border border-gray-200">
+                    <svg class="w-4 h-4 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                  </button>
+                  <button (click)="nextSpecial()" [disabled]="specialIndex() >= getMaxIndex('special')" class="bg-white hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed rounded-full p-2 shadow-sm transition-colors border border-gray-200">
+                     <svg class="w-4 h-4 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                  </button>
+                </div>
+              </div>
+              <div class="overflow-hidden slider-container"
+                (mousedown)="dragStart($event, 'special')" (touchstart)="dragStart($event, 'special')">
+                <div #specialSlider class="flex gap-4 px-4 md:px-8">
+                  @for (item of specialPrograms; track item.id) {
+                    <div class="w-[90vw] md:w-[480px] flex-shrink-0 hardware-accelerate">
+                      <div class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-gray-100 h-full flex flex-col">
+                        <div class="relative h-60 overflow-hidden bg-gray-100">
+                          <img [ngSrc]="item.image" 
+                               [alt]="item.title" 
+                               fill 
+                               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                               draggable="false"
+                               sizes="(max-width: 768px) 90vw, (max-width: 1200px) 50vw, 33vw"
+                               [priority]="$index <= 1">
+                          @if (isLikeFeatureAvailable()) {
+                            <button (click)="handleLike(item, $event)"
+                                    class="like-button absolute top-2 right-2 z-10 flex items-center gap-2 text-gray-700 bg-white/70 backdrop-blur-sm rounded-full py-1 pl-2 pr-3 shadow-md transition-transform hover:scale-105 active:scale-95 group/like"
+                                    [class.liked]="likedPrograms().has(item.id)">
+                              <svg class="w-5 h-5 heart-icon transition-colors duration-300"
+                                  [class.text-red-500]="likedPrograms().has(item.id)"
+                                  [ngClass]="!likedPrograms().has(item.id) ? 'group-hover/like:text-red-400' : ''"
+                                  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path [attr.fill-rule]="likedPrograms().has(item.id) ? 'evenodd' : 'nonzero'" d="M12.001 4.529a5.998 5.998 0 018.242 8.242L12 21l-8.243-8.229a5.998 5.998 0 018.242-8.242z" [attr.fill]="likedPrograms().has(item.id) ? 'currentColor' : 'none'" [attr.stroke]="likedPrograms().has(item.id) ? 'none' : 'currentColor'" stroke-width="1.5" />
+                              </svg>
+                              <span class="font-bold text-sm min-w-[16px] text-left" [class.text-red-500]="likedPrograms().has(item.id)">{{ likeCounts()[item.id] || 0 }}</span>
+                            </button>
+                          }
+                        </div>
+                        <div class="p-6 flex flex-col flex-grow">
+                          <div class="flex justify-between items-start">
+                            <div>
+                              <div class="flex flex-wrap gap-2 mb-3">
+                                @for (tag of item.tags; track tag) {
+                                  <span class="text-[10px] bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-medium">#{{tag}}</span>
+                                }
+                              </div>
+                              <h5 class="text-xl font-bold text-gray-800 mb-1">{{item.title}}</h5>
+                              <p class="text-sm font-bold text-orange-600 mb-3">{{item.desc}}</p>
+                            </div>
+                          </div>
+                          
+                          <div class="flex-grow">
+                            <!-- Sub Description List -->
+                            @if (item.subDescription) {
+                              <ul class="space-y-1.5 mb-4">
+                                @for (desc of item.subDescription; track desc) {
+                                  <li class="text-sm text-gray-600 font-normal flex items-start gap-2">
+                                    <span class="text-purple-400 mt-0.5 flex-shrink-0">✔</span>
+                                    <span class="leading-relaxed">{{desc}}</span>
+                                  </li>
+                                }
+                              </ul>
+                            } @else if (item.detailedDesc) {
+                               <div class="text-sm text-gray-600 font-normal leading-relaxed whitespace-pre-line">
+                                {{item.detailedDesc}}
+                              </div>
+                            }
+    
+                            <!-- Pricing Box (Art Ticon) -->
+                            @if (item.pricing) {
+                              <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4 border border-purple-100 mt-4 shadow-sm">
+                                 @if(item.pricingTitle) {
+                                   <h6 class="font-bold text-gray-800 flex items-center gap-2 mb-2 text-sm">
+                                     <span class="text-base">🎁</span> {{item.pricingTitle}}
+                                   </h6>
+                                 }
+                                 @for (p of item.pricing; track p.price) {
+                                   <div class="flex justify-between items-center py-1.5 border-b border-purple-100/50 last:border-0" [class.bg-white]="p.highlight" [class.rounded-lg]="p.highlight" [class.px-2]="p.highlight" [class.-mx-2]="p.highlight" [class.shadow-sm]="p.highlight">
+                                     <span class="font-bold text-gray-700 text-sm" [class.text-purple-900]="p.highlight">
+                                        <span class="inline-block mr-1 text-gray-400" [class.text-purple-400]="p.highlight">•</span>{{p.price}}
+                                     </span>
+                                     <span class="font-extrabold text-sm" [class.text-pink-600]="p.highlight" [class.text-pink-500]="!p.highlight">{{p.bonus}}</span>
+                                   </div>
+                                 }
+                              </div>
+                            }
+    
+                            <!-- Recommendations Box -->
+                            @if (item.recommendations) {
+                              <div class="bg-gray-50 rounded-xl p-4 mt-4 border border-gray-100">
+                                 <h6 class="font-bold text-gray-800 flex items-center gap-2 mb-2 text-sm">
+                                   <span class="text-base">👍</span> {{item.recommendations.title}}
+                                 </h6>
+                                 <ul class="space-y-1">
+                                   @for (rec of item.recommendations.items; track rec) {
+                                     <li class="text-xs text-gray-600 flex items-start gap-2 leading-relaxed">
+                                       <span class="text-gray-400 mt-0.5">•</span> {{rec}}
+                                     </li>
+                                   }
+                                 </ul>
+                              </div>
+                            }
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+               <div class="px-4 md:px-8 h-5"></div>
+            </div>
         </div>
-
       </section>
 
       <!-- 5. User Reviews (Revamped) -->
-      <section id="reviews" #reviewsSection class="relative z-10 py-16 bg-orange-50 overflow-hidden">
+      <section id="reviews" #reviewsSection class="relative z-10 py-16 bg-gray-900 overflow-hidden">
         <!-- Parallax Background Container -->
         <div class="absolute inset-0 z-0 overflow-hidden">
           <div #reviewParallaxBg class="absolute top-[-15%] left-0 w-full h-[130%] parallax-element">
-            <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/edi3.jpg" fill class="object-cover opacity-40" alt="드로잉 도구들이 놓여있는 카페 내부 모습" priority>
+            <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/edi3.jpg" fill class="object-cover" alt="드로잉 도구들이 놓여있는 카페 내부 모습" priority>
           </div>
+          <!-- Dark overlay for text readability -->
+          <div class="absolute inset-0 bg-black/20 z-0 pointer-events-none"></div>
         </div>
       
         <!-- Content -->
         <div class="relative z-10">
           <div class="max-w-2xl mx-auto text-center mb-10 px-6">
-            <h2 class="text-orange-500 text-sm font-bold tracking-widest mb-2">REVIEWS</h2>
-            <h3 class="text-3xl md:text-4xl font-extrabold text-gray-800">생생한 방문 후기</h3>
-            <div id="review-count-stat" class="inline-flex items-baseline text-gray-500 mt-2 text-sm font-medium">
-              <span class="font-bold text-orange-500 w-12 text-right mr-1">{{ animatedReviewCount() }}</span>
+            <h2 class="text-orange-400 text-sm font-bold tracking-widest mb-2 text-shadow-custom">REVIEWS</h2>
+            <h3 class="text-3xl md:text-4xl font-extrabold text-white text-shadow-custom">생생한 방문 후기</h3>
+            <div id="review-count-stat" class="inline-flex items-baseline text-white mt-2 text-sm font-medium text-shadow-custom">
+              <span class="font-bold text-orange-400 w-12 text-right mr-1 text-shadow-custom">{{ animatedReviewCount() }}</span>
               <span>개가 넘는 후기가 증명하는 만족도</span>
             </div>
           </div>
@@ -742,8 +754,17 @@
       </section>
 
       <!-- 6. Outreach / Group / Events (Revamped) -->
-      <section id="group" class="relative z-10 py-16 px-6 bg-white text-gray-800">
-        <div class="max-w-5xl mx-auto">
+      <section id="group" class="relative z-10 py-16 px-6 bg-white text-gray-800 overflow-hidden">
+        <!-- Background Image -->
+        <div class="absolute inset-0 z-0">
+            <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/back2.jpg" 
+                 fill 
+                 class="object-cover opacity-30" 
+                 alt="Group Background Pattern"
+                 priority>
+        </div>
+
+        <div class="relative z-10 max-w-5xl mx-auto">
           <div class="text-center mb-12">
             <h2 class="text-orange-500 text-sm font-bold tracking-widest mb-2">TOGETHER</h2>
             <h3 class="text-3xl md:text-4xl font-extrabold mb-4">출강 · 단체 · 행사</h3>
@@ -1001,236 +1022,3 @@
     </main>
   </div>
 </div>
-
-<!-- Popups -->
-<!-- Program Detail Popup -->
-@if (isProgramPopupOpen() && selectedProgram()) {
-  <div class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6" role="dialog" aria-modal="true">
-    <div class="absolute inset-0 bg-black/80 backdrop-blur-sm animate-fade-in" (click)="closeProgramPopup()"></div>
-    
-    <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg lg:max-w-4xl max-h-[90vh] overflow-hidden flex flex-col lg:flex-row popup-panel-open">
-      <button (click)="closeProgramPopup()" class="absolute top-4 right-4 z-20 p-2 bg-black/20 hover:bg-black/40 text-white rounded-full transition-colors">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-
-      <!-- Image Slider Section -->
-      <div class="w-full lg:w-1/2 h-80 md:h-96 lg:h-auto bg-gray-100 relative group select-none flex-shrink-0">
-          <!-- Slider Wrapper -->
-          <div class="overflow-hidden w-full h-full relative touch-pan-y"
-                (mousedown)="popupImageDragStart($event)" (touchstart)="popupImageDragStart($event)">
-              <div #popupImageSliderContainer class="flex h-full"
-                    [class.transition-transform]="popupImageSliderTransition()"
-                    [class.duration-300]="popupImageSliderTransition()"
-                    [style.transform]="'translateX(' + popupImageTranslateX() + 'px)'">
-                  @for (img of (selectedProgram()?.images || [selectedProgram()?.image]); track $index) {
-                      <div class="w-full h-full flex-shrink-0 relative">
-                          <img [ngSrc]="img || ''" fill class="object-cover" [alt]="selectedProgram()?.title + ' image ' + ($index + 1)" draggable="false">
-                      </div>
-                  }
-              </div>
-          </div>
-
-          <!-- Navigation Arrows -->
-          @if ((selectedProgram()?.images?.length || 0) > 1) {
-              <button (click)="prevProgramImage()" class="absolute left-2 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white p-2 rounded-full backdrop-blur-sm transition-opacity opacity-0 group-hover:opacity-100 focus:opacity-100 z-10" aria-label="Previous Image">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                  </svg>
-              </button>
-              <button (click)="nextProgramImage()" class="absolute right-2 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white p-2 rounded-full backdrop-blur-sm transition-opacity opacity-0 group-hover:opacity-100 focus:opacity-100 z-10" aria-label="Next Image">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                  </svg>
-              </button>
-              <!-- Indicators -->
-              <div class="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-10 pointer-events-none">
-                  @for (img of selectedProgram()?.images; track $index; let i = $index) {
-                      <div class="w-2 h-2 rounded-full transition-colors duration-300 shadow-sm"
-                           [ngClass]="programImageIndex() === i ? 'bg-white scale-125' : 'bg-white/50'"></div>
-                  }
-              </div>
-          }
-      </div>
-
-      <!-- Content Section -->
-      <div class="w-full lg:w-1/2 flex flex-col overflow-hidden">
-        
-        <!-- Scrollable Content Area -->
-        <div class="flex-grow overflow-y-auto p-6 lg:p-8">
-            <div class="mb-6">
-              <div class="flex flex-wrap gap-2 mb-3">
-                  @for (tag of selectedProgram()?.tags; track tag) {
-                      <span class="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full font-bold">#{{tag}}</span>
-                  }
-              </div>
-              <h3 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">{{selectedProgram()?.title}}</h3>
-              <p class="text-orange-600 font-medium">{{selectedProgram()?.desc}}</p>
-            </div>
-
-            <div class="prose prose-sm text-gray-600 leading-relaxed">
-                @if (selectedProgram()?.subDescription) {
-                  <ul class="space-y-2 mb-4 list-none pl-0">
-                    @for (desc of selectedProgram()?.subDescription; track desc) {
-                      <li class="flex items-start gap-2">
-                        <span class="text-purple-500 mt-1 flex-shrink-0">✔</span>
-                        <span>{{desc}}</span>
-                      </li>
-                    }
-                  </ul>
-                } @else {
-                  <p class="whitespace-pre-line">{{selectedProgram()?.detailedDesc}}</p>
-                }
-
-                @if (selectedProgram()?.pricing) {
-                  <div class="bg-gray-50 rounded-xl p-4 border border-gray-100 mt-4 not-prose">
-                      @if(selectedProgram()?.pricingTitle) {
-                          <h4 class="font-bold text-gray-800 flex items-center gap-2 mb-3 text-sm border-b border-gray-200 pb-2">
-                            🎁 {{selectedProgram()?.pricingTitle}}
-                          </h4>
-                        }
-                        <div class="space-y-2">
-                            @for (p of selectedProgram()?.pricing; track p.price) {
-                              <div class="flex justify-between items-center text-sm">
-                                <span class="font-medium text-gray-600" [class.font-bold]="p.highlight" [class.text-gray-800]="p.highlight">
-                                    <span class="inline-block mr-1 text-gray-400" [class.text-purple-400]="p.highlight">•</span>{{p.price}}
-                                </span>
-                                <span class="font-bold" [class.text-pink-600]="p.highlight" [class.text-pink-500]="!p.highlight">{{p.bonus}}</span>
-                              </div>
-                            }
-                        </div>
-                  </div>
-                }
-
-                @if (selectedProgram()?.recommendations) {
-                    <div class="mt-6 not-prose">
-                        <h4 class="font-bold text-gray-800 mb-2 text-sm">👍 {{selectedProgram()?.recommendations?.title}}</h4>
-                        <ul class="space-y-1">
-                          @for (rec of selectedProgram()?.recommendations?.items; track rec) {
-                            <li class="text-sm text-gray-600 flex items-start gap-2">
-                              <span class="text-gray-300">•</span> {{rec}}
-                            </li>
-                          }
-                        </ul>
-                    </div>
-                }
-            </div>
-        </div>
-        
-        <!-- Sticky Footer Area -->
-        <div class="flex-shrink-0 p-4 lg:p-6 border-t border-gray-100 bg-white z-10">
-            <a href="https://pcmap.place.naver.com/restaurant/1276609996/booking?entry=pll&fromNxList=true&fromPanelNum=2&locale=ko&searchText=%EB%A9%94%EC%A2%85%EB%94%94%EC%95%84%ED%8A%B8&svcName=map_pcv5&timestamp=202601041429" target="_blank" class="block w-full py-4 px-4 bg-orange-500 text-white font-bold rounded-xl hover:bg-orange-600 transition-colors text-center shadow-lg shadow-orange-200">예약하기</a>
-        </div>
-      </div>
-    </div>
-  </div>
-}
-
-<!-- Terms / Privacy Popup -->
-@if (isPopupOpen()) {
-  <div class="fixed inset-0 z-[100] flex items-center justify-center p-4" role="dialog" aria-modal="true">
-      <div class="absolute inset-0 bg-black/60 backdrop-blur-sm animate-fade-in" (click)="closePopup()"></div>
-      <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[80vh] flex flex-col popup-panel-open overflow-hidden">
-        <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-            <h3 class="font-bold text-lg text-gray-800">
-              {{ popupContent() === 'terms' ? '이용약관' : '개인정보처리방침' }}
-            </h3>
-            <button (click)="closePopup()" class="p-1 rounded-full hover:bg-gray-200 transition-colors text-gray-500">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-        </div>
-        <div class="p-6 overflow-y-auto leading-relaxed text-sm text-gray-600">
-            @if (popupContent() === 'terms') {
-              <div class="space-y-4">
-                <div>
-                  <h6 class="font-bold text-gray-800 mb-1">제1조 (목적)</h6>
-                  <p>본 약관은 메종디아트(이하 "회사"라 함)가 제공하는 서비스의 이용조건 및 절차, 회사와 이용자의 권리, 의무 및 책임사항 등을 규정함을 목적으로 합니다.</p>
-                </div>
-                <div>
-                  <h6 class="font-bold text-gray-800 mb-1">제2조 (용어의 정의)</h6>
-                  <ul class="list-disc pl-5 space-y-1 text-xs">
-                    <li>"이용자"란 회사의 서비스에 접속하여 본 약관에 따라 회사가 제공하는 서비스를 받는 회원 및 비회원을 말합니다.</li>
-                    <li>"서비스"란 회사가 제공하는 드로잉 체험, 클래스, 공간 대여 등 모든 제반 서비스를 의미합니다.</li>
-                  </ul>
-                </div>
-                <div>
-                  <h6 class="font-bold text-gray-800 mb-1">제3조 (서비스의 제공)</h6>
-                  <p>회사는 다음과 같은 서비스를 제공합니다.</p>
-                  <ul class="list-disc pl-5 space-y-1 text-xs mt-1">
-                    <li>드로잉 체험 및 미술 재료 제공</li>
-                    <li>음료 및 디저트 판매</li>
-                    <li>원데이 클래스 및 정규 강좌</li>
-                    <li>기타 회사가 정하는 서비스</li>
-                  </ul>
-                </div>
-                <div>
-                  <h6 class="font-bold text-gray-800 mb-1">제4조 (예약 및 취소/환불)</h6>
-                  <p>예약은 네이버 예약을 통해 진행되며, 취소 및 환불 규정은 네이버 예약 시스템의 정책 및 매장 자체 규정에 따릅니다. 당일 취소 시 환불이 제한될 수 있습니다.</p>
-                </div>
-                <div>
-                  <h6 class="font-bold text-gray-800 mb-1">제5조 (이용자의 의무)</h6>
-                  <ul class="list-disc pl-5 space-y-1 text-xs">
-                    <li>이용자는 회사의 시설물 및 대여 장비를 소중히 다루어야 하며, 고의나 과실로 인한 파손 시 배상의 책임이 있습니다.</li>
-                    <li>타 이용자에게 불쾌감을 주거나 서비스 진행을 방해하는 행위를 하여서는 안 됩니다.</li>
-                    <li>1인 1음료 또는 1체험 원칙을 준수해야 합니다.</li>
-                  </ul>
-                </div>
-                <div>
-                  <h6 class="font-bold text-gray-800 mb-1">제6조 (책임의 한계)</h6>
-                  <p>회사는 이용자의 귀책사유로 인한 서비스 이용의 장애에 대하여 책임을 지지 않으며, 이용자가 개인 소지품을 분실한 경우 이에 대한 책임을 지지 않습니다.</p>
-                </div>
-                <p class="text-xs text-gray-400 mt-4">* 본 약관에 명시되지 않은 사항은 관계 법령 및 상관례에 따릅니다.</p>
-              </div>
-            } @else {
-              <div class="space-y-4">
-                <div>
-                  <h6 class="font-bold text-gray-800 mb-1">1. 개인정보 수집 항목</h6>
-                  <p>회사는 원활한 예약 및 서비스 제공을 위해 다음과 같은 최소한의 개인정보를 수집하고 있습니다.</p>
-                  <ul class="list-disc pl-5 space-y-1 text-xs mt-1">
-                    <li>수집항목: 성명, 연락처(휴대전화번호), 예약 정보</li>
-                    <li>수집방법: 네이버 예약, 전화 문의, 현장 방문</li>
-                  </ul>
-                </div>
-                <div>
-                  <h6 class="font-bold text-gray-800 mb-1">2. 개인정보의 수집 및 이용 목적</h6>
-                  <p>수집한 개인정보는 다음의 목적을 위해서만 활용합니다.</p>
-                  <ul class="list-disc pl-5 space-y-1 text-xs mt-1">
-                    <li>예약 관리 및 확인: 예약자 식별, 예약 내용 안내 및 해피콜</li>
-                    <li>고객 응대: 문의사항 처리, 공지사항 전달</li>
-                    <li>마케팅 활용 (동의 시): 이벤트 정보 및 혜택 제공</li>
-                  </ul>
-                </div>
-                <div>
-                  <h6 class="font-bold text-gray-800 mb-1">3. 개인정보의 보유 및 이용 기간</h6>
-                  <p>원칙적으로 개인정보 수집 및 이용 목적이 달성된 후에는 해당 정보를 지체 없이 파기합니다. 단, 관계 법령의 규정에 의하여 보존할 필요가 있는 경우 아래와 같이 관계 법령에서 정한 일정한 기간 동안 개인정보를 보관합니다.</p>
-                  <ul class="list-disc pl-5 space-y-1 text-xs mt-1">
-                    <li>계약 또는 청약철회 등에 관한 기록: 5년</li>
-                    <li>대금결제 및 재화 등의 공급에 관한 기록: 5년</li>
-                    <li>소비자의 불만 또는 분쟁처리에 관한 기록: 3년</li>
-                  </ul>
-                </div>
-                <div>
-                  <h6 class="font-bold text-gray-800 mb-1">4. 개인정보의 제3자 제공</h6>
-                  <p>회사는 이용자의 개인정보를 원칙적으로 외부에 제공하지 않습니다. 다만, 이용자가 사전에 동의한 경우나 법령의 규정에 의거한 경우는 예외로 합니다.</p>
-                </div>
-                <div>
-                  <h6 class="font-bold text-gray-800 mb-1">5. 이용자의 권리</h6>
-                  <p>이용자는 언제든지 등록되어 있는 자신의 개인정보를 조회하거나 수정할 수 있으며 가입 해지를 요청할 수 있습니다.</p>
-                </div>
-                <div>
-                  <h6 class="font-bold text-gray-800 mb-1">6. 개인정보 보호책임자</h6>
-                  <p>회사는 고객의 개인정보를 보호하고 개인정보와 관련한 불만을 처리하기 위하여 아래와 같이 관련 부서 및 개인정보관리책임자를 지정하고 있습니다.</p>
-                  <p class="text-xs mt-1 text-gray-500">전화번호: 0507-1381-5672</p>
-                </div>
-              </div>
-            }
-        </div>
-        <div class="p-5 border-t border-gray-100 bg-gray-50 text-right">
-            <button (click)="closePopup()" class="px-6 py-2 bg-gray-800 text-white font-bold rounded-lg hover:bg-gray-700 transition-colors text-sm">확인</button>
-        </div>
-      </div>
-  </div>
-}
