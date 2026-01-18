@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://maisondeart.com/sitemap.xml

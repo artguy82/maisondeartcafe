@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --index index.html --browser index.tsx --output-path dist && (test -d dist/browser && cp -r dist/browser/* dist/ || true)",
+    "build": "ng build --index index.html --browser index.tsx --output-path dist && (test -d dist/browser && cp -r dist/browser/* dist/ || true) && cp src/robots.txt dist/robots.txt && cp src/rss.xml dist/rss.xml",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
