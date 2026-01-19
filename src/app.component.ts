@@ -109,11 +109,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   private injector = inject(Injector);
   private lastWindowWidth = 0; // To track width changes specifically
   
-  // Lazy loading video source
-  healingVideoSrc = signal<string | null>(null);
-  @ViewChild('healingVideo') healingVideo!: ElementRef<HTMLVideoElement>;
-  private videoObserver: IntersectionObserver | undefined;
-
   bannerImages: string[] = [
     'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/main.jpg',
     'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/main2.jpg',
@@ -166,6 +161,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   scrollContainer = viewChild<ElementRef<HTMLElement>>('scrollContainer');
   parallaxBg = viewChild<ElementRef<HTMLElement>>('parallaxBg');
+  healingParallaxBg = viewChild<ElementRef<HTMLElement>>('healingParallaxBg');
   reviewParallaxBg = viewChild<ElementRef<HTMLElement>>('reviewParallaxBg');
   groupFooterParallaxBg = viewChild<ElementRef<HTMLElement>>('groupFooterParallaxBg');
   floatingImage1 = viewChild<ElementRef<HTMLElement>>('floatingImage1');
@@ -589,45 +585,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       // Calculate initial viewport height
       this.viewportHeight = this.isDesktop() ? this.scrollContainer()!.nativeElement.offsetHeight : window.innerHeight;
       
-      // Explicitly load high-priority image for healing art section
-      const healingImg = new Image();
-      healingImg.src = 'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/healing.jpg';
-
-      // Setup Video Intersection Observer
-      // Use standard browser CDN to ensure video streaming works correctly (Range header support)
-      // GitHub Raw often fails for direct video streaming.
-      const videoCdnUrl = 'https://cdn.jsdelivr.net/gh/artguy82/maisondeart@main/web/heal.mp4';
-      
-      this.videoObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            // Section is visible
-            if (!this.healingVideoSrc()) {
-              this.healingVideoSrc.set(videoCdnUrl);
-            }
-            if (this.healingVideo && this.healingVideo.nativeElement) {
-                const playPromise = this.healingVideo.nativeElement.play();
-                if (playPromise !== undefined) {
-                    playPromise.catch(() => {
-                        // Autoplay was prevented.
-                        // We can show a 'Play' button or just stay muted.
-                        // Since it's background, failing silently is acceptable.
-                    });
-                }
-            }
-          } else {
-            // Section is NOT visible
-            if (this.healingVideo && this.healingVideo.nativeElement) {
-                this.healingVideo.nativeElement.pause();
-            }
-          }
-        });
-      }, { threshold: 0.25 }); // Trigger when 25% of section is visible
-
-      const videoSection = document.getElementById('healing-art');
-      if (videoSection) {
-        this.videoObserver.observe(videoSection);
-      }
+      // Explicit JS preload removed as NgOptimizedImage priority handles LCP better
+      // and we want to avoid double-fetching logic.
 
       effect(() => {
         this.isDesktop(); // Establish dependency on the signal
@@ -679,7 +638,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       this.unlistenMouseUp?.();
       this.unlistenTouchEnd?.();
       this.reviewCountObserver?.disconnect();
-      this.videoObserver?.disconnect();
     }
     
     clearInterval(this.bannerInterval);
@@ -1038,6 +996,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       };
 
       add(this.parallaxBg(), -0.2);
+      add(this.healingParallaxBg(), -0.1); // Reduced from -0.15 to match smaller height
       add(this.reviewParallaxBg(), -0.1);
       add(this.groupFooterParallaxBg(), -0.05);
       add(this.floatingImage1(), 0.1);
