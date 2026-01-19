@@ -1,25 +1,25 @@
 <!-- Desktop Background / Wrapper -->
-<div class="relative w-full lg:h-full wave-bg flex flex-col lg:flex-row items-center lg:items-stretch justify-center px-0 lg:px-12 lg:pt-12 gap-8 lg:gap-8 xl:gap-16 lg:overflow-hidden lg:overscroll-none lg:touch-none">
+<div class="relative w-full lg:h-full wave-bg flex flex-col md:flex-row items-center md:items-stretch justify-center px-0 md:px-6 lg:px-12 md:pt-6 lg:pt-12 gap-8 md:gap-4 lg:gap-8 xl:gap-16 lg:overflow-hidden lg:overscroll-none lg:touch-none">
   
-  <!-- Left Side: Brand Info (Desktop Only) -->
-  <aside class="hidden lg:flex flex-col items-start justify-center max-w-md z-20 space-y-6 xl:space-y-8 shrink-0">
+  <!-- Left Side: Brand Info (Desktop/Tablet) -->
+  <aside class="hidden md:flex flex-col items-start justify-center md:max-w-[240px] lg:max-w-md z-20 space-y-4 lg:space-y-6 xl:space-y-8 shrink-0">
     
     <!-- INFO ZONE -->
     <div class="aside-anim-item anim-slide-from-left aside-delay-1 w-full">
-      <p class="text-5xl xl:text-6xl font-extralight text-gray-800 tracking-widest">Cafe</p>
-      <h1 class="text-7xl xl:text-8xl font-extralight text-gray-800 tracking-widest leading-none mt-2">
+      <p class="text-4xl lg:text-5xl xl:text-6xl font-extralight text-gray-800 tracking-widest">Cafe</p>
+      <h1 class="text-6xl lg:text-7xl xl:text-8xl font-extralight text-gray-800 tracking-widest leading-none mt-2">
         MAISON<br>D'ART
       </h1>
-      <div class="flex items-baseline mt-2">
-        <span class="text-5xl xl:text-6xl font-extralight text-gray-800 tracking-wide mr-3">and</span>
+      <div class="flex flex-col lg:flex-row lg:items-baseline mt-2">
+        <span class="text-4xl lg:text-5xl xl:text-6xl font-extralight text-gray-800 tracking-wide mr-3">and</span>
         <div class="inline-block align-baseline">
             <div class="relative">
                 <!-- Sizer element -->
-                <div class="font-cursive text-6xl xl:text-7xl border-b-2 border-gray-800 pb-1 px-4 text-transparent select-none pointer-events-none">
+                <div class="font-cursive text-5xl lg:text-6xl xl:text-7xl border-b-2 border-gray-800 pb-1 px-2 lg:px-4 text-transparent select-none pointer-events-none">
                     Connection
                 </div>
                 <!-- The actual animated text -->
-                <div class="absolute inset-0 font-cursive text-6xl xl:text-7xl flex justify-center items-end pb-1">
+                <div class="absolute inset-0 font-cursive text-5xl lg:text-6xl xl:text-7xl flex justify-center items-end pb-1">
                     <span class="bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 bg-clip-text text-transparent py-1 px-1 whitespace-nowrap">{{ displayedWord() }}</span><span class="typing-cursor bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400"></span>
                 </div>
             </div>
@@ -27,45 +27,45 @@
       </div>
     </div>
     
-    <div class="w-12 h-1.5 bg-gray-800 aside-anim-item anim-slide-from-left aside-delay-2 mt-2"></div>
+    <div class="w-8 lg:w-12 h-1.5 bg-gray-800 aside-anim-item anim-slide-from-left aside-delay-2 mt-2"></div>
 
-    <p class="text-gray-500 font-normal leading-relaxed text-lg aside-anim-item anim-slide-from-left aside-delay-3">
-      일상에 지친 당신을 위한 특별한 힐링 공간.<br>
-      메종디아트가 선사하는 특별한 체험과 함께<br>
+    <p class="text-gray-500 font-normal leading-relaxed text-sm lg:text-lg aside-anim-item anim-slide-from-left aside-delay-3">
+      일상에 지친 당신을 위한 특별한 힐링 공간.<br class="hidden lg:block">
+      메종디아트가 선사하는 특별한 체험과 함께<br class="hidden lg:block">
       나만의 예술을 만나는 시간을 선물합니다.
     </p>
 
     <!-- ACTION HUB -->
-    <div class="w-full space-y-4 pt-4">
+    <div class="w-full space-y-3 lg:space-y-4 pt-2 lg:pt-4">
         <!-- Primary CTA -->
-        <a href="https://pcmap.place.naver.com/restaurant/1276609996/booking?entry=pll&fromNxList=true&fromPanelNum=2&locale=ko&searchText=%EB%A9%94%EC%A2%85%EB%94%94%EC%95%84%ED%8A%B8&svcName=map_pcv5&timestamp=202601041429" target="_blank" class="w-full flex items-center justify-center px-6 py-4 text-white rounded-full aside-anim-item anim-slide-from-bottom aside-delay-4 animated-gradient-bg">
-            <span class="relative z-10 flex items-center justify-center gap-3">
-                <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/booking.png" alt="Booking Icon" width="20" height="20">
-                <span class="font-bold text-lg whitespace-nowrap">예약 바로 가기</span>
+        <a href="https://pcmap.place.naver.com/restaurant/1276609996/booking?entry=pll&fromNxList=true&fromPanelNum=2&locale=ko&searchText=%EB%A9%94%EC%A2%85%EB%94%94%EC%95%84%ED%8A%B8&svcName=map_pcv5&timestamp=202601041429" target="_blank" class="w-full flex items-center justify-center px-4 lg:px-6 py-3 lg:py-4 text-white rounded-full aside-anim-item anim-slide-from-bottom aside-delay-4 animated-gradient-bg">
+            <span class="relative z-10 flex items-center justify-center gap-2 lg:gap-3">
+                <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/booking.png" alt="Booking Icon" width="20" height="20" class="w-4 h-4 lg:w-5 lg:h-5">
+                <span class="font-bold text-sm lg:text-lg whitespace-nowrap">예약 바로 가기</span>
             </span>
         </a>
         <!-- Secondary Actions -->
-        <div class="grid grid-cols-2 gap-3">
-             <a href="http://talk.naver.com/w4f3ta?frm=pnmb&frm=nmb_detail" target="_blank" class="flex items-center justify-center gap-2 px-4 py-3 text-white rounded-full bg-gradient-to-tr from-lime-400 to-green-500 aside-anim-item anim-slide-from-bottom aside-delay-5 text-sm">
-                <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/naver-talk.png" alt="Naver Talk Icon" width="16" height="16">
-                <span class="font-medium">톡톡 문의</span>
+        <div class="grid grid-cols-2 gap-2 lg:gap-3">
+             <a href="http://talk.naver.com/w4f3ta?frm=pnmb&frm=nmb_detail" target="_blank" class="flex items-center justify-center gap-2 px-3 lg:px-4 py-2.5 lg:py-3 text-white rounded-full bg-gradient-to-tr from-lime-400 to-green-500 aside-anim-item anim-slide-from-bottom aside-delay-5 text-xs lg:text-sm">
+                <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/naver-talk.png" alt="Naver Talk Icon" width="16" height="16" class="w-3.5 h-3.5 lg:w-4 lg:h-4">
+                <span class="font-medium whitespace-nowrap">톡톡 문의</span>
             </a>
-            <a href="http://pf.kakao.com/_tYxgCG/chat" target="_blank" class="flex items-center justify-center gap-2 px-4 py-3 text-white rounded-full bg-gradient-to-tr from-yellow-400 to-orange-400 aside-anim-item anim-slide-from-bottom aside-delay-6 text-sm">
-                <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/kakao-talk.png" alt="Kakao Talk Icon" width="16" height="16">
-                <span class="font-medium">카톡 문의</span>
+            <a href="http://pf.kakao.com/_tYxgCG/chat" target="_blank" class="flex items-center justify-center gap-2 px-3 lg:px-4 py-2.5 lg:py-3 text-white rounded-full bg-gradient-to-tr from-yellow-400 to-orange-400 aside-anim-item anim-slide-from-bottom aside-delay-6 text-xs lg:text-sm">
+                <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/kakao-talk.png" alt="Kakao Talk Icon" width="16" height="16" class="w-3.5 h-3.5 lg:w-4 lg:h-4">
+                <span class="font-medium whitespace-nowrap">카톡 문의</span>
             </a>
         </div>
-        <div class="grid grid-cols-3 gap-3">
-            <a href="https://m.smartstore.naver.com/maisondeartcafe" target="_blank" class="flex items-center justify-center gap-2 px-4 py-3 bg-white/40 hover:bg-white/60 text-gray-800 rounded-full aside-anim-item anim-slide-from-bottom aside-delay-7 transition-colors text-sm">
+        <div class="grid grid-cols-3 gap-2 lg:gap-3">
+            <a href="https://m.smartstore.naver.com/maisondeartcafe" target="_blank" class="flex items-center justify-center gap-1.5 lg:gap-2 px-3 lg:px-4 py-2.5 lg:py-3 bg-white/40 hover:bg-white/60 text-gray-800 rounded-full aside-anim-item anim-slide-from-bottom aside-delay-7 transition-colors text-xs lg:text-sm">
                 <span class="font-extrabold text-green-600">N</span>
                 <span class="font-bold">스토어</span>
             </a>
-            <a href="https://m.blog.naver.com/maisondeart" target="_blank" class="flex items-center justify-center gap-2 px-4 py-3 bg-white/40 hover:bg-white/60 text-gray-800 rounded-full aside-anim-item anim-slide-from-bottom aside-delay-8 transition-colors text-sm">
+            <a href="https://m.blog.naver.com/maisondeart" target="_blank" class="flex items-center justify-center gap-1.5 lg:gap-2 px-3 lg:px-4 py-2.5 lg:py-3 bg-white/40 hover:bg-white/60 text-gray-800 rounded-full aside-anim-item anim-slide-from-bottom aside-delay-8 transition-colors text-xs lg:text-sm">
                 <span class="font-extrabold text-green-600">N</span>
                 <span class="font-bold">블로그</span>
             </a>
-            <a href="https://www.instagram.com/maisondeartcafe/" target="_blank" class="flex items-center justify-center gap-2 px-4 py-3 bg-white/40 hover:bg-white/60 text-gray-800 rounded-full aside-anim-item anim-slide-from-bottom aside-delay-9 transition-colors text-sm">
-                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <a href="https://www.instagram.com/maisondeartcafe/" target="_blank" class="flex items-center justify-center gap-1.5 lg:gap-2 px-3 lg:px-4 py-2.5 lg:py-3 bg-white/40 hover:bg-white/60 text-gray-800 rounded-full aside-anim-item anim-slide-from-bottom aside-delay-9 transition-colors text-xs lg:text-sm">
+                <svg class="w-3.5 h-3.5 lg:w-4 lg:h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <defs>
                     <linearGradient id="instagram-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
                       <stop offset="0%" style="stop-color:#feda75;"></stop>
@@ -86,10 +86,10 @@
   </aside>
 
   <!-- Right Side: Tablet/Device Frame -->
-  <div class="touch-pan-y relative z-10 w-full lg:w-auto grow lg:max-w-[820px] lg:h-full bg-white lg:rounded-t-[2.5rem] lg:shadow-2xl flex flex-col lg:border-[8px] lg:border-b-0 lg:border-gray-900 box-border ring-1 ring-white/20 lg:overflow-hidden">
+  <div class="touch-pan-y relative z-10 w-full md:w-auto md:grow lg:grow-0 md:h-full bg-white md:rounded-t-[2.5rem] md:shadow-2xl flex flex-col md:border-[8px] md:border-b-0 md:border-gray-900 box-border ring-1 ring-white/20 lg:max-w-[820px] lg:overflow-hidden">
     
     <!-- Original SPA View -->
-    <header class="fixed lg:absolute top-0 left-0 right-0 z-50 h-16 flex items-center px-4 lg:px-6 pointer-events-none">
+    <header class="fixed md:absolute top-0 left-0 right-0 z-50 h-16 flex items-center px-4 lg:px-6 pointer-events-none">
       <!-- Logo for Mobile Menu Header -->
       @if (isMenuOpen()) {
         <div class="font-extralight text-xl tracking-widest text-gray-800 md:hidden ml-4 pointer-events-auto">
@@ -200,10 +200,10 @@
     }
 
     <!-- Scrollable Content Area -->
-    <main #scrollContainer class="touch-pan-y scroll-container relative w-full lg:h-full lg:overflow-y-auto pt-0 bg-white lg:rounded-t-[calc(2.5rem-8px)]">
+    <main #scrollContainer class="touch-pan-y scroll-container relative w-full md:h-full md:overflow-y-auto pt-0 bg-white md:rounded-t-[calc(2.5rem-8px)]">
       
       <!-- 1. Main Banner -->
-      <section id="home" class="relative z-10 w-full h-screen flex items-center justify-center overflow-hidden bg-black lg:rounded-t-[calc(2.5rem-8px)]">
+      <section id="home" class="relative z-10 w-full h-screen flex items-center justify-center overflow-hidden bg-black md:rounded-t-[calc(2.5rem-8px)]">
         <!-- Banner Images -->
         @for (image of bannerImages; track $index; let i = $index) {
           <img [ngSrc]="image"
@@ -345,7 +345,7 @@
       </section>
 
       <!-- New Sticky Desktop Navigation -->
-      <nav class="hidden md:flex sticky top-0 z-[100] justify-center items-center gap-x-8 lg:gap-x-12 py-4 bg-white/90 backdrop-blur-sm border-b border-gray-100 shadow-sm w-full lg:rounded-t-[calc(2.5rem-8px)]">
+      <nav class="hidden md:flex sticky top-0 z-[100] justify-center items-center gap-x-8 lg:gap-x-12 py-4 bg-white/90 backdrop-blur-sm border-b border-gray-100 shadow-sm w-full md:rounded-t-[calc(2.5rem-8px)]">
         <button (click)="scrollToSection('intro')" class="text-sm font-semibold text-gray-700 hover:text-orange-500 transition-colors" [class.text-orange-500]="activeDesktopNav() === 'intro'">힐링아트</button>
         <div class="relative">
           <button (click)="scrollToSection('programs')" class="text-sm font-semibold text-gray-700 hover:text-orange-500 transition-colors" [class.text-orange-500]="activeDesktopNav() === 'programs'">프로그램</button>
@@ -392,7 +392,7 @@
             <div class="max-w-[900px] mx-auto px-4 md:px-8 mb-12">
                 <div class="flex gap-4 items-center bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl p-6 md:p-8 text-left shadow-sm">
                     <!-- Icon replaced with Image -->
-                    <div class="flex-shrink-0 self-center">
+                    <div class="flex-shrink-0 self-start md:self-center">
                         <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/notice.png" 
                              width="120" 
                              height="120" 
@@ -1017,66 +1017,81 @@
       </footer>
       
     </main>
+</div>
 
-    <!-- Program Detail Popup -->
-    @if (isProgramPopupOpen()) {
-      <div class="absolute inset-0 z-[60] flex items-end sm:items-center justify-center pointer-events-none">
-        <!-- Backdrop -->
-        <div (click)="closeProgramPopup()" class="absolute inset-0 bg-black/60 backdrop-blur-sm pointer-events-auto transition-opacity animate-fade-in"></div>
+<!-- Program Detail Popup (Moved Outside Wrapper) -->
+@if (isProgramPopupOpen()) {
+  <div class="fixed inset-0 z-[9999] flex items-end md:items-center justify-center pointer-events-none">
+    <!-- Backdrop -->
+    <div (click)="closeProgramPopup()" class="absolute inset-0 bg-black/60 backdrop-blur-sm pointer-events-auto transition-opacity animate-fade-in"></div>
+    
+    <!-- Modal Panel -->
+    <div class="relative bg-white overflow-hidden pointer-events-auto popup-panel-open flex flex-col
+                w-full h-full rounded-none
+                landscape:flex-row
+                md:w-[600px] md:h-[80vh] md:rounded-2xl md:shadow-2xl
+                lg:w-[1000px] lg:h-[500px] lg:flex-row">
         
-        <!-- Modal Panel -->
-        <div class="relative w-full h-[90%] sm:h-[85%] bg-white sm:rounded-2xl rounded-t-2xl shadow-2xl flex flex-col overflow-hidden pointer-events-auto popup-panel-open sm:max-w-lg sm:mx-4">
-            
-            <!-- Close Button -->
-            <button (click)="closeProgramPopup()" class="absolute top-4 right-4 z-20 p-2 bg-black/10 hover:bg-black/20 text-white rounded-full transition-colors backdrop-blur-md">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-            </button>
+        <!-- Close Button -->
+        <button (click)="closeProgramPopup()" class="absolute top-4 right-4 z-20 p-2 rounded-full transition-colors backdrop-blur-md md:backdrop-blur-none bg-black/10 hover:bg-black/20 text-white md:bg-white md:shadow-sm md:border md:border-gray-100 md:text-gray-500 md:hover:bg-gray-50 md:hover:text-gray-900">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
 
-            <!-- Image Slider -->
-            <div class="relative w-full h-64 sm:h-72 flex-shrink-0 bg-gray-100 group">
-                <!-- Slider Track -->
-                <div #popupImageSliderContainer
-                     class="flex h-full transition-transform duration-300 ease-out will-change-transform"
-                     [class.transition-none]="popupImageDragState.isDragging"
-                     [style.transform]="'translateX(' + popupImageTranslateX() + 'px)'"
-                     (mousedown)="popupImageDragStart($event)" 
-                     (touchstart)="popupImageDragStart($event)">
-                    @if (selectedProgram(); as program) {
-                        @if (program.images && program.images.length > 0) {
-                             @for (img of program.images; track $index) {
-                                <div class="w-full h-full flex-shrink-0 relative">
-                                    <img [ngSrc]="img" fill class="object-cover select-none" [attr.draggable]="false">
-                                </div>
-                             }
-                        } @else {
-                             <div class="w-full h-full flex-shrink-0 relative">
-                                <img [ngSrc]="program.image" fill class="object-cover select-none" [attr.draggable]="false">
+        <!-- Image Slider -->
+        <div class="relative shrink-0 bg-gray-100 group
+                    w-full h-1/2
+                    landscape:w-1/2 landscape:h-full
+                    md:w-full md:h-1/2
+                    lg:w-1/2 lg:h-full">
+            <!-- Slider Track -->
+            <div #popupImageSliderContainer
+                 class="flex h-full transition-transform duration-300 ease-out will-change-transform"
+                 [class.transition-none]="popupImageDragState.isDragging"
+                 [style.transform]="'translateX(' + popupImageTranslateX() + 'px)'"
+                 (mousedown)="popupImageDragStart($event)" 
+                 (touchstart)="popupImageDragStart($event)">
+                @if (selectedProgram(); as program) {
+                    @if (program.images && program.images.length > 0) {
+                         @for (img of program.images; track $index) {
+                            <div class="w-full h-full flex-shrink-0 relative">
+                                <img [ngSrc]="img" fill class="object-cover select-none" [attr.draggable]="false">
                             </div>
-                        }
+                         }
+                    } @else {
+                         <div class="w-full h-full flex-shrink-0 relative">
+                            <img [ngSrc]="program.image" fill class="object-cover select-none" [attr.draggable]="false">
+                        </div>
                     }
-                </div>
-                
-                <!-- Dots Indicator -->
-                 @if (selectedProgram()?.images?.length && (selectedProgram()?.images?.length ?? 0) > 1) {
-                    <div class="absolute bottom-3 left-0 right-0 flex justify-center gap-2 pointer-events-none">
-                        @for (img of selectedProgram()?.images; track $index; let i = $index) {
-                            <div class="w-1.5 h-1.5 rounded-full transition-colors duration-300"
-                                 [class.bg-white]="i === programImageIndex()"
-                                 [class.bg-white/40]="i !== programImageIndex()"></div>
-                        }
-                    </div>
-                    <!-- Arrows -->
-                     <button (click)="prevProgramImage()" class="absolute left-2 top-1/2 -translate-y-1/2 p-2 text-white/70 hover:text-white disabled:opacity-0 transition-opacity">
-                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-                     </button>
-                      <button (click)="nextProgramImage()" class="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-white/70 hover:text-white disabled:opacity-0 transition-opacity">
-                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                     </button>
                 }
             </div>
+            
+            <!-- Dots Indicator -->
+             @if (selectedProgram()?.images?.length && (selectedProgram()?.images?.length ?? 0) > 1) {
+                <div class="absolute bottom-3 left-0 right-0 flex justify-center gap-2 pointer-events-none">
+                    @for (img of selectedProgram()?.images; track $index; let i = $index) {
+                        <div class="w-1.5 h-1.5 rounded-full transition-colors duration-300"
+                             [class.bg-white]="i === programImageIndex()"
+                             [class.bg-white/40]="i !== programImageIndex()"></div>
+                    }
+                </div>
+                <!-- Arrows -->
+                 <button (click)="prevProgramImage()" class="absolute left-2 top-1/2 -translate-y-1/2 p-2 text-white/70 hover:text-white disabled:opacity-0 transition-opacity">
+                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                 </button>
+                  <button (click)="nextProgramImage()" class="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-white/70 hover:text-white disabled:opacity-0 transition-opacity">
+                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                 </button>
+            }
+        </div>
 
+        <!-- Content Scroll Wrapper -->
+        <div class="flex flex-col relative
+                    w-full h-1/2
+                    landscape:w-1/2 landscape:h-full
+                    md:w-full md:h-1/2
+                    lg:w-1/2 lg:h-full">
             <!-- Content Scroll -->
-            <div class="flex-grow overflow-y-auto p-6 sm:p-8 bg-white overscroll-contain">
+            <div class="flex-grow overflow-y-auto p-6 sm:p-8 md:p-10 bg-white overscroll-contain">
                 @if (selectedProgram(); as item) {
                     <div class="flex flex-wrap gap-2 mb-3">
                         @for (tag of item.tags; track tag) {
@@ -1095,7 +1110,7 @@
                         }
 
                         @if (item.subDescription) {
-                             <div class="bg-gray-50 rounded-xl p-5 border border-gray-100">
+                            <div class="bg-gray-50 rounded-xl p-5 border border-gray-100">
                                 <h4 class="font-bold text-gray-800 mb-3 text-sm">✨ 프로그램 특징</h4>
                                 <ul class="space-y-2">
                                     @for (desc of item.subDescription; track desc) {
@@ -1124,8 +1139,8 @@
                             </div>
                         }
                         
-                         @if (item.recommendations) {
-                             <div class="bg-blue-50 rounded-xl p-5 border border-blue-100">
+                        @if (item.recommendations) {
+                            <div class="bg-blue-50 rounded-xl p-5 border border-blue-100">
                                 <h4 class="font-bold text-gray-800 mb-3 text-sm flex items-center gap-2">
                                     <span>👍</span> {{ item.recommendations.title }}
                                 </h4>
@@ -1146,46 +1161,44 @@
             </div>
             
             <!-- Footer Action -->
-             <div class="p-4 border-t border-gray-100 bg-white safe-area-bottom">
-                 <a href="https://pcmap.place.naver.com/restaurant/1276609996/booking?entry=pll&fromNxList=true&fromPanelNum=2&locale=ko&searchText=%EB%A9%94%EC%A2%85%EB%94%94%EC%95%84%ED%8A%B8&svcName=map_pcv5&timestamp=202601041429" target="_blank" 
+            <div class="p-4 md:p-6 border-t border-gray-100 bg-white safe-area-bottom shrink-0">
+                <a href="https://pcmap.place.naver.com/restaurant/1276609996/booking?entry=pll&fromNxList=true&fromPanelNum=2&locale=ko&searchText=%EB%A9%94%EC%A2%85%EB%94%94%EC%95%84%ED%8A%B8&svcName=map_pcv5&timestamp=202601041429" target="_blank" 
                     class="block w-full py-4 bg-gray-900 text-white text-center font-bold rounded-xl hover:bg-black transition-colors">
-                     예약 하러 가기
-                 </a>
-             </div>
+                    예약 하러 가기
+                </a>
+            </div>
         </div>
-      </div>
-    }
-
-    <!-- Terms/Privacy Popup -->
-    @if (isPopupOpen()) {
-        <div class="absolute inset-0 z-[70] flex items-center justify-center p-4">
-             <div (click)="closePopup()" class="absolute inset-0 bg-black/60 backdrop-blur-sm animate-fade-in"></div>
-             <div class="relative bg-white rounded-2xl w-full max-w-2xl max-h-[80%] overflow-hidden flex flex-col shadow-2xl popup-panel-open">
-                <div class="p-5 border-b border-gray-100 flex justify-between items-center">
-                    <h3 class="font-bold text-lg text-gray-800">
-                        {{ popupContent() === 'terms' ? '이용약관' : '개인정보처리방침' }}
-                    </h3>
-                    <button (click)="closePopup()" class="p-2 hover:bg-gray-100 rounded-full transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                    </button>
-                </div>
-                <div class="flex-grow overflow-y-auto p-6 text-sm text-gray-600 leading-relaxed whitespace-pre-wrap">
-                    @if (popupContent() === 'terms') {
-                        제 1 조 (목적)
-                        본 약관은 메종디아트(이하 "회사")가 제공하는 서비스의 이용조건 및 절차, 이용자와 회사의 권리, 의무, 책임사항을 규정함을 목적으로 합니다.
-                        ... (이용약관 상세 내용 생략, 실제 운영시 채워넣어야 함) ...
-                    } @else {
-                        1. 개인정보의 수집 및 이용 목적
-                        회사는 예약, 상담, 서비스 신청 등을 위해 아래와 같은 개인정보를 수집하고 있습니다.
-                        ... (개인정보처리방침 상세 내용 생략) ...
-                    }
-                </div>
-                <div class="p-4 border-t border-gray-100 text-center">
-                    <button (click)="closePopup()" class="px-8 py-3 bg-gray-900 text-white rounded-lg font-bold text-sm hover:bg-black transition-colors">확인</button>
-                </div>
-             </div>
-        </div>
-    }
-
+    </div>
   </div>
-</div>
+}
+
+<!-- Terms/Privacy Popup (Moved Outside Wrapper) -->
+@if (isPopupOpen()) {
+    <div class="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+         <div (click)="closePopup()" class="absolute inset-0 bg-black/60 backdrop-blur-sm animate-fade-in"></div>
+         <div class="relative bg-white rounded-2xl w-full max-w-2xl max-h-[80%] overflow-hidden flex flex-col shadow-2xl popup-panel-open pointer-events-auto">
+            <div class="p-5 border-b border-gray-100 flex justify-between items-center">
+                <h3 class="font-bold text-lg text-gray-800">
+                    {{ popupContent() === 'terms' ? '이용약관' : '개인정보처리방침' }}
+                </h3>
+                <button (click)="closePopup()" class="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div class="flex-grow overflow-y-auto p-6 text-sm text-gray-600 leading-relaxed whitespace-pre-wrap">
+                @if (popupContent() === 'terms') {
+                    제 1 조 (목적)
+                    본 약관은 메종디아트(이하 "회사")가 제공하는 서비스의 이용조건 및 절차, 이용자와 회사의 권리, 의무, 책임사항을 규정함을 목적으로 합니다.
+                    ... (이용약관 상세 내용 생략, 실제 운영시 채워넣어야 함) ...
+                } @else {
+                    1. 개인정보의 수집 및 이용 목적
+                    회사는 예약, 상담, 서비스 신청 등을 위해 아래와 같은 개인정보를 수집하고 있습니다.
+                    ... (개인정보처리방침 상세 내용 생략) ...
+                }
+            </div>
+            <div class="p-4 border-t border-gray-100 text-center">
+                <button (click)="closePopup()" class="px-8 py-3 bg-gray-900 text-white rounded-lg font-bold text-sm hover:bg-black transition-colors">확인</button>
+            </div>
+         </div>
+    </div>
+}

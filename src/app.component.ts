@@ -538,7 +538,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.likeCounts.set(baseCounts);
 
     if (isPlatformBrowser(this.platformId)) {
-      this.isDesktop.set(window.innerWidth >= 1024);
+      this.isDesktop.set(window.innerWidth >= 768);
       
       if (this.isLikeFeatureAvailable()) {
         // Fetch total counts first
@@ -675,7 +675,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     if (currentWidth === this.lastWindowWidth) return;
     this.lastWindowWidth = currentWidth;
 
-    this.isDesktop.set(window.innerWidth >= 1024);
+    this.isDesktop.set(window.innerWidth >= 768);
     
     // Update cached viewport height on resize
     this.viewportHeight = this.isDesktop() ? this.scrollContainer()!.nativeElement.offsetHeight : window.innerHeight;
