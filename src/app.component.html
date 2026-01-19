@@ -208,7 +208,7 @@
         @for (image of bannerImages; track $index; let i = $index) {
           <img [ngSrc]="image"
                fill
-               priority
+               [priority]="i === 0"
                class="banner-image brightness-75 object-cover"
                [class.active]="currentBannerIndex() === i && isInitialBannerAnimationTriggered()"
                alt="메종디아트 드로잉 카페 전경 {{ i + 1 }}">
@@ -317,20 +317,26 @@
 
       <!-- 3. What is Healing Art? (Single Column, Refined) -->
       <section id="healing-art" class="relative z-10 py-24 md:py-32 bg-gray-800 text-white overflow-hidden">
-        <!-- Parallax Background Container -->
-        <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
-          <div #parallaxBg class="absolute top-[-75%] left-0 w-full h-[250%] parallax-element">
-            <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/healing.jpg" 
-                 fill 
-                 class="absolute top-0 left-0 w-full h-full object-cover" 
-                 alt="고요한 해변과 파도가 보이는 힐링아트 배경"
-                 priority>
-          </div>
+        <!-- Background Video Container (Replaces Parallax) -->
+        <div class="absolute top-0 left-0 w-full h-full z-0">
+          <video 
+            #healingVideo
+            muted 
+            loop 
+            playsinline 
+            disablePictureInPicture
+            preload="none"
+            class="absolute top-0 left-0 w-full h-full object-cover"
+            poster="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/healing.jpg"
+            [src]="healingVideoSrc()">
+          </video>
+          <!-- Overlay for text readability -->
+          <div class="absolute inset-0 bg-black/50"></div>
         </div>
       
         <!-- Content -->
         <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
-          <div class="bg-black/30 border border-white/20 rounded-2xl p-8 md:p-12">
+          <div class="bg-black/30 border border-white/20 rounded-2xl p-8 md:p-12 backdrop-blur-sm">
             <h2 class="text-green-400 text-sm font-bold tracking-widest mb-2">HEALING ART</h2>
             <h3 class="text-4xl md:text-5xl font-extrabold mb-6">힐링아트로 내면의<br>나를 치유 하다</h3>
             
@@ -378,7 +384,7 @@
                  fill 
                  class="object-cover opacity-30" 
                  alt="Programs Background Pattern"
-                 priority>
+                 loading="lazy">
         </div>
 
         <div class="relative z-10">
@@ -393,14 +399,14 @@
     
             <!-- Info Notice Box -->
             <div class="max-w-[900px] mx-auto px-4 md:px-8 mb-12">
-                <div class="flex gap-4 items-start bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl p-6 md:p-8 text-left shadow-sm">
-                    <!-- Icon -->
-                    <div class="flex-shrink-0 text-orange-500 mt-0.5">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="12" y1="8" x2="12" y2="12"></line>
-                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                        </svg>
+                <div class="flex gap-4 items-center bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl p-6 md:p-8 text-left shadow-sm">
+                    <!-- Icon replaced with Image -->
+                    <div class="flex-shrink-0 self-center">
+                        <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/notice.png" 
+                             width="120" 
+                             height="120" 
+                             alt="Notice Icon" 
+                             class="w-20 h-auto md:w-28 object-contain">
                     </div>
                     <!-- Content -->
                     <div class="text-sm text-gray-600 space-y-1.5 font-normal leading-relaxed">
@@ -559,7 +565,7 @@
                                fill 
                                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
                                draggable="false"
-                               sizes="(max-width: 768px) 90vw, (max-width: 1200px) 50vw, 33vw"
+                               sizes="(max-width: 768px) 90vw, (max-width: 1200px) 60vw, 40vw"
                                [priority]="$index <= 1">
                           @if (isLikeFeatureAvailable()) {
                             <button (click)="handleLike(item, $event)"
@@ -656,7 +662,7 @@
         <!-- Parallax Background Container -->
         <div class="absolute inset-0 z-0 overflow-hidden">
           <div #reviewParallaxBg class="absolute top-[-15%] left-0 w-full h-[130%] parallax-element">
-            <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/edi3.jpg" fill class="object-cover" alt="드로잉 도구들이 놓여있는 카페 내부 모습" priority>
+            <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/edi3.jpg" fill class="object-cover" alt="드로잉 도구들이 놓여있는 카페 내부 모습" loading="lazy">
           </div>
           <!-- Dark overlay for text readability -->
           <div class="absolute inset-0 bg-black/20 z-0 pointer-events-none"></div>
@@ -687,7 +693,7 @@
                         </div>
                       }
                       <div class="flex items-center gap-3 mb-3">
-                        <img [ngSrc]="review.avatar" width="40" height="40" class="w-10 h-10 rounded-full bg-gray-200 object-cover" alt="User Avatar" draggable="false" priority>
+                        <img [ngSrc]="review.avatar" width="40" height="40" class="w-10 h-10 rounded-full bg-gray-200 object-cover" alt="User Avatar" draggable="false" loading="lazy">
                         <div>
                           <div class="font-bold text-sm text-gray-800">{{review.name}}</div>
                           <div class="text-[10px] font-medium text-gray-400">{{review.date}} 방문</div>
@@ -722,7 +728,7 @@
                         </div>
                       }
                       <div class="flex items-center gap-3 mb-3">
-                        <img [ngSrc]="review.avatar" width="40" height="40" class="w-10 h-10 rounded-full bg-gray-200 object-cover" alt="User Avatar" draggable="false" priority>
+                        <img [ngSrc]="review.avatar" width="40" height="40" class="w-10 h-10 rounded-full bg-gray-200 object-cover" alt="User Avatar" draggable="false" loading="lazy">
                         <div>
                           <div class="font-bold text-sm text-gray-800">{{review.name}}</div>
                           <div class="text-[10px] font-medium text-gray-400">{{review.date}} 방문</div>
@@ -761,7 +767,7 @@
                  fill 
                  class="object-cover opacity-30" 
                  alt="Group Background Pattern"
-                 priority>
+                 loading="lazy">
         </div>
 
         <div class="relative z-10 max-w-5xl mx-auto">
@@ -779,7 +785,7 @@
                      alt="기업 및 단체 출강 클래스"
                      fill
                      class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
-                     priority>
+                     loading="lazy">
               </div>
               <div class="md:w-7/12 p-8 md:p-10">
                 <div class="inline-block bg-orange-100 text-orange-700 text-xs font-bold px-3 py-1 rounded-full mb-4">출강 안내</div>
@@ -798,7 +804,7 @@
                      alt="프리미엄 단체 체험"
                      fill
                      class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
-                     priority>
+                     loading="lazy">
               </div>
               <div class="md:w-7/12 p-8 md:p-10">
                 <div class="inline-block bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full mb-4">단체 체험</div>
@@ -817,7 +823,7 @@
                      alt="공간 대관 및 행사 진행"
                      fill
                      class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
-                     priority>
+                     loading="lazy">
               </div>
               <div class="md:w-7/12 p-8 md:p-10">
                 <div class="inline-block bg-purple-100 text-purple-700 text-xs font-bold px-3 py-1 rounded-full mb-4">행사 운영</div>
@@ -884,7 +890,7 @@
         <!-- Parallax Background Container -->
         <div class="absolute inset-0 z-0 overflow-hidden">
           <div #groupFooterParallaxBg class="absolute top-[-25%] left-0 w-full h-[150%] parallax-element">
-            <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/cate2.jpg" fill class="object-cover opacity-90" alt="Drawing tools and paints on a wooden table" priority>
+            <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/cate2.jpg" fill class="object-cover opacity-90" alt="Drawing tools and paints on a wooden table" loading="lazy">
           </div>
         </div>
         <!-- Quote Overlay -->

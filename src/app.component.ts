@@ -1,4 +1,4 @@
-import { Component, signal, OnInit, OnDestroy, inject, PLATFORM_ID, ElementRef, Renderer2, AfterViewInit, viewChild, ChangeDetectionStrategy, effect, Injector } from '@angular/core';
+import { Component, signal, OnInit, OnDestroy, inject, PLATFORM_ID, ElementRef, Renderer2, AfterViewInit, viewChild, ChangeDetectionStrategy, effect, Injector, ViewChild } from '@angular/core';
 import { CommonModule, NgOptimizedImage, isPlatformBrowser } from '@angular/common';
 import { FirebaseService } from './app/firebase.service';
 
@@ -109,6 +109,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   private injector = inject(Injector);
   private lastWindowWidth = 0; // To track width changes specifically
   
+  // Lazy loading video source
+  healingVideoSrc = signal<string | null>(null);
+  @ViewChild('healingVideo') healingVideo!: ElementRef<HTMLVideoElement>;
+  private videoObserver: IntersectionObserver | undefined;
+
   bannerImages: string[] = [
     'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/main.jpg',
     'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/main2.jpg',
@@ -569,7 +574,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.currentWordIndex.set(Math.floor(Math.random() * this.rollingWords.length));
 
     this.bannerInterval = setInterval(() => {
-        this.currentBannerIndex.update(index => (index + 1) % this.bannerImages.length);
+        const nextIndex = (this.currentBannerIndex() + 1) % this.bannerImages.length;
+        this.preloadImage(this.bannerImages[nextIndex]); // Preload the NEXT image
+        this.currentBannerIndex.set(nextIndex);
     }, 7000);
 
     this.startTypingAnimationLoop();
@@ -585,6 +592,42 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       // Explicitly load high-priority image for healing art section
       const healingImg = new Image();
       healingImg.src = 'https://raw.githubusercontent.com/artguy82/maisondeart/main/web/healing.jpg';
+
+      // Setup Video Intersection Observer
+      // Use standard browser CDN to ensure video streaming works correctly (Range header support)
+      // GitHub Raw often fails for direct video streaming.
+      const videoCdnUrl = 'https://cdn.jsdelivr.net/gh/artguy82/maisondeart@main/web/heal.mp4';
+      
+      this.videoObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            // Section is visible
+            if (!this.healingVideoSrc()) {
+              this.healingVideoSrc.set(videoCdnUrl);
+            }
+            if (this.healingVideo && this.healingVideo.nativeElement) {
+                const playPromise = this.healingVideo.nativeElement.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(() => {
+                        // Autoplay was prevented.
+                        // We can show a 'Play' button or just stay muted.
+                        // Since it's background, failing silently is acceptable.
+                    });
+                }
+            }
+          } else {
+            // Section is NOT visible
+            if (this.healingVideo && this.healingVideo.nativeElement) {
+                this.healingVideo.nativeElement.pause();
+            }
+          }
+        });
+      }, { threshold: 0.25 }); // Trigger when 25% of section is visible
+
+      const videoSection = document.getElementById('healing-art');
+      if (videoSection) {
+        this.videoObserver.observe(videoSection);
+      }
 
       effect(() => {
         this.isDesktop(); // Establish dependency on the signal
@@ -636,6 +679,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       this.unlistenMouseUp?.();
       this.unlistenTouchEnd?.();
       this.reviewCountObserver?.disconnect();
+      this.videoObserver?.disconnect();
     }
     
     clearInterval(this.bannerInterval);
@@ -1698,9 +1742,14 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     imagesToPreload.forEach(imageUrl => {
       if (imageUrl) {
-        const img = new Image();
-        img.src = imageUrl;
+        this.preloadImage(imageUrl);
       }
     });
+  }
+
+  // Helper for program preloading and banner preloading
+  private preloadImage(url: string) {
+    const img = new Image();
+    img.src = url;
   }
 }
