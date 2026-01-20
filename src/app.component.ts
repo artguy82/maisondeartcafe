@@ -160,6 +160,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   private lastFrameTimeLayer2: number = 0;
 
   scrollContainer = viewChild<ElementRef<HTMLElement>>('scrollContainer');
+  desktopNav = viewChild<ElementRef<HTMLElement>>('desktopNav');
   parallaxBg = viewChild<ElementRef<HTMLElement>>('parallaxBg');
   healingParallaxBg = viewChild<ElementRef<HTMLElement>>('healingParallaxBg');
   reviewParallaxBg = viewChild<ElementRef<HTMLElement>>('reviewParallaxBg');
@@ -538,7 +539,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.likeCounts.set(baseCounts);
 
     if (isPlatformBrowser(this.platformId)) {
-      this.isDesktop.set(window.innerWidth >= 768);
+      this.isDesktop.set(window.innerWidth >= 1280);
       
       if (this.isLikeFeatureAvailable()) {
         // Fetch total counts first
@@ -675,7 +676,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     if (currentWidth === this.lastWindowWidth) return;
     this.lastWindowWidth = currentWidth;
 
-    this.isDesktop.set(window.innerWidth >= 768);
+    this.isDesktop.set(window.innerWidth >= 1280);
     
     // Update cached viewport height on resize
     this.viewportHeight = this.isDesktop() ? this.scrollContainer()!.nativeElement.offsetHeight : window.innerHeight;
@@ -812,8 +813,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private updateActiveNavOnScroll() {
     const scrollTop = this.getScrollTop();
-    const windowWidth = isPlatformBrowser(this.platformId) ? window.innerWidth : 1024;
-    const isStickyNavVisible = windowWidth >= 768;
+    const windowWidth = isPlatformBrowser(this.platformId) ? window.innerWidth : 1280;
+    // Updated breakpoint from 768 to 1280 to match new split-view logic
+    const isStickyNavVisible = windowWidth >= 1280;
     const defaultBuffer = isStickyNavVisible ? 53 : 10;
 
     // --- Nav Highlight Logic ---
@@ -822,7 +824,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     for (const [id, offsetTop] of this.sectionOffsets.entries()) {
       // Use a specific buffer for the 'contact' section to match its scroll-to position.
-      const sectionBuffer = (id === 'contact' && isStickyNavVisible) ? 45 : defaultBuffer;
+      const sectionBuffer = (id === 'contact' && isStickyNavVisible) ? 53 : defaultBuffer;
       const triggerOffset = scrollTop + sectionBuffer;
       
       if (offsetTop <= triggerOffset) {
@@ -1070,33 +1072,53 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!isPlatformBrowser(this.platformId)) return;
 
     const targetElement = document.getElementById(sectionId);
-    if (!targetElement) {
-        console.error(`Could not find element for section: ${sectionId}`);
-        return;
-    }
+    if (!targetElement) return;
 
-    if (sectionId === 'intro') {
-      const scrollContainer = this.isDesktop() ? this.scrollContainer()?.nativeElement : window;
+    // Desktop Frame Scroll Logic
+    if (this.isDesktop()) {
+        const scrollContainer = this.scrollContainer()?.nativeElement;
+        const navEl = this.desktopNav()?.nativeElement;
+        
+        if (scrollContainer && scrollContainer instanceof HTMLElement) {
+            // Determine if we need to account for the sticky header
+            // Sections physically after the nav in DOM need the offset
+            // The nav is between 'healing-art' and 'programs'
+            const navIndex = this.allScrollSections.indexOf('programs'); // Programs is first after nav
+            const targetIndex = this.allScrollSections.indexOf(sectionId);
+            const needsNavOffset = targetIndex >= navIndex;
 
-      if (this.isDesktop() && scrollContainer instanceof HTMLElement) {
-        // Desktop mode: scroll within the <main> container. 
-        // offsetTop is correct here since sections are direct children.
-        scrollContainer.scrollTo({
-          top: targetElement.offsetTop,
-          behavior: 'smooth'
-        });
-      } else {
-        // Mobile/Tablet mode: scroll the window.
-        // getBoundingClientRect is more robust for calculating scroll position.
-        const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY;
-        window.scrollTo({
-          top: targetPosition,
-          behavior: 'smooth'
-        });
-      }
+            let offset = 0;
+            if (needsNavOffset && navEl) {
+                // Get precise height including borders/padding
+                offset = navEl.getBoundingClientRect().height;
+            }
+
+            // Use offsetTop for stable coordinate relative to the scroll container
+            // This is robust against current scroll position and transforms on children
+            let targetPosition = targetElement.offsetTop;
+            
+            // Adjust for sticky header
+            targetPosition -= offset;
+
+            // Cap at 0
+            if (targetPosition < 0) targetPosition = 0;
+
+            scrollContainer.scrollTo({
+                top: targetPosition,
+                behavior: 'smooth'
+            });
+        }
     } else {
-      // Default behavior for all other sections, respecting scroll-padding-top
-      targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Mobile/Tablet Logic
+        // Mobile Header Height: 64px (h-16), but user requested to remove offset consideration for tablet resolution.
+        // Since tablets < 1280px are handled here, we set offset to 0 to scroll to top.
+        const mobileOffset = 0; 
+        const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY;
+        const targetPosition = elementPosition - mobileOffset;
+        window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+        });
     }
   }
   
