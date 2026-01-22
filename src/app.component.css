@@ -244,8 +244,8 @@
   }
   
   .responsive-divider {
-    margin-top: 0.25rem !important;
-    margin-bottom: 0.25rem !important;
+    margin-top: 1.5rem !important; /* Increased to widen upper space */
+    margin-bottom: -0.5rem !important; /* Decreased to bring closer to description */
     height: 4px !important;
   }
   
