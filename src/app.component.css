@@ -1,5 +1,4 @@
 
-
 :host {
   display: block;
   width: 100%;
@@ -138,54 +137,170 @@
   background-repeat: no-repeat;
 }
 
-/* Responsive Adjustments */
-@media (max-height: 850px) and (min-width: 1280px) {
-  aside .text-5xl { font-size: 2.25rem; }
-  aside .font-cursive.text-6xl { font-size: 3rem; }
-  aside .text-7xl { font-size: 3.75rem; line-height: 1; }
-  aside .text-lg { font-size: 1rem; line-height: 1.5rem; }
-  aside.space-y-6 > :not([hidden]) ~ :not([hidden]) { margin-top: 1rem; }
-  aside .py-4 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
-  aside .py-3 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
-  aside .px-6 { padding-left: 1.25rem; padding-right: 1.25rem; }
+/* 
+  ===========================================
+  Responsive Layout Logic for Left Sidebar 
+  ===========================================
+*/
+
+/* 1. Large Desktop (Height > 850px) - Standard/Large sizing */
+@media (min-height: 851px) and (min-width: 1280px) {
+  .responsive-brand-container { 
+    gap: 1.5rem; 
+    width: 28rem; /* Fixed width for standard layout to ensure consistent button width */
+  }
+  
+  .responsive-brand-subtitle { 
+    font-size: 3.75rem; /* text-6xl */ 
+  }
+  
+  .responsive-brand-title { 
+    font-size: 6rem; /* text-8xl */ 
+    margin-top: 0.5rem; 
+  }
+  
+  .responsive-brand-script { 
+    font-size: 4.5rem; /* text-7xl */ 
+  }
+  
+  .responsive-brand-desc { 
+    font-size: 1.35rem; /* Increased from 1.25rem for 0.5 step bump */
+    margin-top: 0; /* Removed margin to let divider control spacing */
+    margin-bottom: 1rem; 
+    line-height: 1.6; 
+  }
+  
+  .responsive-action-hub { 
+    padding-top: 1rem; 
+    gap: 1rem; 
+    display: flex; 
+    flex-direction: column; 
+  }
+  
+  .responsive-btn-padding { 
+    padding: 1rem 1.5rem; /* px-6 py-4 equivalent */ 
+  }
+  
+  .responsive-btn-text { 
+    font-size: 1.125rem; /* text-lg */ 
+  }
+  
+  .responsive-icon-size { 
+    width: 1.25rem; 
+    height: 1.25rem; 
+  }
+  
+  /* Adjusted spacing logic:
+     - margin-top: 2.5rem adds to the 1.5rem flex gap = 4rem total spacing above (Wider)
+     - margin-bottom: -1rem reduces the 1.5rem flex gap = 0.5rem total spacing below (Closer)
+  */
+  .responsive-divider { 
+    margin-top: 2.5rem; 
+    margin-bottom: -1rem; 
+  }
 }
 
-/* Hide separator and description on very short screens */
-@media (max-height: 720px) and (min-width: 1280px) {
-  aside > .aside-anim-item.aside-delay-2,
-  aside > .aside-anim-item.aside-delay-3 {
-    display: none;
+/* Default state for the responsive break */
+.responsive-br {
+  display: none;
+}
+
+/* 2. Short Desktop (Height <= 850px) - Compact Sizing */
+@media (max-height: 850px) and (min-width: 1280px) {
+  /* Tighten vertical rhythm & Reduce Container Width */
+  .responsive-brand-container { 
+    gap: 0.75rem !important; 
+    width: 20rem !important; /* Constrain width so buttons shrink horizontally */
   }
+  
+  /* Shrink Titles */
+  .responsive-brand-subtitle { 
+    font-size: 2.25rem !important; 
+  }
+  
+  .responsive-brand-title { 
+    font-size: 4.25rem !important; /* Increased from 3.75rem */
+    line-height: 0.9 !important;
+    margin-top: 0.25rem !important;
+  }
+  
+  .responsive-brand-script { 
+    font-size: 3rem !important; 
+  }
+  
+  /* Shrink Description Text */
+  .responsive-brand-desc { 
+    font-size: 0.95rem !important; /* Increased from 0.875rem */
+    line-height: 1.4 !important;
+    margin-top: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  /* Show line break only in short mode */
+  .responsive-br {
+    display: block !important;
+    content: "";
+    margin: 0;
+  }
+  
+  .responsive-divider {
+    margin-top: 0.25rem !important;
+    margin-bottom: 0.25rem !important;
+    height: 4px !important;
+  }
+  
+  /* Compact Action Hub */
+  .responsive-action-hub { 
+    padding-top: 0.5rem !important; 
+    gap: 0.75rem !important;
+    display: flex; flex-direction: column;
+  }
+  
+  /* Sleek Buttons (Reduced Padding) */
+  .responsive-btn-padding { 
+    padding: 0.5rem 1rem !important; 
+  }
+  
+  .responsive-btn-text { 
+    font-size: 0.8rem !important; /* text-xs/sm */
+  }
+  
+  .responsive-icon-size { 
+    width: 1rem !important; 
+    height: 1rem !important; 
+  }
+}
+
+/* 3. Very Short Desktop (Height <= 720px) - Ultra Compact */
+@media (max-height: 720px) and (min-width: 1280px) {
+  /* Hide non-essential elements to save space */
+  .responsive-brand-desc { display: none !important; } 
+  .responsive-divider { display: none !important; }
+  
+  .responsive-brand-container { justify-content: center !important; gap: 0.5rem !important; }
 }
 
 .slider-container { cursor: grab; user-select: none; touch-action: pan-y; }
 .slider-container.dragging { cursor: grabbing; }
 .slider-transition { transition: transform 500ms cubic-bezier(0.23, 1, 0.32, 1); }
 
-/* --- PERFORMANCE FIXES FOR MOBILE SLIDERS --- */
-/* Hardware accelerate slider items to prevent repainting/flickering on scroll */
+/* --- PERFORMANCE FIXES --- */
 .hardware-accelerate {
-  /* REMOVED: will-change: transform; -> Caused aggressive layer discarding on mobile */
-  transform: translate3d(0,0,0); /* Force GPU layer strictly */
+  transform: translate3d(0,0,0);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   perspective: 1000px;
 }
 
-/* --- Parallax Performance --- */
 .parallax-element {
-  /* REMOVED: will-change: transform; -> This signals browser to create separate layer, which gets discarded when off-screen on mobile */
-  /* Using translate3d in JS is sufficient for smoothness without the flicker side-effect */
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   perspective: 1000px;
-  /* Ensure it doesn't flicker on repaint */
   transform-style: preserve-3d; 
 }
 
 .floating-bounce, .floating-bounce-delayed {
-  /* REMOVED: will-change: transform; */
-  transform: translateZ(0); /* Minimal acceleration */
+  transform: translateZ(0); 
 }
 
 @keyframes popup-fade-in { from { opacity: 0; } to { opacity: 1; } }
@@ -204,31 +319,15 @@
 }
 
 @keyframes bounce-subtle {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-6px);
-  }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
 }
-.speech-bubble-anim {
-  animation: bounce-subtle 2s ease-in-out infinite;
-}
-.floating-bounce {
-  animation: bounce-subtle 3s ease-in-out infinite;
-}
-.floating-bounce-delayed {
-  animation: bounce-subtle 3s ease-in-out infinite;
-  animation-delay: 1.5s;
-}
+.speech-bubble-anim { animation: bounce-subtle 2s ease-in-out infinite; }
+.floating-bounce { animation: bounce-subtle 3s ease-in-out infinite; }
+.floating-bounce-delayed { animation: bounce-subtle 3s ease-in-out infinite; animation-delay: 1.5s; }
 
-.fill-image-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
+.fill-image-container { position: relative; width: 100%; height: 100%; }
 
-/* Fix: Ensure Footer has enough height to scroll to top */
 footer#contact {
   min-height: 100vh;
   display: flex;

@@ -3,68 +3,83 @@
 <div class="relative w-full xl:h-full wave-bg flex flex-col xl:flex-row items-center xl:items-stretch justify-center px-0 xl:px-12 pt-0 xl:pt-12 gap-8 xl:gap-16 2xl:gap-32 xl:overflow-hidden xl:overscroll-none xl:touch-none">
   
   <!-- Left Side: Brand Info (Desktop Only - XL+) -->
-  <aside class="hidden xl:flex flex-col items-start justify-center xl:max-w-md z-20 space-y-6 xl:space-y-8 shrink-0">
+  <!-- Removed xl:max-w-md, now controlled by responsive-brand-container width in CSS -->
+  <aside class="hidden xl:flex flex-col items-start justify-center z-20 shrink-0 responsive-brand-container">
     
     <!-- INFO ZONE -->
-    <div class="aside-anim-item anim-slide-from-left aside-delay-1 w-full">
-      <p class="text-5xl xl:text-6xl font-extralight text-gray-800 tracking-widest">Cafe</p>
-      <h1 class="-ml-1 text-7xl xl:text-8xl font-extralight text-gray-800 tracking-widest leading-none mt-2">
+    <div class="aside-anim-item anim-slide-from-left aside-delay-1 w-full flex flex-col items-start">
+      <p class="font-extralight text-gray-800 tracking-widest responsive-brand-subtitle leading-none">Cafe</p>
+      
+      <h1 class="-ml-1 font-extralight text-gray-800 tracking-widest leading-none responsive-brand-title whitespace-nowrap">
         MAISON<br>D'ART
       </h1>
-      <div class="flex flex-row items-baseline mt-2">
-        <span class="text-5xl xl:text-6xl font-extralight text-gray-800 tracking-wide mr-3">and</span>
-        <div class="inline-block align-baseline">
-            <div class="relative">
-                <!-- Sizer element -->
-                <div class="font-cursive text-6xl xl:text-7xl border-b-2 border-gray-800 pb-1 px-4 text-transparent select-none pointer-events-none">
-                    Connection
-                </div>
-                <!-- The actual animated text -->
-                <div class="absolute inset-0 font-cursive text-6xl xl:text-7xl flex justify-center items-end pb-1">
-                    <span class="bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 bg-clip-text text-transparent py-1 px-1 whitespace-nowrap">{{ displayedWord() }}</span><span class="typing-cursor bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400"></span>
-                </div>
+      
+      <div class="flex flex-row items-baseline mt-2 w-full relative">
+        <span class="font-extralight text-gray-800 tracking-wide mr-3 responsive-brand-subtitle leading-none">and</span>
+        
+        <!-- Script Text Area -->
+        <div class="inline-block align-baseline relative">
+             <!-- Placeholder for sizing -->
+             <div class="font-cursive border-b-2 border-gray-800 pb-1 px-4 text-transparent select-none pointer-events-none responsive-brand-script leading-none">
+                 Connection
+             </div>
+             <!-- Actual Animated Text -->
+             <div class="absolute inset-0 font-cursive flex justify-center items-end pb-1 responsive-brand-script leading-none">
+                <span class="bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 bg-clip-text text-transparent py-1 px-1 whitespace-nowrap">{{ displayedWord() }}</span>
+                <span class="typing-cursor bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400"></span>
             </div>
         </div>
       </div>
     </div>
     
-    <div class="w-12 h-1.5 bg-gray-800 aside-anim-item anim-slide-from-left aside-delay-2 mt-2"></div>
+    <!-- Divider -->
+    <div class="w-12 h-1.5 bg-gray-800 aside-anim-item anim-slide-from-left aside-delay-2 responsive-divider"></div>
 
-    <p class="text-gray-500 font-normal leading-relaxed text-base xl:text-2xl tracking-wide w-full text-left break-keep aside-anim-item anim-slide-from-left aside-delay-3">
-      일상에 지친 당신을 위한 특별한 힐링 공간. 메종디아트가 선사하는 특별한 체험과 함께 나만의 예술을 만나는 시간을 선물합니다.
+    <!-- Description -->
+    <p class="text-gray-500 font-normal tracking-wide w-full text-left break-keep aside-anim-item anim-slide-from-left aside-delay-3 responsive-brand-desc">
+      일상에 지친 당신을 위한 특별한 힐링 공간.<br class="responsive-br">메종디아트가 선사하는 특별한 체험과 함께 나만의 예술을 만나는 시간을 선물합니다.
     </p>
 
     <!-- ACTION HUB -->
-    <div class="w-full space-y-4 pt-4">
+    <div class="w-full responsive-action-hub">
         <!-- Primary CTA -->
-        <a href="https://pcmap.place.naver.com/restaurant/1276609996/booking?entry=pll&fromNxList=true&fromPanelNum=2&locale=ko&searchText=%EB%A9%94%EC%A2%85%EB%94%94%EC%95%84%ED%8A%B8&svcName=map_pcv5&timestamp=202601041429" target="_blank" class="w-full flex items-center justify-center px-6 py-4 text-white rounded-full aside-anim-item anim-slide-from-bottom aside-delay-4 animated-gradient-bg">
+        <a href="https://pcmap.place.naver.com/restaurant/1276609996/booking?entry=pll&fromNxList=true&fromPanelNum=2&locale=ko&searchText=%EB%A9%94%EC%A2%85%EB%94%94%EC%95%84%ED%8A%B8&svcName=map_pcv5&timestamp=202601041429" target="_blank" 
+           class="w-full flex items-center justify-center text-white rounded-full aside-anim-item anim-slide-from-bottom aside-delay-4 animated-gradient-bg responsive-btn-padding shadow-lg hover:shadow-xl transition-shadow">
             <span class="relative z-10 flex items-center justify-center gap-3">
-                <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/booking.png" alt="Booking Icon" width="20" height="20" class="w-5 h-5">
-                <span class="font-bold text-lg whitespace-nowrap">예약 바로 가기</span>
+                <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/booking.png" alt="Booking Icon" width="24" height="24" class="responsive-icon-size">
+                <span class="font-bold whitespace-nowrap responsive-btn-text">예약 바로 가기</span>
             </span>
         </a>
+        
         <!-- Secondary Actions -->
-        <div class="grid grid-cols-2 gap-3">
-             <a href="http://talk.naver.com/w4f3ta?frm=pnmb&frm=nmb_detail" target="_blank" class="flex items-center justify-center gap-2 px-4 py-3 text-white rounded-full bg-gradient-to-tr from-lime-400 to-green-500 aside-anim-item anim-slide-from-bottom aside-delay-5 text-sm">
-                <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/naver-talk.png" alt="Naver Talk Icon" width="16" height="16" class="w-4 h-4">
-                <span class="font-bold whitespace-nowrap">톡톡 문의</span>
+        <div class="grid grid-cols-2 gap-3 w-full">
+             <a href="http://talk.naver.com/w4f3ta?frm=pnmb&frm=nmb_detail" target="_blank" 
+                class="flex items-center justify-center gap-2 text-white rounded-full bg-gradient-to-tr from-lime-400 to-green-500 aside-anim-item anim-slide-from-bottom aside-delay-5 responsive-btn-padding shadow-md hover:shadow-lg transition-shadow">
+                <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/naver-talk.png" alt="Naver Talk Icon" width="20" height="20" class="responsive-icon-size">
+                <span class="font-bold whitespace-nowrap responsive-btn-text">톡톡 문의</span>
             </a>
-            <a href="http://pf.kakao.com/_tYxgCG/chat" target="_blank" class="flex items-center justify-center gap-2 px-4 py-3 text-white rounded-full bg-gradient-to-tr from-yellow-400 to-orange-400 aside-anim-item anim-slide-from-bottom aside-delay-6 text-sm">
-                <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/kakao-talk.png" alt="Kakao Talk Icon" width="16" height="16" class="w-4 h-4">
-                <span class="font-bold whitespace-nowrap">카톡 문의</span>
+            <a href="http://pf.kakao.com/_tYxgCG/chat" target="_blank" 
+               class="flex items-center justify-center gap-2 text-white rounded-full bg-gradient-to-tr from-yellow-400 to-orange-400 aside-anim-item anim-slide-from-bottom aside-delay-6 responsive-btn-padding shadow-md hover:shadow-lg transition-shadow">
+                <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/kakao-talk.png" alt="Kakao Talk Icon" width="20" height="20" class="responsive-icon-size">
+                <span class="font-bold whitespace-nowrap responsive-btn-text">카톡 문의</span>
             </a>
         </div>
-        <div class="grid grid-cols-3 gap-3">
-            <a href="https://m.smartstore.naver.com/maisondeartcafe" target="_blank" class="flex items-center justify-center gap-2 px-4 py-3 bg-white/40 hover:bg-white/60 text-gray-800 rounded-full aside-anim-item anim-slide-from-bottom aside-delay-7 transition-colors text-sm">
-                <span class="font-extrabold text-green-600">N</span>
-                <span class="font-bold">스토어</span>
+        
+        <!-- Tertiary Actions -->
+        <div class="grid grid-cols-3 gap-3 w-full">
+            <a href="https://m.smartstore.naver.com/maisondeartcafe" target="_blank" 
+               class="flex items-center justify-center gap-2 bg-white/40 hover:bg-white/60 text-gray-800 rounded-full aside-anim-item anim-slide-from-bottom aside-delay-7 transition-colors responsive-btn-padding">
+                <span class="font-extrabold text-green-600 responsive-btn-text">N</span>
+                <span class="font-bold responsive-btn-text">스토어</span>
             </a>
-            <a href="https://m.blog.naver.com/maisondeart" target="_blank" class="flex items-center justify-center gap-2 px-4 py-3 bg-white/40 hover:bg-white/60 text-gray-800 rounded-full aside-anim-item anim-slide-from-bottom aside-delay-8 transition-colors text-sm">
-                <span class="font-extrabold text-green-600">N</span>
-                <span class="font-bold">블로그</span>
+            <a href="https://m.blog.naver.com/maisondeart" target="_blank" 
+               class="flex items-center justify-center gap-2 bg-white/40 hover:bg-white/60 text-gray-800 rounded-full aside-anim-item anim-slide-from-bottom aside-delay-8 transition-colors responsive-btn-padding">
+                <span class="font-extrabold text-green-600 responsive-btn-text">N</span>
+                <span class="font-bold responsive-btn-text">블로그</span>
             </a>
-            <a href="https://www.instagram.com/maisondeartcafe/" target="_blank" class="flex items-center justify-center gap-2 px-4 py-3 bg-white/40 hover:bg-white/60 text-gray-800 rounded-full aside-anim-item anim-slide-from-bottom aside-delay-9 transition-colors text-sm">
-                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <a href="https://www.instagram.com/maisondeartcafe/" target="_blank" 
+               class="flex items-center justify-center gap-2 bg-white/40 hover:bg-white/60 text-gray-800 rounded-full aside-anim-item anim-slide-from-bottom aside-delay-9 transition-colors responsive-btn-padding">
+                <svg class="responsive-icon-size" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <defs>
                     <linearGradient id="instagram-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
                       <stop offset="0%" style="stop-color:#feda75;"></stop>
@@ -78,7 +93,7 @@
                   <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" stroke="url(#instagram-gradient)"></path>
                   <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke="url(#instagram-gradient)"></line>
                 </svg>
-                <span class="font-bold">인스타</span>
+                <span class="font-bold responsive-btn-text">인스타</span>
             </a>
         </div>
     </div>
