@@ -1,3 +1,4 @@
+
 import { Component, signal, OnInit, OnDestroy, inject, PLATFORM_ID, ElementRef, Renderer2, AfterViewInit, viewChild, ChangeDetectionStrategy, effect, Injector, ViewChild } from '@angular/core';
 import { CommonModule, NgOptimizedImage, isPlatformBrowser } from '@angular/common';
 import { FirebaseService } from './app/firebase.service';
@@ -1080,6 +1081,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         const navEl = this.desktopNav()?.nativeElement;
         
         if (scrollContainer && scrollContainer instanceof HTMLElement) {
+            // Fix: Add pointer-events: none during scroll to prevent sticky scrollbar glitch
+            this.renderer.addClass(scrollContainer, 'scrolling-lock');
+
             // Determine if we need to account for the sticky header
             // Sections physically after the nav in DOM need the offset
             // The nav is between 'healing-art' and 'programs'
@@ -1107,6 +1111,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 top: targetPosition,
                 behavior: 'smooth'
             });
+
+            // Release lock after scroll animation finishes
+            setTimeout(() => {
+                this.renderer.removeClass(scrollContainer, 'scrolling-lock');
+            }, 1000);
         }
     } else {
         // Mobile/Tablet Logic

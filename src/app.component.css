@@ -334,3 +334,8 @@ footer#contact {
   flex-direction: column;
   justify-content: flex-start;
 }
+
+/* Fix Ghost Scrollbar Issue */
+.scrolling-lock {
+  pointer-events: none !important;
+}
