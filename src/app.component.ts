@@ -194,6 +194,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   
   private unlistenMouseUp!: () => void;
   private unlistenTouchEnd!: () => void;
+  private bubbleShowTimeout: any;
 
   animatedReviewCount = signal('0');
   private reviewCountObserver?: IntersectionObserver;
@@ -652,6 +653,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     clearTimeout(this.countUpRestartTimeoutId);
     clearTimeout(this.reviewAutoScrollTimeout);
     clearTimeout(this.reviewAutoScrollTimeoutLayer2);
+    clearTimeout(this.bubbleShowTimeout);
     Object.values(this.sliderTransitionTimers).forEach(timer => clearTimeout(timer));
   }
 
@@ -874,26 +876,35 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isMenuButtonDark.set(!this.darkSections.has(currentSectionIdForButton));
 
     // --- Mobile Like Bubble Visibility Logic (More Robust) ---
-    if (this.isLikeBubbleDismissed()) {
-        this.isLikeBubbleVisible.set(false);
-        return;
+    // Debounce the visibility update to ensure scroll animation is finished before showing the bubble.
+    // This prevents layout thrashing during the smooth scroll.
+
+    let shouldShowBubble = false;
+    
+    if (!this.isLikeBubbleDismissed()) {
+        if (this.isDesktop()) {
+            shouldShowBubble = lastSectionId === 'programs';
+        } else {
+            const programsEl = document.getElementById('programs');
+            if (programsEl) {
+                const rect = programsEl.getBoundingClientRect();
+                shouldShowBubble = rect.top <= 0 && rect.bottom > 64;
+            }
+        }
     }
 
-    if (this.isDesktop()) {
-        // Desktop: use simple section detection
-        this.isLikeBubbleVisible.set(lastSectionId === 'programs');
+    if (!shouldShowBubble) {
+        // If we moved away, hide immediately to be responsive
+        this.isLikeBubbleVisible.set(false);
+        // Also clear any pending show timer
+        if (this.bubbleShowTimeout) clearTimeout(this.bubbleShowTimeout);
     } else {
-        // Mobile: use precise bounding box to handle dynamic heights/layout shifts
-        const programsEl = document.getElementById('programs');
-        if (programsEl) {
-            const rect = programsEl.getBoundingClientRect();
-            // Trigger when the top of the section is near the top of the viewport (e.g., under the header)
-            // and the section is still visible.
-            // 100px buffer allows it to trigger just before it hits the very top, or while it's passing.
-            const isVisible = rect.top <= 0 && rect.bottom > 64;
-            this.isLikeBubbleVisible.set(isVisible);
-        } else {
-            this.isLikeBubbleVisible.set(false);
+        // If we are in the target section, wait for scroll to stop before showing
+        if (!this.isLikeBubbleVisible()) {
+            if (this.bubbleShowTimeout) clearTimeout(this.bubbleShowTimeout);
+            this.bubbleShowTimeout = setTimeout(() => {
+                this.isLikeBubbleVisible.set(true);
+            }, 500); // 500ms delay to ensure scroll has completely settled
         }
     }
   }

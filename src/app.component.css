@@ -324,7 +324,11 @@
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-6px); }
 }
-.speech-bubble-anim { animation: bounce-subtle 2s ease-in-out infinite; }
+.speech-bubble-anim { 
+  animation: bounce-subtle 2s ease-in-out infinite; 
+  /* Performance optimization: hints browser to promote to layer */
+  will-change: transform;
+}
 .floating-bounce { animation: bounce-subtle 3s ease-in-out infinite; }
 .floating-bounce-delayed { animation: bounce-subtle 3s ease-in-out infinite; animation-delay: 1.5s; }
 
