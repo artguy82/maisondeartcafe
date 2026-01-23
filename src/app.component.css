@@ -297,6 +297,8 @@
   -webkit-backface-visibility: hidden;
   perspective: 1000px;
   transform-style: preserve-3d; 
+  /* Hint browser to promote to its own layer to avoid repainting scrollbars */
+  will-change: transform;
 }
 
 .floating-bounce, .floating-bounce-delayed {
@@ -333,9 +335,4 @@ footer#contact {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-}
-
-/* Fix Ghost Scrollbar Issue */
-.scrolling-lock {
-  pointer-events: none !important;
 }

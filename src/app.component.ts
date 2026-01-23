@@ -63,6 +63,7 @@ interface ParallaxCache {
   speed: number;
   sectionTop: number;
   sectionHeight: number;
+  lastTranslateY?: number;
 }
 
 @Component({
@@ -1008,17 +1009,20 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private updateParallax() {
     const scrollTop = this.getScrollTop();
-    // Optimized: Use cached viewportHeight instead of reading DOM (window.innerHeight/offsetHeight)
-    // This prevents layout thrashing during the scroll loop.
     const height = this.viewportHeight;
 
     for (const item of this.parallaxCache) {
         const sectionTopRelativeToVisible = item.sectionTop - scrollTop;
         // Check visibility with a bit of buffer
         if (sectionTopRelativeToVisible < height && sectionTopRelativeToVisible > -item.sectionHeight) {
-            const translateY = sectionTopRelativeToVisible * item.speed;
-            // Use translate3d for GPU acceleration
-            item.el.style.transform = `translate3d(0, ${translateY.toFixed(2)}px, 0)`; 
+            // Pixel Snapping: Round to integer to avoid sub-pixel jitter keeping scrollbar active
+            const translateY = Math.round(sectionTopRelativeToVisible * item.speed);
+            
+            // Deadband: Only write to DOM if value actually changed
+            if (item.lastTranslateY !== translateY) {
+                item.el.style.transform = `translate3d(0, ${translateY}px, 0)`; 
+                item.lastTranslateY = translateY;
+            }
         }
     }
   }
@@ -1081,8 +1085,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         const navEl = this.desktopNav()?.nativeElement;
         
         if (scrollContainer && scrollContainer instanceof HTMLElement) {
-            // Fix: Add pointer-events: none during scroll to prevent sticky scrollbar glitch
-            this.renderer.addClass(scrollContainer, 'scrolling-lock');
+            // Removed scrolling-lock logic
 
             // Determine if we need to account for the sticky header
             // Sections physically after the nav in DOM need the offset
@@ -1111,11 +1114,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 top: targetPosition,
                 behavior: 'smooth'
             });
-
-            // Release lock after scroll animation finishes
-            setTimeout(() => {
-                this.renderer.removeClass(scrollContainer, 'scrolling-lock');
-            }, 1000);
         }
     } else {
         // Mobile/Tablet Logic
