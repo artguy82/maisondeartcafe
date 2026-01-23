@@ -210,7 +210,7 @@
       <section id="home" class="relative z-10 w-full h-screen flex items-center justify-center overflow-hidden bg-black xl:rounded-t-[calc(2.5rem-8px)]">
         <div class="absolute inset-0 w-full h-full z-0">
             @for (image of bannerImages; track $index; let i = $index) {
-              <img [ngSrc]="image" fill [priority]="i <= 2" class="banner-image brightness-75 object-cover" [class.active]="currentBannerIndex() === i && isInitialBannerAnimationTriggered()" alt="메종디아트 드로잉 카페 전경 {{ i + 1 }}">
+              <img [ngSrc]="image" fill [priority]="true" class="banner-image brightness-75 object-cover" [class.active]="currentBannerIndex() === i && isInitialBannerAnimationTriggered()" alt="메종디아트 드로잉 카페 전경 {{ i + 1 }}">
             }
         </div>
         <div class="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-black/50 to-transparent z-10"></div>
@@ -231,10 +231,10 @@
       <!-- 2. Introduction -->
       <section id="intro" class="relative z-10 py-24 px-6 bg-[#fdfbf8] overflow-hidden">
         <div #floatingImage1 class="absolute bottom-16 md:bottom-0 left-0 z-[5] w-64 h-80 md:w-[30rem] md:h-[40rem] xl:w-[32rem] xl:h-[40rem] pointer-events-none parallax-element">
-          <div class="floating-bounce fill-image-container"><img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/bear.png" alt="Floating bear" fill class="object-contain object-left-bottom" priority></div>
+          <div class="floating-bounce fill-image-container"><img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/bear.png" alt="Floating bear" fill class="object-contain object-left-bottom" priority decoding="async"></div>
         </div>
         <div #floatingImage2 class="absolute top-24 md:top-0 right-0 z-[5] w-64 h-80 md:w-[30rem] md:h-[40rem] xl:w-[32rem] xl:h-[40rem] pointer-events-none parallax-element">
-          <div class="floating-bounce-delayed fill-image-container"><img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/bear2.png" alt="Floating bear 2" fill class="object-contain object-right-top" priority></div>
+          <div class="floating-bounce-delayed fill-image-container"><img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/bear2.png" alt="Floating bear 2" fill class="object-contain object-right-top" priority decoding="async"></div>
         </div>
         <div class="absolute top-1/4 left-0 w-64 h-64 bg-orange-100/50 rounded-full blur-3xl -translate-x-1/2"></div>
         <div class="absolute bottom-1/4 right-0 w-64 h-64 bg-blue-100/50 rounded-full blur-3xl translate-x-1/2"></div>
@@ -264,7 +264,7 @@
       <section id="healing-art" class="relative z-10 py-24 md:py-32 bg-gray-800 text-white overflow-hidden">
         <div class="absolute inset-0 z-0 overflow-hidden">
           <div #healingParallaxBg class="absolute top-[-10%] left-0 w-full h-[120%] parallax-element">
-            <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/healing.jpg" fill class="object-cover" alt="Healing Art Background" priority sizes="100vw">
+            <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/healing.jpg" fill class="object-cover" alt="Healing Art Background" priority decoding="async" sizes="100vw">
           </div>
         </div>
         <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">

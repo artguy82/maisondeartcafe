@@ -340,3 +340,12 @@ footer#contact {
   flex-direction: column;
   justify-content: flex-start;
 }
+
+/* Hide scrollbar logic for scroll-container */
+.scroll-container {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.scroll-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}

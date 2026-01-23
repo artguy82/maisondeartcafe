@@ -820,16 +820,22 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     const windowWidth = isPlatformBrowser(this.platformId) ? window.innerWidth : 1280;
     // Updated breakpoint from 768 to 1280 to match new split-view logic
     const isStickyNavVisible = windowWidth >= 1280;
-    const defaultBuffer = isStickyNavVisible ? 53 : 10;
+
+    // Dynamic buffer calculation based on Nav Height
+    let navHeight = 0;
+    if (isStickyNavVisible && this.desktopNav()) {
+        navHeight = this.desktopNav()!.nativeElement.offsetHeight;
+    }
+    // Buffer must be slightly larger than nav height to ensure the section top 
+    // is crossed when scrolled exactly to (SectionTop - NavHeight).
+    const defaultBuffer = isStickyNavVisible ? (navHeight + 10) : 10;
 
     // --- Nav Highlight Logic ---
     let currentNavId: string | null = null;
     let lastSectionId: string | null = null;
 
     for (const [id, offsetTop] of this.sectionOffsets.entries()) {
-      // Use a specific buffer for the 'contact' section to match its scroll-to position.
-      const sectionBuffer = (id === 'contact' && isStickyNavVisible) ? 53 : defaultBuffer;
-      const triggerOffset = scrollTop + sectionBuffer;
+      const triggerOffset = scrollTop + defaultBuffer;
       
       if (offsetTop <= triggerOffset) {
         if (this.navSections.includes(id)) {
@@ -875,9 +881,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     // If section is NOT in darkSections, background is light, so button should be dark.
     this.isMenuButtonDark.set(!this.darkSections.has(currentSectionIdForButton));
 
-    // --- Mobile Like Bubble Visibility Logic (More Robust) ---
-    // Debounce the visibility update to ensure scroll animation is finished before showing the bubble.
-    // This prevents layout thrashing during the smooth scroll.
+    // --- Like Bubble Visibility Logic (Hide on Scroll) ---
+    // Optimization: Hide bubble immediately when user starts scrolling to prevent
+    // animation jitter/layout thrashing. Show it again only after scroll stops.
 
     let shouldShowBubble = false;
     
@@ -893,19 +899,19 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-    if (!shouldShowBubble) {
-        // If we moved away, hide immediately to be responsive
+    // 1. If currently scrolling, ensure bubble is HIDDEN to prevent animation jitter
+    if (this.isLikeBubbleVisible()) {
         this.isLikeBubbleVisible.set(false);
-        // Also clear any pending show timer
-        if (this.bubbleShowTimeout) clearTimeout(this.bubbleShowTimeout);
-    } else {
-        // If we are in the target section, wait for scroll to stop before showing
-        if (!this.isLikeBubbleVisible()) {
-            if (this.bubbleShowTimeout) clearTimeout(this.bubbleShowTimeout);
-            this.bubbleShowTimeout = setTimeout(() => {
-                this.isLikeBubbleVisible.set(true);
-            }, 500); // 500ms delay to ensure scroll has completely settled
-        }
+    }
+
+    // 2. Clear any pending show timer (debounce)
+    if (this.bubbleShowTimeout) clearTimeout(this.bubbleShowTimeout);
+
+    // 3. If supposed to be visible, schedule it to appear after scroll stops
+    if (shouldShowBubble) {
+        this.bubbleShowTimeout = setTimeout(() => {
+            this.isLikeBubbleVisible.set(true);
+        }, 600); // Wait for scroll to completely settle
     }
   }
 
@@ -1084,6 +1090,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   closeMenu() { this.isMenuOpen.set(false); }
 
   scrollToSection(sectionId: string) {
+    // Hide bubble immediately to prevent layout thrashing/repaints during smooth scroll
+    this.isLikeBubbleVisible.set(false);
+    
     this.closeMenu();
     if (!isPlatformBrowser(this.platformId)) return;
 
