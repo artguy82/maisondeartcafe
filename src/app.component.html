@@ -231,13 +231,19 @@
       <!-- 2. Introduction -->
       <section id="intro" class="relative z-10 py-24 px-6 bg-[#fdfbf8] overflow-hidden">
         <div #floatingImage1 class="absolute bottom-16 md:bottom-0 left-0 z-[5] w-64 h-80 md:w-[30rem] md:h-[40rem] xl:w-[32rem] xl:h-[40rem] pointer-events-none parallax-element">
-          <div class="floating-bounce fill-image-container"><img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/bear.png" alt="Floating bear" fill class="object-contain object-left-bottom" priority decoding="async"></div>
+          <div class="floating-bounce fill-image-container">
+            <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/bear.png" sizes="(max-width: 768px) 70vw, 30vw" alt="Floating bear" fill class="object-contain object-left-bottom" priority decoding="async">
+          </div>
         </div>
         <div #floatingImage2 class="absolute top-24 md:top-0 right-0 z-[5] w-64 h-80 md:w-[30rem] md:h-[40rem] xl:w-[32rem] xl:h-[40rem] pointer-events-none parallax-element">
-          <div class="floating-bounce-delayed fill-image-container"><img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/bear2.png" alt="Floating bear 2" fill class="object-contain object-right-top" priority decoding="async"></div>
+          <div class="floating-bounce-delayed fill-image-container">
+            <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/bear2.png" sizes="(max-width: 768px) 70vw, 30vw" alt="Floating bear 2" fill class="object-contain object-right-top" priority decoding="async">
+          </div>
         </div>
-        <div class="absolute top-1/4 left-0 w-64 h-64 bg-orange-100/50 rounded-full blur-3xl -translate-x-1/2"></div>
-        <div class="absolute bottom-1/4 right-0 w-64 h-64 bg-blue-100/50 rounded-full blur-3xl translate-x-1/2"></div>
+        <!-- Hide expensive blurs on mobile to prevent memory shortage/crash -->
+        <div class="hidden md:block absolute top-1/4 left-0 w-64 h-64 bg-orange-100/50 rounded-full blur-3xl -translate-x-1/2"></div>
+        <div class="hidden md:block absolute bottom-1/4 right-0 w-64 h-64 bg-blue-100/50 rounded-full blur-3xl translate-x-1/2"></div>
+        
         <div class="max-w-6xl mx-auto text-center relative z-10">
           <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/simbol.png" width="80" height="80" class="mx-auto mb-6 opacity-80" alt="메종디아트 심볼" priority>
           <h2 class="font-cursive text-4xl md:text-5xl text-orange-500 mb-4">What color was your day?</h2>
@@ -551,7 +557,7 @@
       <section id="reviews" #reviewsSection class="relative z-10 py-16 bg-gray-900 overflow-hidden">
         <div class="absolute inset-0 z-0 overflow-hidden">
           <div #reviewParallaxBg class="absolute top-[-15%] left-0 w-full h-[130%] parallax-element">
-            <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/edi3.jpg" fill class="object-cover" alt="드로잉 도구들이 놓여있는 카페 내부 모습" loading="lazy">
+            <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/edi3.jpg" fill class="object-cover" alt="드로잉 도구들이 놓여있는 카페 내부 모습" loading="lazy" sizes="100vw">
           </div>
           <div class="absolute inset-0 bg-black/20 z-0 pointer-events-none"></div>
         </div>
@@ -757,7 +763,7 @@
         <!-- Parallax Background Container -->
         <div class="absolute inset-0 z-0 overflow-hidden">
           <div #groupFooterParallaxBg class="absolute top-[-25%] left-0 w-full h-[150%] parallax-element">
-            <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/cate2.jpg" fill class="object-cover opacity-90" alt="Drawing tools and paints on a wooden table" loading="lazy">
+            <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/cate2.jpg" fill class="object-cover opacity-90" alt="Drawing tools and paints on a wooden table" loading="lazy" sizes="100vw">
           </div>
         </div>
         <!-- Quote Overlay -->

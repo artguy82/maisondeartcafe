@@ -27,6 +27,7 @@
   /* Prevent layout shifts during transition */
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  will-change: transform, opacity;
 }
 .banner-image.active {
   opacity: 1;
@@ -303,6 +304,7 @@
 
 .floating-bounce, .floating-bounce-delayed {
   transform: translateZ(0); 
+  will-change: transform;
 }
 
 @keyframes popup-fade-in { from { opacity: 0; } to { opacity: 1; } }

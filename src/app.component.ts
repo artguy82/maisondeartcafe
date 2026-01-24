@@ -1016,15 +1016,22 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
           });
       };
 
-      add(this.parallaxBg(), -0.2);
-      add(this.healingParallaxBg(), -0.1); // Reduced from -0.15 to match smaller height
+      // Backgrounds enabled on all devices as requested
+      add(this.healingParallaxBg(), -0.1);
       add(this.reviewParallaxBg(), -0.1);
       add(this.groupFooterParallaxBg(), -0.05);
-      add(this.floatingImage1(), 0.1);
-      add(this.floatingImage2(), -0.1);
+
+      // Floating elements/Desktop specific
+      if (this.isDesktop()) {
+          add(this.parallaxBg(), -0.2);
+          add(this.floatingImage1(), 0.1);
+          add(this.floatingImage2(), -0.1);
+      }
   }
 
   private updateParallax() {
+    if (this.parallaxCache.length === 0) return; // Skip if no parallax elements (Mobile)
+
     const scrollTop = this.getScrollTop();
     const height = this.viewportHeight;
 
