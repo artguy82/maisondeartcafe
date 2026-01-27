@@ -3,7 +3,6 @@
 <div class="relative w-full xl:h-full wave-bg flex flex-col xl:flex-row items-center xl:items-stretch justify-center px-0 xl:px-12 pt-0 xl:pt-12 gap-8 xl:gap-16 2xl:gap-32 xl:overflow-hidden xl:overscroll-none xl:touch-none">
   
   <!-- Left Side: Brand Info (Desktop Only - XL+) -->
-  <!-- Removed xl:max-w-md, now controlled by responsive-brand-container width in CSS -->
   <aside class="hidden xl:flex flex-col items-start justify-center z-20 shrink-0 responsive-brand-container">
     
     <!-- INFO ZONE -->
@@ -19,7 +18,6 @@
         
         <!-- Script Text Area -->
         <div class="inline-block align-baseline relative">
-             <!-- Placeholder for sizing -->
              <div class="font-cursive border-b-2 border-gray-800 pb-1 px-4 text-transparent select-none pointer-events-none responsive-brand-script leading-none">
                  Connection
              </div>
@@ -99,20 +97,17 @@
     </div>
   </aside>
 
-  <!-- Right Side: Device Frame (Now triggers at XL/1280px) -->
+  <!-- Right Side: Device Frame -->
   <div class="touch-pan-y relative z-10 w-full xl:w-auto xl:grow-0 xl:h-full bg-white xl:rounded-t-[2.5rem] xl:shadow-2xl flex flex-col xl:border-[8px] xl:border-b-0 xl:border-gray-900 box-border ring-1 ring-white/20 xl:max-w-[820px] xl:overflow-hidden">
     
     <!-- Header -->
     <header class="fixed xl:absolute top-0 left-0 right-0 z-50 h-16 flex items-center px-4 lg:px-6 pointer-events-none">
-      <!-- Logo for Mobile/Tablet Menu Header -->
       @if (isMenuOpen()) {
-        <!-- Hidden in Popover mode as per new design request (cleaner look) -->
         <div class="xl:hidden"></div>
       } @else {
         <div class="xl:hidden"></div>
       }
 
-      <!-- Mobile/Tablet Hamburger -->
       <button class="ml-auto p-2 xl:hidden pointer-events-auto z-50 transition-colors duration-300" 
               [class.text-gray-900]="isMenuButtonDark()"
               [class.text-white]="!isMenuButtonDark()"
@@ -135,16 +130,10 @@
 
     <!-- Mobile Menu Popover (Top-Right, Auto Sized) -->
     @if (isMenuOpen()) {
-      <!-- Backdrop for clicking outside -->
       <div (click)="closeMenu()" class="fixed inset-0 z-40 bg-black/10 backdrop-blur-[2px] xl:hidden transition-opacity duration-300"></div>
-
-      <!-- Popover Menu -->
       <div class="fixed top-16 right-4 sm:right-6 z-50 bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-gray-100 p-6 xl:hidden origin-top-right animate-menu-pop w-[calc(100vw-2rem)] sm:w-auto sm:min-w-[300px]">
         
-        <!-- Responsive Layout: Vertical on Portrait (default), Horizontal on Landscape -->
         <div class="flex flex-col landscape:flex-row lg:flex-row items-stretch justify-center gap-6">
-    
-          <!-- Left: Nav Links -->
           <div class="flex flex-col gap-3 text-center landscape:text-left lg:text-left min-w-[140px]">
             <button (click)="scrollToSection('intro')" class="text-lg font-bold text-gray-800 hover:text-orange-500 py-1 transition-colors">힐링아트</button>
             <button (click)="scrollToSection('programs')" class="text-lg font-bold text-gray-800 hover:text-orange-500 py-1 transition-colors">프로그램</button>
@@ -152,15 +141,10 @@
             <button (click)="scrollToSection('faq')" class="text-lg font-bold text-gray-800 hover:text-orange-500 py-1 transition-colors">자주 묻는 질문</button>
             <button (click)="scrollToSection('contact')" class="text-lg font-bold text-gray-800 hover:text-orange-500 py-1 transition-colors">이용안내</button>
           </div>
-    
-          <!-- Divider -->
-          <!-- Horizontal line for Portrait (Vertical Layout) -->
           <div class="block landscape:hidden lg:hidden w-full h-px bg-gray-200"></div>
-          <!-- Vertical line for Landscape (Horizontal Layout) -->
           <div class="hidden landscape:block lg:block w-px self-stretch bg-gray-200"></div>
-    
-          <!-- Right: Buttons -->
           <div class="flex flex-col items-center justify-center gap-4 min-w-[200px]">
+              <!-- Social & Contact Buttons -->
               <div class="grid grid-cols-3 gap-2 w-full">
                   <a href="https://m.smartstore.naver.com/maisondeartcafe" target="_blank" class="flex flex-col items-center justify-center gap-1 p-2 bg-gray-50 hover:bg-gray-100 text-gray-800 rounded-xl text-xs font-bold transition-colors">
                       <span class="font-extrabold text-green-600 text-sm">N</span><span>스토어</span>
@@ -170,21 +154,12 @@
                   </a>
                   <a href="https://www.instagram.com/maisondeartcafe/" target="_blank" class="flex flex-col items-center justify-center gap-1 p-2 bg-gray-50 hover:bg-gray-100 text-gray-800 rounded-xl text-xs font-bold transition-colors">
                       <svg class="w-4 h-4 mb-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <defs>
-                          <linearGradient id="ig-grad-pop" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#feda75;"></stop>
-                            <stop offset="25%" style="stop-color:#fa7e1e;"></stop>
-                            <stop offset="50%" style="stop-color:#d62976;"></stop>
-                            <stop offset="75%" style="stop-color:#962fbf;"></stop>
-                            <stop offset="100%" style="stop-color:#4f5bd5;"></stop>
-                          </linearGradient>
-                        </defs>
+                        <defs><linearGradient id="ig-grad-pop" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#feda75;"></stop><stop offset="25%" style="stop-color:#fa7e1e;"></stop><stop offset="50%" style="stop-color:#d62976;"></stop><stop offset="75%" style="stop-color:#962fbf;"></stop><stop offset="100%" style="stop-color:#4f5bd5;"></stop></linearGradient></defs>
                         <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke="url(#ig-grad-pop)"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" stroke="url(#ig-grad-pop)"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke="url(#ig-grad-pop)"></line>
                       </svg>
                       <span>인스타</span>
                   </a>
               </div>
-              
                <div class="grid grid-cols-2 gap-2 w-full">
                   <a href="http://talk.naver.com/w4f3ta?frm=pnmb&frm=nmb_detail" target="_blank" class="w-full flex items-center justify-center gap-2 px-3 py-2 text-white rounded-lg bg-gradient-to-tr from-lime-400 to-green-500 text-xs font-bold shadow-sm hover:shadow-md transition-all">
                       <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/naver-talk.png" alt="Icon" width="14" height="14"><span>톡톡 문의</span>
@@ -203,14 +178,14 @@
       </div>
     }
 
-    <!-- Scrollable Content Area -->
-    <main #scrollContainer class="touch-pan-y scroll-container relative w-full xl:h-full xl:overflow-y-auto pt-0 bg-white xl:rounded-t-[calc(2.5rem-8px)]">
+    <!-- Scrollable Content Area: Add desktop-perspective class -->
+    <main #scrollContainer class="touch-pan-y scroll-container relative w-full xl:h-full xl:overflow-y-auto pt-0 bg-white xl:rounded-t-[calc(2.5rem-8px)] desktop-perspective">
       
       <!-- 1. Main Banner -->
       <section id="home" class="relative z-10 w-full h-screen flex items-center justify-center overflow-hidden bg-black xl:rounded-t-[calc(2.5rem-8px)]">
         <div class="absolute inset-0 w-full h-full z-0">
             @for (image of bannerImages; track $index; let i = $index) {
-              <img [ngSrc]="image" fill [priority]="true" class="banner-image brightness-75 object-cover" [class.active]="currentBannerIndex() === i && isInitialBannerAnimationTriggered()" alt="메종디아트 드로잉 카페 전경 {{ i + 1 }}">
+              <img [ngSrc]="image" fill [priority]="true" sizes="(min-width: 1280px) 50vw, 100vw" class="banner-image brightness-75 object-cover" [class.active]="currentBannerIndex() === i && isInitialBannerAnimationTriggered()" alt="메종디아트 드로잉 카페 전경 {{ i + 1 }}">
             }
         </div>
         <div class="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-black/50 to-transparent z-10"></div>
@@ -232,6 +207,7 @@
       <section id="intro" class="relative z-10 py-24 px-6 bg-[#fdfbf8] overflow-hidden">
         <div #floatingImage1 class="absolute bottom-16 md:bottom-0 left-0 z-[5] w-64 h-80 md:w-[30rem] md:h-[40rem] xl:w-[32rem] xl:h-[40rem] pointer-events-none parallax-element">
           <div class="floating-bounce fill-image-container">
+            <!-- Optimized sizes -->
             <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/bear.png" sizes="(max-width: 768px) 70vw, 30vw" alt="Floating bear" fill class="object-contain object-left-bottom" priority decoding="async">
           </div>
         </div>
@@ -240,9 +216,7 @@
             <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/bear2.png" sizes="(max-width: 768px) 70vw, 30vw" alt="Floating bear 2" fill class="object-contain object-right-top" priority decoding="async">
           </div>
         </div>
-        <!-- Hide expensive blurs on mobile to prevent memory shortage/crash -->
-        <div class="hidden md:block absolute top-1/4 left-0 w-64 h-64 bg-orange-100/50 rounded-full blur-3xl -translate-x-1/2"></div>
-        <div class="hidden md:block absolute bottom-1/4 right-0 w-64 h-64 bg-blue-100/50 rounded-full blur-3xl translate-x-1/2"></div>
+        <!-- REMOVED BLUR DIVS for performance/memory optimization -->
         
         <div class="max-w-6xl mx-auto text-center relative z-10">
           <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/simbol.png" width="80" height="80" class="mx-auto mb-6 opacity-80" alt="메종디아트 심볼" priority>
@@ -266,14 +240,13 @@
         </div>
       </section>
 
-      <!-- 3. Healing Art (Header) -->
-      <section id="healing-art" class="relative z-10 py-24 md:py-32 bg-gray-800 text-white overflow-hidden">
-        <div class="absolute inset-0 z-0 overflow-hidden">
-          <div #healingParallaxBg class="absolute top-[-10%] left-0 w-full h-[120%] parallax-element">
+      <!-- 3. Healing Art (Header) - CSS Parallax -->
+      <!-- Removed overflow-hidden to allow 3D parallax to bleed and be clipped by viewport -->
+      <section id="healing-art" class="relative z-10 py-24 md:py-32 bg-gray-800 text-white parallax-group">
+        <div class="parallax-layer-back">
             <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/healing.jpg" fill class="object-cover" alt="Healing Art Background" priority decoding="async" sizes="100vw">
-          </div>
         </div>
-        <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
+        <div class="relative parallax-layer-base max-w-3xl mx-auto px-6 text-center">
           <div class="bg-black/30 border border-white/20 rounded-2xl p-8 md:p-12">
             <h2 class="text-green-400 text-sm font-bold tracking-widest mb-2">HEALING ART</h2>
             <h3 class="text-4xl md:text-5xl font-extrabold mb-6">힐링아트로 내면의<br>나를 치유 하다</h3>
@@ -285,7 +258,7 @@
       </section>
 
       <!-- New Sticky Desktop Navigation (Only on XL+) -->
-      <nav id="desktopNav" #desktopNav class="hidden xl:flex sticky top-0 z-[100] justify-center items-center gap-x-8 xl:gap-x-12 py-4 bg-white/90 backdrop-blur-sm border-b border-gray-100 shadow-sm w-full xl:rounded-t-[calc(2.5rem-8px)]">
+      <nav id="desktopNav" #desktopNav class="hidden xl:flex sticky top-0 z-[100] justify-center items-center gap-x-8 xl:gap-x-12 py-4 bg-white/90 backdrop-blur-sm border-b border-gray-100 shadow-sm w-full">
         <button (click)="scrollToSection('intro')" class="text-sm font-semibold text-gray-700 hover:text-orange-500 transition-colors" [class.text-orange-500]="activeDesktopNav() === 'intro'">힐링아트</button>
         <div class="relative">
           <button (click)="scrollToSection('programs')" class="text-sm font-semibold text-gray-700 hover:text-orange-500 transition-colors" [class.text-orange-500]="activeDesktopNav() === 'programs'">프로그램</button>
@@ -304,10 +277,11 @@
       <!-- 4. Programs -->
       <section id="programs" class="relative z-10 py-16 bg-white overflow-hidden">
         <div class="absolute inset-0 z-0">
-            <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/back.jpg" fill class="object-cover opacity-30" alt="Programs Background Pattern" loading="lazy">
+            <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/back.jpg" fill class="object-cover opacity-30" sizes="(min-width: 1280px) 60vw, 100vw" alt="Programs Background Pattern" loading="lazy">
         </div>
 
         <div class="relative z-10">
+            <!-- Content omitted for brevity, structure largely same -->
             <div class="text-center mb-12 px-4 md:px-8">
               <h2 class="text-orange-500 text-sm font-bold tracking-widest mb-2">PROGRAMS</h2>
               <h3 class="text-3xl md:text-4xl font-extrabold text-gray-800">체험 & 클래스</h3>
@@ -317,7 +291,6 @@
               </p>
             </div>
     
-            <!-- Info Notice Box -->
             <div class="w-full flex justify-center px-4 md:px-8 mb-12">
                 <div class="inline-flex flex-col md:flex-row gap-6 items-center md:items-center bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl p-6 md:p-8 text-left shadow-sm max-w-[900px]">
                     <div class="flex-shrink-0">
@@ -354,7 +327,8 @@
                     <div class="w-[85vw] md:w-96 flex-shrink-0 hardware-accelerate" (mouseenter)="preloadProgramImages(item)" (touchstart)="preloadProgramImages(item)">
                       <div class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-gray-100 h-full flex flex-col">
                         <div class="relative h-48 overflow-hidden bg-gray-100">
-                          <img [ngSrc]="item.image" [alt]="item.title" fill class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" draggable="false" sizes="(max-width: 768px) 85vw, (max-width: 1200px) 50vw, 33vw" [priority]="$index <= 1">
+                          <!-- Optimized size -->
+                          <img [ngSrc]="item.image" [alt]="item.title" fill class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" draggable="false" sizes="(min-width: 768px) 50vw, 85vw" [priority]="$index <= 1">
                           @if (isLikeFeatureAvailable()) {
                             <button (click)="handleLike(item, $event)"
                                     class="like-button absolute top-2 right-2 z-10 flex items-center gap-2 text-gray-700 bg-white/70 backdrop-blur-sm rounded-full py-1 pl-2 pr-3 shadow-md transition-transform hover:scale-105 active:scale-95 group/like"
@@ -410,7 +384,7 @@
                     <div class="w-[85vw] md:w-96 flex-shrink-0 hardware-accelerate" (mouseenter)="preloadProgramImages(item)" (touchstart)="preloadProgramImages(item)">
                       <div class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-gray-100 h-full flex flex-col">
                         <div class="relative h-48 overflow-hidden bg-gray-100">
-                          <img [ngSrc]="item.image" [alt]="item.title" fill class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" draggable="false" sizes="(max-width: 768px) 85vw, (max-width: 1200px) 50vw, 33vw" [priority]="$index <= 1">
+                          <img [ngSrc]="item.image" [alt]="item.title" fill class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" draggable="false" sizes="(min-width: 768px) 50vw, 85vw" [priority]="$index <= 1">
                            <div class="absolute top-2 left-2 bg-white/90 px-2 py-1 rounded text-xs font-bold text-gray-800">예약필수</div>
                           @if (isLikeFeatureAvailable()) {
                             <button (click)="handleLike(item, $event)"
@@ -467,7 +441,7 @@
                     <div class="w-[90vw] md:w-[480px] flex-shrink-0 hardware-accelerate">
                       <div class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-gray-100 h-full flex flex-col">
                         <div class="relative h-60 overflow-hidden bg-gray-100">
-                          <img [ngSrc]="item.image" [alt]="item.title" fill class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" draggable="false" sizes="(max-width: 768px) 90vw, (max-width: 1200px) 60vw, 40vw" [priority]="$index <= 1">
+                          <img [ngSrc]="item.image" [alt]="item.title" fill class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" draggable="false" sizes="(min-width: 768px) 60vw, 90vw" [priority]="$index <= 1">
                           @if (isLikeFeatureAvailable()) {
                             <button (click)="handleLike(item, $event)"
                                     class="like-button absolute top-2 right-2 z-10 flex items-center gap-2 text-gray-700 bg-white/70 backdrop-blur-sm rounded-full py-1 pl-2 pr-3 shadow-md transition-transform hover:scale-105 active:scale-95 group/like"
@@ -496,6 +470,7 @@
                           </div>
                           
                           <div class="flex-grow">
+                            <!-- Detail content omitted -->
                             @if (item.subDescription) {
                               <ul class="space-y-1.5 mb-4">
                                 @for (desc of item.subDescription; track desc) {
@@ -553,15 +528,13 @@
         </div>
       </section>
 
-      <!-- 5. User Reviews (Revamped) -->
-      <section id="reviews" #reviewsSection class="relative z-10 py-16 bg-gray-900 overflow-hidden">
-        <div class="absolute inset-0 z-0 overflow-hidden">
-          <div #reviewParallaxBg class="absolute top-[-15%] left-0 w-full h-[130%] parallax-element">
-            <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/edi3.jpg" fill class="object-cover" alt="드로잉 도구들이 놓여있는 카페 내부 모습" loading="lazy" sizes="100vw">
-          </div>
+      <!-- 5. User Reviews (Revamped) - CSS Parallax -->
+      <section id="reviews" #reviewsSection class="relative z-10 py-16 bg-gray-900 overflow-hidden parallax-group">
+        <div class="parallax-layer-back">
+          <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/edi3.jpg" fill class="object-cover" alt="드로잉 도구들이 놓여있는 카페 내부 모습" loading="lazy" sizes="100vw">
           <div class="absolute inset-0 bg-black/20 z-0 pointer-events-none"></div>
         </div>
-        <div class="relative z-10">
+        <div class="relative parallax-layer-base z-10">
           <div class="max-w-2xl mx-auto text-center mb-10 px-6">
             <h2 class="text-orange-400 text-sm font-bold tracking-widest mb-2 text-shadow-custom">REVIEWS</h2>
             <h3 class="text-3xl md:text-4xl font-extrabold text-white text-shadow-custom">생생한 방문 후기</h3>
@@ -652,10 +625,11 @@
       <!-- 6. Outreach / Group / Events (Revamped) -->
       <section id="group" class="relative z-10 py-16 px-6 bg-white text-gray-800 overflow-hidden">
         <div class="absolute inset-0 z-0">
-            <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/back2.jpg" fill class="object-cover opacity-30" alt="Group Background Pattern" loading="lazy">
+            <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/back2.jpg" fill class="object-cover opacity-30" sizes="(min-width: 1280px) 60vw, 100vw" alt="Group Background Pattern" loading="lazy">
         </div>
 
         <div class="relative z-10 max-w-5xl mx-auto">
+          <!-- Content omitted -->
           <div class="text-center mb-12">
             <h2 class="text-orange-500 text-sm font-bold tracking-widest mb-2">TOGETHER</h2>
             <h3 class="text-3xl md:text-4xl font-extrabold mb-4">출강 · 단체 · 행사</h3>
@@ -666,7 +640,7 @@
             <!-- Card 1: 출강 -->
             <div class="bg-gray-50 rounded-2xl overflow-hidden md:flex items-center group transition-shadow duration-300 hover:shadow-xl border border-gray-100">
               <div class="md:w-5/12 h-56 md:h-auto md:self-stretch relative overflow-hidden">
-                <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/vision1.jpg" alt="기업 및 단체 출강 클래스" fill class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110" loading="lazy">
+                <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/vision1.jpg" alt="기업 및 단체 출강 클래스" fill class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110" loading="lazy" sizes="(min-width: 768px) 50vw, 100vw">
               </div>
               <div class="md:w-7/12 p-8 md:p-10">
                 <div class="inline-block bg-orange-100 text-orange-700 text-xs font-bold px-3 py-1 rounded-full mb-4">출강 안내</div>
@@ -681,7 +655,7 @@
             <!-- Card 2: 단체 -->
              <div class="bg-gray-50 rounded-2xl overflow-hidden md:flex md:flex-row-reverse items-center group transition-shadow duration-300 hover:shadow-xl border border-gray-100">
               <div class="md:w-5/12 h-56 md:h-auto md:self-stretch relative overflow-hidden">
-                <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/vision2.jpg" alt="프리미엄 단체 체험" fill class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110" loading="lazy">
+                <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/vision2.jpg" alt="프리미엄 단체 체험" fill class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110" loading="lazy" sizes="(min-width: 768px) 50vw, 100vw">
               </div>
               <div class="md:w-7/12 p-8 md:p-10">
                 <div class="inline-block bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full mb-4">단체 체험</div>
@@ -696,7 +670,7 @@
             <!-- Card 3: 행사 -->
             <div id="event-section" class="bg-gray-50 rounded-2xl overflow-hidden md:flex items-center group transition-shadow duration-300 hover:shadow-xl border border-gray-100">
               <div class="md:w-5/12 h-56 md:h-auto md:self-stretch relative overflow-hidden">
-                <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/vision3.jpg" alt="공간 대관 및 행사 진행" fill class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110" loading="lazy">
+                <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/vision3.jpg" alt="공간 대관 및 행사 진행" fill class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110" loading="lazy" sizes="(min-width: 768px) 50vw, 100vw">
               </div>
               <div class="md:w-7/12 p-8 md:p-10">
                 <div class="inline-block bg-purple-100 text-purple-700 text-xs font-bold px-3 py-1 rounded-full mb-4">행사 운영</div>
@@ -713,9 +687,9 @@
                 <a href="https://blog.naver.com/maisondeart/223870602392" target="_blank" class="text-lg bg-white border-2 border-orange-500 text-orange-500 hover:bg-orange-50 font-bold py-4 px-10 rounded-full transition-all active:scale-95 shadow-lg shadow-orange-500/10 w-full md:w-auto flex items-center justify-center">
                   자세히 보기
                 </a>
-                <button (click)="callShop()" class="text-lg bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-10 rounded-full transition-all active:scale-95 shadow-lg shadow-orange-500/20 w-full md:w-auto">
+                <a href="https://talk.naver.com/profile/w4f3ta/form/1" target="_blank" class="text-lg bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-10 rounded-full transition-all active:scale-95 shadow-lg shadow-orange-500/20 w-full md:w-auto flex items-center justify-center text-center">
                   단체 및 제휴 문의하기
-                </button>
+                </a>
             </div>
             <p class="text-center text-gray-500 text-xs font-medium mt-4">평일/주말 상담 가능 • 견적서 발급 가능</p>
           </div>
@@ -758,16 +732,13 @@
         </div>
       </section>
 
-      <!-- New Parallax Divider Section -->
-      <section id="quote-divider" class="relative z-10 h-64 md:h-80 bg-gray-800 overflow-hidden">
-        <!-- Parallax Background Container -->
-        <div class="absolute inset-0 z-0 overflow-hidden">
-          <div #groupFooterParallaxBg class="absolute top-[-25%] left-0 w-full h-[150%] parallax-element">
-            <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/cate2.jpg" fill class="object-cover opacity-90" alt="Drawing tools and paints on a wooden table" loading="lazy" sizes="100vw">
-          </div>
+      <!-- New Parallax Divider Section - CSS Parallax -->
+      <section id="quote-divider" class="relative z-10 h-64 md:h-80 bg-gray-800 overflow-hidden parallax-group">
+        <div class="parallax-layer-back">
+          <img ngSrc="https://raw.githubusercontent.com/artguy82/maisondeart/main/web/cate2.jpg" fill class="object-cover opacity-90" alt="Drawing tools and paints on a wooden table" loading="lazy" sizes="100vw">
         </div>
         <!-- Quote Overlay -->
-        <div class="relative z-10 flex h-full items-center justify-center px-8 sm:px-12">
+        <div class="relative parallax-layer-base flex h-full items-center justify-center px-8 sm:px-12">
             <blockquote class="text-white text-center text-shadow-custom">
               <p class="font-nanum-brush text-2xl sm:text-3xl md:text-4xl tracking-wide leading-relaxed">
                 "예술은 영혼에 묻은<br>일상의 먼지를 씻어준다."
@@ -781,6 +752,7 @@
 
       <!-- 7. Footer (Combined with Contact) -->
       <footer id="contact" class="relative z-10 bg-gray-900 text-white pt-20 pb-10 px-6">
+        <!-- Content omitted -->
         <div class="max-w-5xl mx-auto">
           
           <!-- Information Title Header -->
@@ -850,9 +822,9 @@
                  언제든 편하게 문의주시면, 최고의 경험을 설계해 드리겠습니다.
                </p>
                <!-- Button for all screens -->
-               <button (click)="callShop()" class="mt-8 text-sm bg-white/10 hover:bg-white/20 text-white font-bold py-3 px-6 rounded-full transition-colors w-full sm:w-auto self-start">
+               <a href="https://talk.naver.com/profile/w4f3ta/form/1" target="_blank" class="mt-8 text-sm bg-white/10 hover:bg-white/20 text-white font-bold py-3 px-6 rounded-full transition-colors w-full sm:w-auto self-start text-center inline-block">
                   제휴 및 단체 문의
-               </button>
+               </a>
             </div>
           </div>
           
@@ -870,7 +842,7 @@
     </main>
 </div>
 
-<!-- Program Detail Popup (Moved Outside Wrapper) -->
+<!-- Popups omitted, no changes -->
 @if (isProgramPopupOpen()) {
   <div class="fixed inset-0 z-[9999] flex items-end md:items-center justify-center pointer-events-none">
     <!-- Backdrop -->
@@ -905,12 +877,12 @@
                     @if (program.images && program.images.length > 0) {
                          @for (img of program.images; track $index) {
                             <div class="w-full h-full flex-shrink-0 relative">
-                                <img [ngSrc]="img" fill class="object-cover select-none" [attr.draggable]="false">
+                                <img [ngSrc]="img" fill class="object-cover select-none" [attr.draggable]="false" sizes="(min-width: 1280px) 50vw, 100vw">
                             </div>
                          }
                     } @else {
                          <div class="w-full h-full flex-shrink-0 relative">
-                            <img [ngSrc]="program.image" fill class="object-cover select-none" [attr.draggable]="false">
+                            <img [ngSrc]="program.image" fill class="object-cover select-none" [attr.draggable]="false" sizes="(min-width: 1280px) 50vw, 100vw">
                         </div>
                     }
                 }
@@ -1023,7 +995,6 @@
   </div>
 }
 
-<!-- Terms/Privacy Popup (Moved Outside Wrapper) -->
 @if (isPopupOpen()) {
     <div class="fixed inset-0 z-[9999] flex items-center justify-center p-4">
          <div (click)="closePopup()" class="absolute inset-0 bg-black/60 backdrop-blur-sm animate-fade-in"></div>
